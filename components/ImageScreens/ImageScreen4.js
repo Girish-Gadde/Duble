@@ -14,11 +14,62 @@ import { useNavigation } from "@react-navigation/native";
 const ImageScreen4 = () => {
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
+  const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
   const navigation = useNavigation();
+  const profiles = [
+    {
+      id: 1,
+      imageSource: require("../../assets/capture1.png"),
+      name1: "Neha",
+      age1: 25,
+      name2: "Shruthi",
+      age2: 24,
+      location: "2 km away",
+      description:
+        "Your go to adventure enthusiast and amateur stand-up comedian",
+    },
+    {
+      id: 2,
+      imageSource: require("../../assets/profile-2.png"),
+      name1: "Anusha",
+      age1: 24,
+      name2: "Nikitha",
+      age2: 26,
+      location: "3 km away",
+      description:
+        "Crazy cat lady who is as crazy as a cat who loves to explore",
+    },
+    {
+      id: 3,
+      imageSource: require("../../assets/profile-3.png"),
+      name1: "Julia",
+      age1: 27,
+      name2: "Jenny",
+      age2: 24,
+      location: "4 km away",
+      description:
+        "Your go to adventure enthusiast and amateur stand-up comedian",
+    },
+    {
+      id: 4,
+      imageSource: require("../../assets/profile-4.png"),
+      name1: "Shivani",
+      age1: 23,
+      name2: "Chandini",
+      age2: 25,
+      location: "10 km away",
+      description:
+        "We love to travel and experience new places, cultures, animals etc",
+    },
+    // Add more profiles as needed
+  ];
 
   const toggleHeart = () => {
     setIsHeartActive(!isHeartActive);
-    navigation.navigate("Image-1");
+
+    setCurrentProfileIndex(
+      currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
+    );
   };
 
   const handleScroll = (event) => {
@@ -39,19 +90,25 @@ const ImageScreen4 = () => {
     >
       <View style={{ flex: 1 }}>
         <Image
-          source={{
-            uri: "https://images.unsplash.com/photo-1540834805150-b551c602aac8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQ3fHx0d28lMjBnaXJscyUyMGJlc3QlMjBmcmllbmRzJTIwMzg2KjY1NHxlbnwwfHwwfHx8MA%3D%3D",
-          }}
+          source={profiles[currentProfileIndex].imageSource}
           style={styles.image}
           resizeMode="cover"
         />
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.nameText}>Neha,</Text>
-            <Text style={styles.ageText}>25</Text>
+            <Text style={styles.nameText}>
+              {profiles[currentProfileIndex].name1},
+            </Text>
+            <Text style={styles.ageText}>
+              {profiles[currentProfileIndex].age1}
+            </Text>
             <View style={styles.divider} />
-            <Text style={styles.nameText}>Shruthi,</Text>
-            <Text style={styles.ageText}>24</Text>
+            <Text style={styles.nameText}>
+              {profiles[currentProfileIndex].name2},
+            </Text>
+            <Text style={styles.ageText}>
+              {profiles[currentProfileIndex].age2}
+            </Text>
           </View>
           <View style={styles.locationContainer}>
             <MaterialIcons
@@ -60,10 +117,12 @@ const ImageScreen4 = () => {
               color="white"
               style={styles.locationIcon}
             />
-            <Text style={styles.locationText}>2 km away</Text>
+            <Text style={styles.locationText}>
+              {profiles[currentProfileIndex].location}
+            </Text>
           </View>
           <Text style={styles.descriptionText}>
-            "Your go to adventure enthusiast and amateur stand-up comedian"
+            "{profiles[currentProfileIndex].description}""
           </Text>
         </View>
         {

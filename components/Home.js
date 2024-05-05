@@ -6,6 +6,7 @@ import ImageScreen2 from "./ImageScreens/ImageScreen2";
 import ImageScreen3 from "./ImageScreens/ImageScreen3";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import ImageScreen4 from "./ImageScreens/ImageScreen4";
+import ImageScreen5 from "./ImageScreens/ImageScreen5";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -69,6 +70,11 @@ const Home = () => {
         <Tab.Screen
           name="Image-4"
           component={ImageScreen4}
+          options={{ gestureEnabled: false }}
+        />
+        <Tab.Screen
+          name="Image-5"
+          component={ImageScreen5}
           options={{ gestureEnabled: false }}
         />
       </Tab.Navigator>

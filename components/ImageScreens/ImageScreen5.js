@@ -72,7 +72,7 @@ const profiles = [
   // Add more profiles as needed
 ];
 
-const ImageScreen2 = () => {
+const ImageScreen5 = () => {
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(
@@ -82,14 +82,13 @@ const ImageScreen2 = () => {
   const [lastDirection, setLastDirection] = useState();
   const currentIndexRef = useRef(currentProfileIndex);
 
-  // const childRefs = useMemo(
-  //   () =>
-  //     Array(profiles.length)
-  //       .fill(0)
-  //       .map((i) => React.createRef()),
-  //   []
-  // );
-  const childRefs = useRef(Array(profiles.length).fill(null));
+  const childRefs = useMemo(
+    () =>
+      Array(profiles.length)
+        .fill(0)
+        .map((i) => React.createRef()),
+    []
+  );
 
   const updateCurrentIndex = (val) => {
     setCurrentProfileIndex(val);
@@ -115,7 +114,6 @@ const ImageScreen2 = () => {
   };
 
   const swipe = async (dir) => {
-    console.log(canSwipe, currentProfileIndex, profiles.length);
     if (canSwipe && currentProfileIndex < profiles.length) {
       await childRefs[currentProfileIndex].current.swipe(dir); // Swipe the card!
     }
@@ -127,18 +125,12 @@ const ImageScreen2 = () => {
     await childRefs[newIndex].current.restoreCard();
   };
 
-  const toggleHeart = async () => {
+  const toggleHeart = () => {
     setIsHeartActive(!isHeartActive);
 
-    if (canSwipe) {
-      // await swipe("right");
-      updateCurrentIndex(
-        currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-      );
-    }
-    // setCurrentProfileIndex(
-    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-    // );
+    setCurrentProfileIndex(
+      currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
+    );
   };
 
   const handleScroll = (event) => {
@@ -157,39 +149,28 @@ const ImageScreen2 = () => {
       scrollEventThrottle={16}
       style={{ backgroundColor: "#EDEEF1" }}
     >
-      <View style={{ flex: 1 }}>
+      {profiles.map((character, index) => (
         <TinderCard
-          ref={(ref) => (childRefs[currentProfileIndex] = ref)}
-          className="swipe"
-          key={profiles[currentProfileIndex].id} // Use id instead of name1 as key
-          onSwipe={(dir) =>
-            swiped(dir, profiles[currentProfileIndex].id, currentProfileIndex)
-          }
-          onCardLeftScreen={() =>
-            outOfFrame(profiles[currentProfileIndex].id, currentProfileIndex)
-          }
+          ref={childRefs[index]}
+          //className="swipe"
+          style={styles.swipe}
+          key={character.name1}
+          onSwipe={(dir) => swiped(dir, character.name1, index)}
+          onCardLeftScreen={() => outOfFrame(character.name1, index)}
         >
-          <View style={{ flex: 1 }}>
+          <View style={styles.profileContainer}>
             <Image
-              source={profiles[currentProfileIndex].imageSource}
+              source={character.imageSource}
               style={styles.image}
               resizeMode="cover"
             />
             <View style={styles.textContainer}>
               <View style={styles.nameContainer}>
-                <Text style={styles.nameText}>
-                  {profiles[currentProfileIndex].name1},
-                </Text>
-                <Text style={styles.ageText}>
-                  {profiles[currentProfileIndex].age1}
-                </Text>
+                <Text style={styles.nameText}>{character.name1},</Text>
+                <Text style={styles.ageText}>{character.age1}</Text>
                 <View style={styles.divider} />
-                <Text style={styles.nameText}>
-                  {profiles[currentProfileIndex].name2},
-                </Text>
-                <Text style={styles.ageText}>
-                  {profiles[currentProfileIndex].age2}
-                </Text>
+                <Text style={styles.nameText}>{character.name2},</Text>
+                <Text style={styles.ageText}>{character.age2}</Text>
               </View>
               <View style={styles.locationContainer}>
                 <MaterialIcons
@@ -198,77 +179,80 @@ const ImageScreen2 = () => {
                   color="white"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.locationText}>
-                  {profiles[currentProfileIndex].location}
-                </Text>
+                <Text style={styles.locationText}>{character.location}</Text>
               </View>
               <Text style={styles.descriptionText}>
-                "{profiles[currentProfileIndex].description}"
+                "{character.description}""
               </Text>
             </View>
-          </View>
-          {showIcons ? (
-            <View style={styles.actionContainer1}>
-              <TouchableOpacity style={styles.actionButton1}>
-                <View
-                  style={{
-                    backgroundColor: "#6420AA",
-                    borderRadius: 999,
-                    width: 60,
-                    height: 60,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
+            {showIcons ? (
+              <View style={styles.actionContainer1}>
+                <TouchableOpacity style={styles.actionButton1}>
+                  <View
+                    style={{
+                      backgroundColor: "#6420AA",
+                      borderRadius: 999,
+                      width: 60,
+                      height: 60,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <AntDesign name="close" size={30} color="white" />
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.actionButton2}
+                  onPress={() => swipe("right")}
                 >
-                  <AntDesign name="close" size={30} color="white" />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.actionButton2}
-                onPress={toggleHeart}
-              >
-                <View
-                  style={[
-                    styles.heartButton,
-                    {
-                      backgroundColor: isHeartActive ? "#00b300" : "#FF3156",
-                    },
-                  ]}
-                >
-                  <AntDesign name="heart" size={30} color="white" />
-                </View>
-              </TouchableOpacity>
-            </View>
-          ) : null}
+                  <View
+                    style={[
+                      styles.heartButton,
+                      {
+                        backgroundColor: isHeartActive ? "#00b300" : "#FF3156",
+                      },
+                    ]}
+                  >
+                    <AntDesign name="heart" size={30} color="white" />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ) : null}
 
-          <View style={styles.viewContainer}>
-            <View style={styles.searchContainer}>
-              <Ionicons name="search" size={16} color="#454545" />
-              <Text style={styles.searchText}>Our Story</Text>
+            <View style={styles.viewContainer}>
+              <View style={styles.searchContainer}>
+                <Ionicons name="search" size={16} color="#454545" />
+                <Text style={styles.searchText}>Our Story</Text>
+              </View>
+              <Text style={styles.text}>{character.ourStory} </Text>
             </View>
-            <Text style={styles.text}>
-              {profiles[currentProfileIndex].ourStory}{" "}
-            </Text>
-          </View>
-          <View style={styles.viewContainer}>
-            <View style={styles.searchContainer}>
-              <Ionicons name="star" size={16} color="#FFFF66" />
-              <Text style={styles.searchText}>Our Idea of a Fun Date</Text>
+            <View style={styles.viewContainer}>
+              <View style={styles.searchContainer}>
+                <Ionicons name="star" size={16} color="#FFFF66" />
+                <Text style={styles.searchText}>Our Idea of a Fun Date</Text>
+              </View>
+              <Text style={styles.text}>{character.funDate} </Text>
             </View>
-            <Text style={styles.text}>
-              {profiles[currentProfileIndex].funDate}{" "}
-            </Text>
+            {/* <div
+              style={{ backgroundImage: 'url(' + character.url + ')' }}
+              className='card'
+            >
+              <h3>{character.name}</h3>
+            </div> */}
           </View>
         </TinderCard>
-      </View>
+      ))}
 
       <View style={styles.actionContainer2}>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity style={styles.actionButton} onPress={() => goBack()}>
           <View style={styles.buttonContainer}>
             <Text style={styles.buttonText}>Reject</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton} onPress={toggleHeart}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => swipe("right")}
+        >
           <View
             style={[
               styles.buttonContainer,
@@ -284,9 +268,17 @@ const ImageScreen2 = () => {
 };
 
 const styles = StyleSheet.create({
-  // swipe: {
-  //   position: absolute,
-  // },
+  swipe: {
+    //position: "absolute",
+    backgroundColor: "#EDEEF1",
+  },
+  profileContainer: {
+    position: "absolute",
+    width: "100%",
+    alignItems: "center",
+    marginBottom: 20,
+    backgroundColor: "#EDEEF1",
+  },
   image: {
     width: "92%",
     height: 600,
@@ -354,10 +346,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingRight: 20,
     paddingLeft: 8,
-    // position: "absolute",
-    // bottom: 10,
-    // left: 0,
-    // right: 0,
+    position: "absolute",
+    top: 550,
+    left: 0,
+    right: 0,
     marginTop: 40,
     marginBottom: 5,
   },
@@ -417,4 +409,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ImageScreen2;
+export default ImageScreen5;
