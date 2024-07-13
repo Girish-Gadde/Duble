@@ -1,0 +1,121 @@
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  Image,
+} from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+
+const Login = () => {
+  const [activeButton, setActiveButton] = useState(null);
+  const navigation = useNavigation();
+
+  const navigateToPhoneLoginScreen = () => {
+    navigation.navigate("PhoneLogin");
+  };
+
+  const navigateToPhoneLoginScreen1 = () => {
+    navigation.navigate("PhoneLogin1");
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            activeButton === "phone"
+              ? styles.activeButton
+              : styles.activeButton,
+          ]}
+          onPress={navigateToPhoneLoginScreen}
+        >
+          <Icon
+            name="phone"
+            size={16}
+            color={activeButton === "phone" ? "#EDEEF1" : "#EDEEF1"}
+            style={styles.icon}
+          />
+          <Text
+            style={[
+              styles.buttonText,
+              { color: activeButton === "phone" ? "#EDEEF1" : "#EDEEF1" },
+            ]}
+          >
+            Login with Phone Number
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.button,
+            activeButton === "gmail"
+              ? styles.activeButton
+              : styles.inactiveButton,
+          ]}
+          onPress={navigateToPhoneLoginScreen1}
+        >
+          <Image
+            source={require("../assets/gmail-1.jpg")}
+            style={styles.image}
+          />
+          <Text
+            style={[
+              styles.buttonText,
+              { color: activeButton === "gmail" ? "#EDEEF1" : "#121212" },
+            ]}
+          >
+            Login with Gmail
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-end",
+    padding: 20,
+  },
+  buttonContainer: {
+    marginBottom: 20,
+  },
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 5,
+    marginVertical: 5,
+    borderRadius: 5,
+    width: 356,
+    height: 49,
+    borderRadius: 33,
+  },
+  activeButton: {
+    backgroundColor: "#6420AA",
+  },
+  inactiveButton: {
+    backgroundColor: "#fff",
+    borderWidth: 2,
+    borderColor: "#6420AA",
+  },
+  icon: {
+    marginRight: 5,
+  },
+  buttonText: {
+    color: "#121212",
+    fontSize: 16,
+  },
+  image: {
+    width: 14.78,
+    height: 15,
+    marginRight: 5,
+  },
+});
+
+export default Login;

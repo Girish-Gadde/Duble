@@ -1,11 +1,37 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import MatchScreen from "./MatchesScreens/MatchScreen";
+import ChatScreen from "./MatchesScreens/ChatScreen";
+import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
+
+const Stack = createStackNavigator();
 
 const Matches = () => {
   return (
-    <View>
-      <Text>Matches</Text>
-    </View>
+    <NavigationContainer independent="true">
+      <Stack.Navigator initialRouteName="MatchScreen">
+        <Stack.Screen
+          name="MatchScreen"
+          component={MatchScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={ChatScreen}
+          options={{
+            headerTitle: () => (
+              <HeaderTitleWithIcon1
+                title="duble"
+                iconName="swap-horiz"
+                iconName1="menu"
+              />
+            ),
+            headerTitleAlign: "center",
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

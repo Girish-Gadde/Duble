@@ -7,6 +7,7 @@ import ImageScreen3 from "./ImageScreens/ImageScreen3";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import ImageScreen4 from "./ImageScreens/ImageScreen4";
 import ImageScreen5 from "./ImageScreens/ImageScreen5";
+import { useSelector } from "react-redux";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -38,11 +39,13 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
 };
 
 const Home = () => {
+  const showIcons = useSelector((state) => state.showIcons);
   return (
     <NavigationContainer independent="true">
       <Tab.Navigator
         tabBar={(props) => <CustomTabBar {...props} />}
         screenOptions={{
+          swipeEnabled: showIcons,
           activeTintColor: "green",
           labelStyle: { fontSize: 10 },
           style: { backgroundColor: "white" },
@@ -52,11 +55,11 @@ const Home = () => {
           tabBarStyle: { marginTop: -40 },
         }}
       >
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Image-1"
           component={ImageScreen1}
           options={{ gestureEnabled: false }}
-        />
+        /> */}
         <Tab.Screen
           name="Image-2"
           component={ImageScreen2}
@@ -91,9 +94,9 @@ const styles = StyleSheet.create({
   tabBar: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "white",
+    backgroundColor: "#EDEEF1",
     paddingHorizontal: 10,
-    paddingTop: 2,
+    paddingVertical: 1,
     height: 10,
   },
   tabBarItem: {
@@ -103,12 +106,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginHorizontal: 5,
     paddingVertical: 0.5,
-    borderBottomWidth: 4,
+    borderBottomWidth: 3,
     borderBottomColor: "#ccc",
+    backgroundColor: "#ccc",
+    borderRadius: 10,
   },
   tabBarItemSelected: {
-    borderBottomColor: "grey",
-    backgroundColor: "#EDEEF1", // Background color for the selected tab
+    borderBottomColor: "#FFFFFF",
+    backgroundColor: "#FFFFFF", // Background color for the selected tab
   },
 });
 

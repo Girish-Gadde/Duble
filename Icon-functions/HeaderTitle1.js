@@ -4,11 +4,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { toggleEditButtonAndBio } from "../components/Redux/Actions";
-import { useNavigation } from "@react-navigation/native";
 
-const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
+const HeaderTitleWithIcon1 = ({ title, iconName, iconName1 }) => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
 
   const handleMenuClick = () => {
     // Dispatch action to toggle the state
@@ -26,38 +24,17 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
       <TouchableOpacity
         style={{
           position: "absolute",
-          left: -128,
-          top: -3,
+          right: 200,
+          top: -1,
         }}
-        onPress={navigateToTeamProfile}
+        // onPress={handleMenuClick}
       >
-        <View
-          style={{
-            padding: 4,
-            borderRadius: 22,
-            backgroundColor: "#EFE0E4",
-            flexDirection: "row",
-            borderWidth: 1,
-            borderColor: "black",
-          }}
-        >
-          <Image
-            source={{
-              uri: "https://images.unsplash.com/photo-1582481960493-26179ea458e0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEyfHx8ZW58MHx8fHx8",
-            }} // Replace with your image source
-            style={{
-              width: 26,
-              height: 26,
-              borderRadius: 13,
-              marginLeft: 2,
-            }} // Adjust width, height, and border-radius as needed
-          />
-          <MaterialIcons
-            name="keyboard-arrow-right" // Right arrow icon
-            size={24}
-            color="black"
-          />
-        </View>
+        {/* Your button icon or text */}
+        <MaterialIcons
+          name={iconName1} // Example icon name
+          size={30}
+          color="black"
+        />
       </TouchableOpacity>
 
       <Image
@@ -81,7 +58,7 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
       <TouchableOpacity
         style={{
           position: "absolute",
-          right: -120,
+          right: -125,
           //top: -1,
         }}
         onPress={handleMenuClick}
@@ -96,9 +73,14 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
             marginLeft: 2,
           }} // Adjust width, height, and border-radius as needed
         />
+        {/* <MaterialIcons
+          name={iconName} // Example icon name
+          size={34}
+          color="black"
+        /> */}
       </TouchableOpacity>
     </View>
   );
 };
 
-export default HeaderTitleWithIcon;
+export default HeaderTitleWithIcon1;

@@ -19,6 +19,8 @@ import { useNavigation } from "@react-navigation/native";
 import TinderCard from "react-tinder-card";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleShowIcons } from "../Redux/Actions";
+import HeaderTitleWithIcon1 from "../../Icon-functions/HeaderTitle1";
+import HeaderTitleWithIcon2 from "../../Icon-functions/HeaderTitle2";
 
 const profiles = [
   {
@@ -82,20 +84,22 @@ const profiles = [
   // Add more profiles as needed
 ];
 
-const ImageScreen5 = () => {
+const TeamProfile = ({ navigation }) => {
   const [isHeartActive, setIsHeartActive] = useState(false);
   // const [showIcons, setShowIcons] = useState(true);
   const [loading, setLoading] = useState(false);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(
     profiles.length - 1
   );
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
   const [lastDirection, setLastDirection] = useState();
   const currentIndexRef = useRef(currentProfileIndex);
   const scrollViewRef = useRef(null);
 
   const dispatch = useDispatch();
   const showIcons = useSelector((state) => state.showIcons);
+
+  const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
 
   // const childRefs = useMemo(
   //   () =>
@@ -160,6 +164,10 @@ const ImageScreen5 = () => {
   //   await childRefs[newIndex].current.restoreCard();
   // };
 
+  const goToTeamProfileDetails = () => {
+    navigation.navigate("TeamProfileDetails");
+  };
+
   const toggleHeart = async () => {
     setIsHeartActive(!isHeartActive);
     updateCurrentIndex(
@@ -188,12 +196,35 @@ const ImageScreen5 = () => {
       scrollEventThrottle={16}
       style={{ backgroundColor: "#EDEEF1" }}
     >
+      <View style={styles.headerStyle}>
+        <HeaderTitleWithIcon2
+          title="duble"
+          iconName="arrow-back"
+          iconName1="menu"
+        />
+      </View>
       <View style={{ flex: 1 }}>
         <Image
           source={profiles[currentProfileIndex].imageSource}
           style={styles.image}
           resizeMode="cover"
         />
+        {isEditVisible && (
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={goToTeamProfileDetails}
+          >
+            <View style={styles.editButtonContainer}>
+              <Ionicons
+                name="infinite-outline"
+                size={24}
+                color="red"
+                style={styles.icon}
+              />
+              <Text style={styles.editButtonText}>Edit</Text>
+            </View>
+          </TouchableOpacity>
+        )}
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
             <Text style={styles.nameText}>
@@ -531,7 +562,7 @@ const styles = StyleSheet.create({
   },
   viewContainer1: {
     backgroundColor: "#FFFFFF",
-    marginTop: 35,
+    marginTop: 40,
     marginHorizontal: 20,
     marginBottom: 10,
     borderRadius: 6,
@@ -650,6 +681,41 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     lineHeight: 16.77,
   },
+  headerStyle: {
+    marginTop: 40,
+    position: "relative",
+    left: 180,
+    marginBottom: 10,
+  },
+  editButton: {
+    position: "absolute",
+    width: 98,
+    height: 40,
+    top: 6,
+    left: 262,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+  },
+  editButtonContainer: {
+    // backgroundColor: "#FFFFFF",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 84,
+    height: 30,
+    paddingTop: 6,
+  },
+  editButtonText: {
+    color: "#FF3156",
+    fontSize: 20,
+    marginLeft: 5,
+    //fontWeight: "bold",
+    // marginTop: 5,
+  },
+  icon: {
+    marginTop: 2,
+    marginHorizontal: 7, // Adjust the spacing between icon and text as needed
+  },
 });
 
-export default ImageScreen5;
+export default TeamProfile;

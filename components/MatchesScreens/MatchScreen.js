@@ -1,0 +1,274 @@
+import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+const profiles = [
+  {
+    id: 1,
+    imageSource: require("../../assets/profile-1.jpg"),
+    name1: "Neha",
+    age1: 25,
+    name2: "Shruthi",
+    age2: 24,
+    location: "2 km away",
+    description:
+      "Your go to adventure enthusiast and amateur stand-up comedian",
+    ourStory:
+      "We met at a comedy show where shruthi was performing her stand-up routine and Neha was in the audience",
+    funDate:
+      "Hiking in the mountains, laughing, roasting marshmallows and sharing stories",
+  },
+  {
+    id: 2,
+    imageSource: require("../../assets/profile-2.png"),
+    name1: "Anusha",
+    age1: 24,
+    name2: "Nikitha",
+    age2: 26,
+    location: "3 km away",
+    description: "Crazy cat lady who is as crazy as a cat who loves to explore",
+    ourStory: "We met at a coffee shop and bonded over our love for cats",
+    funDate: "Visiting a cat café and having a cat-themed movie marathon",
+  },
+  {
+    id: 3,
+    imageSource: require("../../assets/profile-3.png"),
+    name1: "Julia",
+    age1: 27,
+    name2: "Jenny",
+    age2: 24,
+    location: "4 km away",
+    description:
+      "Your go to adventure enthusiast and amateur stand-up comedian",
+    ourStory:
+      "We met at a hiking event and instantly clicked while exploring nature",
+    funDate: "Going on a spontaneous road trip to explore new hiking trails",
+  },
+  {
+    id: 4,
+    imageSource: require("../../assets/profile-4.png"),
+    name1: "Shivani",
+    age1: 23,
+    name2: "Chandini",
+    age2: 25,
+    location: "10 km away",
+    description:
+      "We love to travel and experience new places, cultures, animals etc",
+    ourStory:
+      "We met while traveling solo in Europe and decided to explore the rest of the trip together",
+    funDate:
+      "Attending a cultural festival in a foreign country and trying out exotic foods",
+  },
+  {
+    id: 5,
+    imageSource: require("../../assets/profile-4.png"),
+    name1: "Shivani",
+    age1: 23,
+    name2: "Chandini",
+    age2: 25,
+    location: "10 km away",
+    description:
+      "We love to travel and experience new places, cultures, animals etc",
+    ourStory:
+      "We first met at a local music festival and bonded over our favorite bands",
+    funDate: "A road trip to a music festival, camping out under the stars",
+  },
+  {
+    id: 6,
+    imageSource: require("../../assets/profile-6.jpg"),
+    name1: "Shivani",
+    age1: 23,
+    name2: "Chandini",
+    age2: 25,
+    location: "10 km away",
+    description:
+      "We love to travel and experience new places, cultures, animals etc",
+    ourStory:
+      "We bumped into each other at a cooking class and decided to partner up",
+    funDate:
+      "A cooking class followed by a dinner at a newly opened restaurant",
+  },
+  {
+    id: 7,
+    imageSource: require("../../assets/profile-7.jpg"),
+    name1: "Shivani",
+    age1: 23,
+    name2: "Chandini",
+    age2: 25,
+    location: "10 km away",
+    description:
+      "We love to travel and experience new places, cultures, animals etc",
+    ourStory:
+      "We met while traveling solo in Europe and decided to explore the rest of the trip together",
+    funDate:
+      "Attending a cultural festival in a foreign country and trying out exotic foods",
+  },
+  {
+    id: 8,
+    imageSource: require("../../assets/profile-8.jpg"),
+    name1: "Shivani",
+    age1: 23,
+    name2: "Chandini",
+    age2: 25,
+    location: "10 km away",
+    description:
+      "We love to travel and experience new places, cultures, animals etc",
+    ourStory:
+      "Our love for food brought us together when we met at a gourmet food festival.",
+    funDate:
+      "Going on a food tour in the city, trying out the best local dishes.",
+  },
+  {
+    id: 9,
+    imageSource: require("../../assets/profile-9.jpg"),
+    name1: "Shivani",
+    age1: 23,
+    name2: "Chandini",
+    age2: 25,
+    location: "10 km away",
+    description:
+      "We love to travel and experience new places, cultures, animals etc",
+    ourStory:
+      "We met at a book club meeting and bonded over our favorite authors.",
+    funDate:
+      "Visiting an art gallery followed by a relaxing evening at a cozy café.",
+  },
+  {
+    id: 10,
+    imageSource: require("../../assets/profile-10.jpg"),
+    name1: "Shivani",
+    age1: 23,
+    name2: "Chandini",
+    age2: 25,
+    location: "10 km away",
+    description:
+      "We love to travel and experience new places, cultures, animals etc",
+    ourStory:
+      "We met at a local hiking club and have been exploring trails together ever since.",
+    funDate:
+      "Going on a spontaneous road trip to a nearby national park and camping under the stars.",
+  },
+];
+
+const MatchScreen = () => {
+  const navigation = useNavigation();
+  return (
+    <View style={styles.container}>
+      <TextInput style={styles.searchBar} placeholder="Search matches" />
+      <Text style={styles.headerText}>New Matches</Text>
+      <View style={styles.scrollViewWrapper}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollView}
+        >
+          {profiles.map((profile, index) => (
+            <View key={index} style={styles.imageContainer}>
+              <Image source={profile.imageSource} style={styles.image} />
+              <Text style={styles.imageText}>
+                {profile.name1} & {profile.name2}
+              </Text>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+      <Text style={styles.headerText}>Chats</Text>
+      <FlatList
+        data={profiles}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.chatContainer}>
+            <Image source={item.imageSource} style={styles.chatImage} />
+            <TouchableOpacity
+              style={styles.chatTextContainer}
+              onPress={() => navigation.navigate("Chat", { profile: item })}
+            >
+              <Text style={styles.chatText}>
+                {item.name1} & {item.name2}
+              </Text>
+              <Text style={styles.chatMessage}>{item.description}</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  searchBar: {
+    height: 40,
+    borderColor: "#F4F4F4",
+    backgroundColor: "#FFFFFF",
+    borderWidth: 1,
+    borderRadius: 22,
+    paddingHorizontal: 10,
+    margin: 10,
+  },
+  headerText: {
+    fontSize: 14,
+    fontWeight: "500",
+    marginVertical: 10,
+    lineHeight: 14.52,
+    marginHorizontal: 15,
+  },
+  scrollView: {
+    flexDirection: "row",
+  },
+  scrollViewWrapper: {
+    marginBottom: 20, // Adjust the value as needed to ensure space between scrollView and FlatList
+  },
+  imageContainer: {
+    width: 102,
+    height: 190,
+    alignItems: "center",
+    marginRight: 10,
+  },
+  image: {
+    width: 102,
+    height: 146,
+  },
+  imageText: {
+    textAlign: "center",
+    marginTop: 5,
+  },
+  chatContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  chatImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  chatTextContainer: {
+    flex: 1,
+  },
+  chatText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  chatMessage: {
+    fontSize: 14,
+    color: "#555",
+  },
+});
+
+export default MatchScreen;

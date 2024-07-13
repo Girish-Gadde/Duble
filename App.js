@@ -1,190 +1,95 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
-import Home from "./components/Home";
-import Likes from "./components/Likes";
-import Teams from "./components/Teams";
-import Matches from "./components/Matches";
-import Profile from "./components/Profile";
-import HeaderTitleWithIcon from "./Icon-functions/HeaderTitle";
-import { Image, View } from "react-native";
+import React, { useRef } from "react";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import ProfileDetails from "./components/ProfileScreens/ProfileDetails";
+import { Provider } from "react-redux";
+import store from "./components/Store";
+import HomeTab from "./components/HomeTab";
+import ProfileScreen1 from "./components/ProfileScreens/ProfileScreen1";
+import Login from "./Login Screens/Login";
+import PhoneLogin from "./Login Screens/PhoneLogin";
+import OTPScreen from "./Login Screens/OTPScreen";
+import VerifyScreen from "./Login Screens/VerifyScreen";
+import NameScreen from "./Login Screens/NameScreen";
+import DOBScreen from "./Login Screens/DOBScreen";
+import LocationScreen from "./Login Screens/LocationScreen";
+import PictureScreen from "./Login Screens/PictureScreen";
+import SetUpScreen from "./Login Screens/SetUpScreen";
+import { TeamProfileStack } from "./components/Team/TeamProfileStack";
+import PhoneLogin1 from "./Login Screens/PhoneLogin1";
 
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-const BottomTabNavigator = () => {
+const App = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          tabBarActiveTintColor: "#FF3156",
-          tabBarInactiveTintColor: "black",
-          tabBarItemStyle: {
-            justifyContent: "center",
-          },
-          tabBarLabelStyle: {
-            fontWeight: "bold",
-          },
-          tabBarStyle: [
-            {
-              backgroundColor: "#EDEEF1",
-              display: "flex",
-              paddingHorizontal: 12,
-              paddingVertical: 20,
-              height: 80,
-              justifyContent: "center",
-              //marginBottom: 10,
-            },
-            null,
-          ],
-        }}
-      >
-        <Tab.Screen
-          name="Teams"
-          component={Teams}
-          options={{
-            tabBarIcon: ({ focused, color, size }) => (
-              <View style={{ position: "relative" }}>
-                <Ionicons
-                  name={focused ? "shuffle" : "shuffle"}
-                  size={size}
-                  color={color}
-                />
-
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    backgroundColor: "#FF3156",
-                    borderRadius: 6,
-                    width: 8,
-                    height: 8,
-                  }}
-                />
-              </View>
-            ),
-            tabBarLabelStyle: {
-              marginBottom: 20, // Adjust as needed to decrease the gap
-              fontWeight: "bold",
-            },
-          }}
-        />
-        <Tab.Screen
-          name="Likes"
-          component={Likes}
-          options={{
-            tabBarIcon: ({ focused, color, size }) => (
-              <View style={{ position: "relative" }}>
-                <Ionicons
-                  name={focused ? "heart" : "heart-outline"}
-                  size={size}
-                  color={color}
-                />
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    backgroundColor: "#FF3156",
-                    borderRadius: 6,
-                    width: 8,
-                    height: 8,
-                  }}
-                />
-              </View>
-            ),
-            tabBarLabelStyle: {
-              marginBottom: 20, // Adjust as needed to decrease the gap
-              fontWeight: "bold",
-            },
-          }}
-        />
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            tabBarIcon: ({ focused, color, size }) => (
-              <Ionicons
-                name={focused ? "logo-twitter" : "logo-twitter"}
-                size={size}
-                color={color}
-              />
-              // <Image
-              //   source={require("./assets/duble-icon.jpeg")} // Replace with your image source
-              //   style={{
-              //     width: 26,
-              //     height: 26,
-              //     borderRadius: 0,
-              //     marginLeft: 2,
-              //   }}
-              // />
-            ),
-            tabBarLabelStyle: {
-              marginBottom: 20, // Adjust as needed to decrease the gap
-              fontWeight: "bold",
-            },
-            headerTitle: () => (
-              <HeaderTitleWithIcon title="duble" iconName="logo-twitter" /> // Use the HeaderTitleWithIcon component
-            ),
-            headerTitleAlign: "center",
-          }}
-        />
-        <Tab.Screen
-          name="Matches"
-          component={Matches}
-          options={{
-            tabBarIcon: ({ focused, color, size }) => (
-              <View style={{ position: "relative" }}>
-                <Ionicons
-                  name={
-                    focused
-                      ? "chatbubble-ellipses-outline"
-                      : "chatbubble-ellipses-outline"
-                  }
-                  size={size}
-                  color={color}
-                />
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    backgroundColor: "#FF3156",
-                    borderRadius: 6,
-                    width: 8,
-                    height: 8,
-                  }}
-                />
-              </View>
-            ),
-            tabBarLabelStyle: {
-              marginBottom: 20, // Adjust as needed to decrease the gap
-              fontWeight: "bold",
-            },
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            tabBarIcon: ({ focused, color, size }) => (
-              <Ionicons
-                name={focused ? "person" : "person-outline"}
-                size={size}
-                color={color}
-              />
-            ),
-            tabBarLabelStyle: {
-              marginBottom: 20, // Adjust as needed to decrease the gap
-              fontWeight: "bold",
-            },
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PhoneLogin"
+            component={PhoneLogin}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PhoneLogin1"
+            component={PhoneLogin1}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="OTPScreen"
+            component={OTPScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="VerifyScreen"
+            component={VerifyScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="NameScreen"
+            component={NameScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="DOBScreen"
+            component={DOBScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LocationScreen"
+            component={LocationScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PictureScreen"
+            component={PictureScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SetUpScreen"
+            component={SetUpScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="HomeTab"
+            component={HomeTab}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TeamProfileStack"
+            component={TeamProfileStack}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 
-export default BottomTabNavigator;
+export default App;

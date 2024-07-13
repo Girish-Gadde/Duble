@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   View,
   Image,
@@ -6,16 +6,24 @@ import {
   Text,
   ScrollView,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+import {
+  MaterialIcons,
+  Ionicons,
+  SimpleLineIcons,
+  FontAwesome5,
+} from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import TinderCard from "react-tinder-card";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleShowIcons } from "../Redux/Actions";
 
 const profiles = [
   {
     id: 1,
-    imageSource: require("../../assets/capture1.png"),
+    imageSource: require("../../assets/profile-1.jpg"),
     name1: "Neha",
     age1: 25,
     name2: "Shruthi",
@@ -27,6 +35,8 @@ const profiles = [
       "We met at a comedy show where shruthi was performing her stand-up routine and Neha was in the audience",
     funDate:
       "Hiking in the mountains, laughing, roasting marshmallows and sharing stories",
+    singleImage1: require("../../assets/image20.jpg"),
+    singleImage2: require("../../assets/image21.jpg"),
   },
   {
     id: 2,
@@ -74,13 +84,18 @@ const profiles = [
 
 const ImageScreen2 = () => {
   const [isHeartActive, setIsHeartActive] = useState(false);
-  const [showIcons, setShowIcons] = useState(true);
+  // const [showIcons, setShowIcons] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(
     profiles.length - 1
   );
   const navigation = useNavigation();
   const [lastDirection, setLastDirection] = useState();
   const currentIndexRef = useRef(currentProfileIndex);
+  const scrollViewRef = useRef(null);
+
+  const dispatch = useDispatch();
+  const showIcons = useSelector((state) => state.showIcons);
 
   // const childRefs = useMemo(
   //   () =>
@@ -89,7 +104,23 @@ const ImageScreen2 = () => {
   //       .map((i) => React.createRef()),
   //   []
   // );
-  const childRefs = useRef(Array(profiles.length).fill(null));
+  const childRefs = useRef(profiles.map(() => React.createRef()));
+  // const childRefs = useMemo(
+  //   () =>
+  //     Array(profiles.length)
+  //       .fill(0)
+  //       .map((i) => React.createRef()),
+  //   []
+  // );
+
+  // const swipe = async (dir) => {
+  //   console.log(canSwipe, currentProfileIndex, profiles.length);
+  //   if (canSwipe && currentProfileIndex < profiles.length) {
+  //     console.log("FOG", childRefs, "IND", currentProfileIndex);
+  //     console.log("LOG", childRefs[currentProfileIndex]);
+  //     await childRefs[currentProfileIndex].swipe(dir); // Swipe the card!
+  //   }
+  // };
 
   const updateCurrentIndex = (val) => {
     setCurrentProfileIndex(val);
@@ -100,166 +131,265 @@ const ImageScreen2 = () => {
 
   const canSwipe = currentProfileIndex >= 0;
 
-  const swiped = (direction, nameToDelete, index) => {
-    setLastDirection(direction);
-    updateCurrentIndex(index - 1);
-  };
+  // const swiped = (direction, nameToDelete, index) => {
+  //   console.log("DIR", direction, lastDirection);
+  //   setLastDirection(direction);
+  //   //setLoading(true);
+  //   //updateCurrentIndex(index - 1);
+  //   setTimeout(() => {
+  //     updateCurrentIndex(
+  //       currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
+  //     );
+  //     setLoading(false);
+  //   }, 500);
+  // };
 
-  const outOfFrame = (name, idx) => {
-    console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
-    // handle the case in which go back is pressed before card goes outOfFrame
-    currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
-    // TODO: when quickly swipe and restore multiple times the same card,
-    // it happens multiple outOfFrame events are queued and the card disappear
-    // during latest swipes. Only the last outOfFrame event should be considered valid
-  };
+  // const outOfFrame = (name, idx) => {
+  //   console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
+  //   // handle the case in which go back is pressed before card goes outOfFrame
+  //   currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
+  //   // TODO: when quickly swipe and restore multiple times the same card,
+  //   // it happens multiple outOfFrame events are queued and the card disappear
+  //   // during latest swipes. Only the last outOfFrame event should be considered valid
+  // };
 
-  const swipe = async (dir) => {
-    console.log(canSwipe, currentProfileIndex, profiles.length);
-    if (canSwipe && currentProfileIndex < profiles.length) {
-      await childRefs[currentProfileIndex].current.swipe(dir); // Swipe the card!
-    }
-  };
-  const goBack = async () => {
-    if (!canGoBack) return;
-    const newIndex = currentProfileIndex + 1;
-    updateCurrentIndex(newIndex);
-    await childRefs[newIndex].current.restoreCard();
-  };
+  // const goBack = async () => {
+  //   if (!canGoBack) return;
+  //   const newIndex = currentProfileIndex + 1;
+  //   updateCurrentIndex(newIndex);
+  //   await childRefs[newIndex].current.restoreCard();
+  // };
 
   const toggleHeart = async () => {
     setIsHeartActive(!isHeartActive);
-
-    if (canSwipe) {
-      // await swipe("right");
-      updateCurrentIndex(
-        currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-      );
-    }
-    // setCurrentProfileIndex(
-    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-    // );
+    updateCurrentIndex(
+      currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
+    );
   };
+  useEffect(() => {
+    console.log("BD");
+    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+  }, [currentProfileIndex]);
 
   const handleScroll = (event) => {
     const currentOffset = event.nativeEvent.contentOffset.y;
     const show = currentOffset <= 0;
 
     if (show !== showIcons) {
-      setShowIcons(show);
+      dispatch(toggleShowIcons());
     }
   };
 
   return (
     <ScrollView
+      ref={scrollViewRef}
       contentContainerStyle={{ flexGrow: 1 }}
       onScroll={handleScroll}
       scrollEventThrottle={16}
       style={{ backgroundColor: "#EDEEF1" }}
     >
       <View style={{ flex: 1 }}>
-        <TinderCard
-          ref={(ref) => (childRefs[currentProfileIndex] = ref)}
-          className="swipe"
-          key={profiles[currentProfileIndex].id} // Use id instead of name1 as key
-          onSwipe={(dir) =>
-            swiped(dir, profiles[currentProfileIndex].id, currentProfileIndex)
-          }
-          onCardLeftScreen={() =>
-            outOfFrame(profiles[currentProfileIndex].id, currentProfileIndex)
-          }
-        >
-          <View style={{ flex: 1 }}>
-            <Image
-              source={profiles[currentProfileIndex].imageSource}
-              style={styles.image}
-              resizeMode="cover"
+        <Image
+          source={profiles[currentProfileIndex].imageSource}
+          style={styles.image}
+          resizeMode="cover"
+        />
+        <View style={styles.textContainer}>
+          <View style={styles.nameContainer}>
+            <Text style={styles.nameText}>
+              {profiles[currentProfileIndex].name1},
+            </Text>
+            <Text style={styles.ageText}>
+              {profiles[currentProfileIndex].age1}
+            </Text>
+            <View style={styles.divider} />
+            <Text style={styles.nameText}>
+              {profiles[currentProfileIndex].name2},
+            </Text>
+            <Text style={styles.ageText}>
+              {profiles[currentProfileIndex].age2}
+            </Text>
+          </View>
+          <View style={styles.locationContainer}>
+            <MaterialIcons
+              name="location-on"
+              size={18}
+              color="white"
+              style={styles.locationIcon}
             />
-            <View style={styles.textContainer}>
-              <View style={styles.nameContainer}>
-                <Text style={styles.nameText}>
-                  {profiles[currentProfileIndex].name1},
-                </Text>
-                <Text style={styles.ageText}>
-                  {profiles[currentProfileIndex].age1}
-                </Text>
-                <View style={styles.divider} />
-                <Text style={styles.nameText}>
-                  {profiles[currentProfileIndex].name2},
-                </Text>
-                <Text style={styles.ageText}>
-                  {profiles[currentProfileIndex].age2}
-                </Text>
-              </View>
-              <View style={styles.locationContainer}>
-                <MaterialIcons
-                  name="location-on"
+            <Text style={styles.locationText}>
+              {profiles[currentProfileIndex].location}
+            </Text>
+          </View>
+          <Text style={styles.descriptionText}>
+            "{profiles[currentProfileIndex].description}"
+          </Text>
+        </View>
+      </View>
+      {showIcons ? (
+        <View style={styles.actionContainer1}>
+          <TouchableOpacity style={styles.actionButton1}>
+            <View
+              style={{
+                backgroundColor: "#6420AA",
+                borderRadius: 999,
+                width: 60,
+                height: 60,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <AntDesign name="close" size={30} color="white" />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionButton2} onPress={toggleHeart}>
+            <View
+              style={[
+                styles.heartButton,
+                {
+                  backgroundColor: isHeartActive ? "#FF3156" : "#FF3156",
+                },
+              ]}
+            >
+              <AntDesign name="heart" size={30} color="white" />
+            </View>
+          </TouchableOpacity>
+        </View>
+      ) : null}
+
+      <View style={styles.viewContainer1}>
+        <View style={styles.searchContainer}>
+          <Ionicons name="search" size={16} color="#454545" />
+          <Text style={styles.searchText}>Our Story</Text>
+        </View>
+        <Text style={styles.text}>
+          {profiles[currentProfileIndex].ourStory}{" "}
+        </Text>
+      </View>
+      <View style={styles.viewContainer}>
+        <View style={styles.searchContainer}>
+          <Ionicons name="star" size={16} color="#FFFF66" />
+          <Text style={styles.searchText}>Our Idea of a Fun Date</Text>
+        </View>
+        <Text style={styles.text}>
+          {profiles[currentProfileIndex].funDate}{" "}
+        </Text>
+      </View>
+      <View style={styles.singleBioContainer}>
+        <Image source={profiles[0].singleImage1} style={styles.singleImage} />
+        <View style={styles.bioDataContainer}>
+          <View style={styles.singleNameContainer}>
+            <Text style={styles.nameText1}>
+              {profiles[currentProfileIndex].name1},
+            </Text>
+            <Text style={styles.ageText1}>
+              {profiles[currentProfileIndex].age1}
+            </Text>
+          </View>
+          <View style={styles.rowContainer}>
+            <View style={styles.iconContainer}>
+              <MaterialIcons
+                name="location-on"
+                size={18}
+                color="#121212"
+                style={styles.locationIcon}
+              />
+              <Text style={styles.cell}>Pitampura</Text>
+            </View>
+
+            <View style={styles.iconContainer}>
+              <SimpleLineIcons
+                name="graduation"
+                size={18}
+                color="#121212"
+                style={styles.locationIcon}
+              />
+              <Text style={styles.cell}>PhD Student</Text>
+            </View>
+          </View>
+
+          <View style={styles.rowContainer}>
+            <View style={styles.iconContainer3}>
+              <FontAwesome5
+                name="ruler-vertical"
+                size={18}
+                color="#121212"
+                style={styles.locationIcon}
+              />
+              <Text style={styles.cell}>155 cm</Text>
+            </View>
+            <View style={styles.iconContainer}>
+              <AntDesign
+                name="hearto"
+                size={17}
+                color="#121212"
+                style={styles.locationIcon}
+              />
+              <Text style={styles.cell}>Bisexual</Text>
+            </View>
+          </View>
+          <Text style={styles.singleBioText}>
+            "I bet I run faster than you."
+          </Text>
+        </View>
+      </View>
+      <View style={styles.singleBioContainer}>
+        <Image source={profiles[0].singleImage2} style={styles.singleImage} />
+        <View style={styles.bioDataContainer}>
+          <View style={styles.singleNameContainer}>
+            <Text style={styles.nameText1}>
+              {profiles[currentProfileIndex].name2},
+            </Text>
+            <Text style={styles.ageText1}>
+              {profiles[currentProfileIndex].age2}
+            </Text>
+          </View>
+          <View style={styles.rowContainer}>
+            <View style={styles.iconContainer}>
+              <MaterialIcons
+                name="location-on"
+                size={18}
+                color="#121212"
+                style={styles.locationIcon}
+              />
+              <Text style={styles.cell}>Pitampura</Text>
+            </View>
+
+            <View style={styles.iconContainer}>
+              <SimpleLineIcons
+                name="graduation"
+                size={18}
+                color="#121212"
+                style={styles.locationIcon}
+              />
+              <Text style={styles.cell}>Analyst</Text>
+            </View>
+          </View>
+
+          <View style={styles.rowContainer}>
+            {/* <View style={styles.iconContainer3}>
+                <FontAwesome5
+                  name="ruler-vertical"
                   size={18}
-                  color="white"
+                  color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.locationText}>
-                  {profiles[currentProfileIndex].location}
-                </Text>
-              </View>
-              <Text style={styles.descriptionText}>
-                "{profiles[currentProfileIndex].description}"
-              </Text>
+                <Text style={styles.cell}>155 cm</Text>
+              </View> */}
+            <View style={styles.iconContainer}>
+              <AntDesign
+                name="hearto"
+                size={17}
+                color="#121212"
+                style={styles.locationIcon}
+              />
+              <Text style={styles.cell}>Straight</Text>
             </View>
           </View>
-          {showIcons ? (
-            <View style={styles.actionContainer1}>
-              <TouchableOpacity style={styles.actionButton1}>
-                <View
-                  style={{
-                    backgroundColor: "#6420AA",
-                    borderRadius: 999,
-                    width: 60,
-                    height: 60,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <AntDesign name="close" size={30} color="white" />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.actionButton2}
-                onPress={toggleHeart}
-              >
-                <View
-                  style={[
-                    styles.heartButton,
-                    {
-                      backgroundColor: isHeartActive ? "#00b300" : "#FF3156",
-                    },
-                  ]}
-                >
-                  <AntDesign name="heart" size={30} color="white" />
-                </View>
-              </TouchableOpacity>
-            </View>
-          ) : null}
-
-          <View style={styles.viewContainer}>
-            <View style={styles.searchContainer}>
-              <Ionicons name="search" size={16} color="#454545" />
-              <Text style={styles.searchText}>Our Story</Text>
-            </View>
-            <Text style={styles.text}>
-              {profiles[currentProfileIndex].ourStory}{" "}
-            </Text>
-          </View>
-          <View style={styles.viewContainer}>
-            <View style={styles.searchContainer}>
-              <Ionicons name="star" size={16} color="#FFFF66" />
-              <Text style={styles.searchText}>Our Idea of a Fun Date</Text>
-            </View>
-            <Text style={styles.text}>
-              {profiles[currentProfileIndex].funDate}{" "}
-            </Text>
-          </View>
-        </TinderCard>
+          <Text style={styles.singleBioText}>
+            "Joker with a punchline prowess."
+          </Text>
+        </View>
       </View>
 
       <View style={styles.actionContainer2}>
@@ -272,7 +402,7 @@ const ImageScreen2 = () => {
           <View
             style={[
               styles.buttonContainer,
-              { backgroundColor: isHeartActive ? "#00b300" : "#FF3156" },
+              { backgroundColor: isHeartActive ? "#FF3156" : "#FF3156" },
             ]}
           >
             <Text style={styles.buttonText}>Like</Text>
@@ -305,7 +435,7 @@ const styles = StyleSheet.create({
   nameContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 2,
+    // marginBottom: 2,
   },
   nameText: {
     fontSize: 30,
@@ -314,9 +444,21 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   ageText: {
-    fontSize: 25,
+    fontSize: 30,
     fontWeight: "bold",
     color: "#EDEEF1",
+  },
+  nameText1: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#121212",
+    marginRight: 10,
+    // lineHeight: 36.31,
+  },
+  ageText1: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#121212",
   },
   divider: {
     width: 3,
@@ -330,7 +472,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   locationIcon: {
-    marginRight: 5,
+    marginRight: 3,
   },
   locationText: {
     fontSize: 16,
@@ -358,8 +500,7 @@ const styles = StyleSheet.create({
     // bottom: 10,
     // left: 0,
     // right: 0,
-    marginTop: 40,
-    marginBottom: 5,
+    marginVertical: 10,
   },
   actionButton1: { flex: 1, alignItems: "flex-end", marginHorizontal: 15 },
   actionButton2: { flex: 1, alignItems: "flex-start", marginHorizontal: 15 },
@@ -388,11 +529,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 8,
   },
-  viewContainer: {
+  viewContainer1: {
     backgroundColor: "#FFFFFF",
     marginTop: 40,
     marginHorizontal: 20,
     marginBottom: 10,
+    borderRadius: 6,
+    paddingBottom: 13,
+  },
+  viewContainer: {
+    backgroundColor: "#FFFFFF",
+    marginVertical: 10,
+    marginHorizontal: 20,
     borderRadius: 6,
     paddingBottom: 13,
   },
@@ -414,6 +562,93 @@ const styles = StyleSheet.create({
     fontSize: 16,
     //fontWeight: "bold",
     // marginTop: 5,
+  },
+  loadingContainer: {
+    //flex: 1,
+    height: 600,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(255, 255, 255, 0.8)", // Optional: to add a semi-transparent background
+    marginHorizontal: 20,
+    borderRadius: 10,
+  },
+
+  loadingIndicator: {
+    transform: [{ scale: 2 }], // Increase the size of the ActivityIndicator
+  },
+  // loadingContainer: {
+  //   position: "absolute",
+  //   top: 0,
+  //   left: 0,
+  //   right: 0,
+  //   bottom: 0,
+  //   backgroundColor: "rgba(255, 255, 255, 0.8)",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   zIndex: 1000, // Ensure it's above other content
+  // },
+  singleImage: {
+    height: 110,
+    width: 117,
+    marginHorizontal: 10,
+    marginTop: 15,
+    borderRadius: 5,
+  },
+  singleBioContainer: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: "#FFFFFF",
+    marginVertical: 10,
+    marginHorizontal: 20,
+    //   marginBottom: 10,
+    borderRadius: 6,
+    paddingBottom: 13,
+  },
+  singleNameContainer: {
+    flex: 0.2,
+    flexDirection: "row",
+    // backgroundColor: "pink",
+  },
+  bioDataContainer: {
+    flex: 1,
+    flexDirection: "column",
+    margin: 4,
+  },
+  rowContainer: {
+    flex: 1,
+    flexDirection: "row",
+    //alignItems: "flex-end",
+    //backgroundColor: "#ccc",
+  },
+  iconContainer: {
+    flex: 0.8,
+    flexDirection: "row",
+    marginRight: 3,
+    //  backgroundColor: "green",
+  },
+  iconContainer3: {
+    flex: 0.8,
+    flexDirection: "row",
+    marginLeft: 4,
+    marginRight: 3,
+    //  backgroundColor: "green",
+  },
+  cell: {
+    fontSize: 14, // Font size between 15 to 20
+    marginBottom: 10,
+    color: "#000000",
+    marginRight: 2,
+  },
+  singleBioText: {
+    fontSize: 14,
+    color: "#000000",
+    marginLeft: 3,
+    lineHeight: 16.77,
   },
 });
 
