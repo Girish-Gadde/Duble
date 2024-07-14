@@ -519,7 +519,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
     position: "absolute",
-    top: 565,
+    top: 643,
     marginBottom: 20,
   },
   actionContainer2: {

@@ -15,18 +15,19 @@ import {
   FontAwesome5,
   AntDesign,
 } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/FontAwesome";
 
-const LikedProfile = ({ route }) => {
+const LikedProfile = ({ route, navigation }) => {
   const { profile } = route.params;
   console.log("NAME", profile);
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
 
   const toggleHeart = () => {
     setIsHeartActive(!isHeartActive);
-
+    navigation.navigate("LikedMatch");
     // setCurrentProfileIndex(
     //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
     // );
@@ -54,6 +55,10 @@ const LikedProfile = ({ route }) => {
           style={styles.image}
           resizeMode="cover"
         />
+        <View style={styles.likedView}>
+          <Icon name="heart" size={18} color="#fff" />
+          <Text style={styles.likedText}>Likes you</Text>
+        </View>
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
             <Text style={styles.nameText}>{profile.name1},</Text>
@@ -97,7 +102,7 @@ const LikedProfile = ({ route }) => {
                 <View
                   style={[
                     styles.heartButton,
-                    { backgroundColor: isHeartActive ? "#00b300" : "#FF3156" },
+                    { backgroundColor: isHeartActive ? "#FF3156" : "#FF3156" },
                   ]}
                 >
                   <AntDesign name="heart" size={30} color="white" />
@@ -471,6 +476,26 @@ const styles = StyleSheet.create({
     color: "#000000",
     marginLeft: 3,
     lineHeight: 16.77,
+  },
+  likedView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#FF3156",
+    width: 124,
+    height: 29,
+    borderRadius: 48,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    position: "absolute",
+    top: 23,
+    left: 131,
+  },
+  likedText: {
+    color: "#EDEEF1",
+    fontSize: 16,
+    fontWeight: "500",
+    lineHeight: 19.36,
   },
 });
 

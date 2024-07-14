@@ -91,6 +91,7 @@ const HomeTab = () => {
         <Tab.Screen
           name="Likes"
           component={LikeStack}
+          initialParams={{ navigation }}
           options={{
             tabBarIcon: ({ focused, color, size }) => (
               <View style={{ position: "relative" }}>
