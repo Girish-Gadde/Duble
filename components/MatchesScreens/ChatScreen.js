@@ -11,17 +11,31 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Icon1 from "react-native-vector-icons/Feather";
 import Icon2 from "react-native-vector-icons/Octicons";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleEditButtonAndBio } from "../Redux/Actions";
 
 const ChatScreen = ({ route, navigation }) => {
   const { profile } = route.params;
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState("");
   const flatListRef = useRef(null);
+  const dispatch = useDispatch();
+  const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
 
   console.log("PRO", profile);
+
+  const goToUnlikedMatch = () => {
+    navigation.navigate("UnlikedMatch");
+  };
+
+  const handleMenuClick = () => {
+    // Dispatch action to toggle the state
+    dispatch(toggleEditButtonAndBio());
+  };
 
   useEffect(() => {
     const loadMessages = async () => {
@@ -59,14 +73,16 @@ const ChatScreen = ({ route, navigation }) => {
             <Text style={styles.matchTextContainer}>Matched 3 days ago</Text>
           </View>
           <View style={styles.iconContainer}>
-            <Icon name="more-vert" size={30} style={styles.icon} />
             <Icon1 name="phone" size={24} style={styles.icon} />
             <Icon2
               name="device-camera-video"
               size={30}
               color="#000"
-              style={styles.icon}
+              style={styles.icon1}
             />
+            <TouchableOpacity onPress={handleMenuClick}>
+              <Icon name="more-vert" size={30} style={styles.icon} />
+            </TouchableOpacity>
           </View>
         </View>
       ),
@@ -140,6 +156,19 @@ const ChatScreen = ({ route, navigation }) => {
         keyExtractor={(item) => item.id}
         style={styles.chatContainer}
       />
+      {isEditVisible && (
+        <TouchableOpacity style={styles.editButton} onPress={goToUnlikedMatch}>
+          <View style={styles.editButtonContainer}>
+            <Ionicons
+              name="infinite-outline"
+              size={20}
+              color="red"
+              //style={styles.icon}
+            />
+            <Text style={styles.editButtonText}>Unmatch</Text>
+          </View>
+        </TouchableOpacity>
+      )}
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -204,13 +233,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginLeft: 35,
+    marginLeft: 36,
   },
   icon: {
     backgroundColor: "#fff",
     borderRadius: 12,
     color: "#000",
-    marginHorizontal: 5,
+    marginHorizontal: 8,
+  },
+  icon1: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    color: "#000",
+    marginLeft: 10,
   },
   headerContainer: {
     flexDirection: "row",
@@ -247,6 +282,31 @@ const styles = StyleSheet.create({
   headerProfile: {
     flexDirection: "column",
     width: 123,
+  },
+  editButton: {
+    position: "absolute",
+    width: 124,
+    height: 34,
+    top: 2,
+    left: 258,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+  },
+  editButtonContainer: {
+    // backgroundColor: "#FFFFFF",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 124,
+    height: 34,
+    // paddingTop: 6,
+  },
+  editButtonText: {
+    color: "#FF3156",
+    fontSize: 17,
+    marginLeft: 5,
+    fontWeight: "350",
+    lineHeight: 20.37,
   },
 });
 

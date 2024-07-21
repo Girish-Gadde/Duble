@@ -105,7 +105,12 @@ const Teams = () => {
   };
 
   const changeSwitchState = () => {
-    setShowView(false);
+    console.log("EG");
+    if (showView) {
+      setShowView(false);
+    } else {
+      setShowView(true);
+    }
   };
 
   return (
@@ -187,7 +192,7 @@ const Teams = () => {
             <View style={styles.newTeamContainer}>
               <TouchableOpacity
                 style={styles.backButton}
-                onPress={navigateToHomeScreen}
+                onPress={changeSwitchState}
               >
                 <Ionicons name="chevron-back" size={20} color="#121212" />
                 <Text style={styles.backButtonText}>Create New Team</Text>

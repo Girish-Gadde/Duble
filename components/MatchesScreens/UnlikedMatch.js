@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import Icon from "react-native-vector-icons/AntDesign";
+import Icon from "react-native-vector-icons/FontAwesome";
 
-const LikedMatch = ({ navigation }) => {
+const UnlikedMatch = ({ navigation }) => {
   const profile = {
     id: 1,
     imageSource: require("../../assets/profile-8.jpg"),
@@ -15,27 +15,27 @@ const LikedMatch = ({ navigation }) => {
     ourStory: "We met at a coffee shop and bonded over our love for cats",
     funDate: "Visiting a cat café and having a cat-themed movie marathon",
   };
-  const navigateBack = () => {
-    navigation.goBack();
-  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.crossIcon} onPress={navigateBack}>
-        <Icon name="close" size={24} color="#000" />
+      <TouchableOpacity style={styles.crossIcon}>
+        <Icon name="times" size={24} color="#000" />
       </TouchableOpacity>
       <Image
         source={require("../../assets/nimbus_link.jpg")}
         style={styles.image}
       />
-      <Text style={styles.text}>You matched with Neha & Shruti!</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate("LikedChat", { profile });
-        }}
-      >
-        <Text style={styles.buttonText}>Start Chatting</Text>
-      </TouchableOpacity>
+      <Text style={styles.text}>You unmatched with Neha & Shruti!</Text>
+      <View style={styles.unMatchContainer}>
+        <TouchableOpacity>
+          <Text style={styles.unMatchText}>It was a mistake</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.unMatchText}>Report</Text>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.unMatchText}>Done</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -62,24 +62,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 16,
   },
-  button: {
-    backgroundColor: "#FF3156",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    width: 190,
-    height: 49,
-    borderRadius: 35,
+  unMatchContainer: {
+    flexDirection: "column",
+    backgroundColor: "#FFFFFF",
     alignItems: "center",
-    justifyContent: "center",
-    marginVertical: 12,
+    justifyContent: "space-between",
+    width: 217,
+    height: 121,
+    padding: 15,
+    marginTop: 20,
   },
-  buttonText: {
-    color: "#FFDDEE",
-    fontSize: 16,
-    fontWeight: "400",
-    lineHeight: 19.17,
+  unMatchText: {
+    fontWeight: "350",
+    fontSize: 14,
+    color: "#121212",
+    lineHeight: 16.77,
   },
 });
 
-export default LikedMatch;
+export default UnlikedMatch;
