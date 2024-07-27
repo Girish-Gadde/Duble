@@ -159,8 +159,8 @@ const profiles = [
   },
 ];
 
-const MatchScreen = () => {
-  const navigation = useNavigation();
+const MatchScreen = ({ navigation }) => {
+  //const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <TextInput style={styles.searchBar} placeholder="Search matches" />
@@ -172,12 +172,16 @@ const MatchScreen = () => {
           contentContainerStyle={styles.scrollView}
         >
           {profiles.map((profile, index) => (
-            <View key={index} style={styles.imageContainer}>
-              <Image source={profile.imageSource} style={styles.image} />
-              <Text style={styles.imageText}>
-                {profile.name1} & {profile.name2}
-              </Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("TeamProfile", { profile })}
+            >
+              <View key={index} style={styles.imageContainer}>
+                <Image source={profile.imageSource} style={styles.image} />
+                <Text style={styles.imageText}>
+                  {profile.name1} & {profile.name2}
+                </Text>
+              </View>
+            </TouchableOpacity>
           ))}
         </ScrollView>
       </View>

@@ -37,6 +37,10 @@ const ChatScreen = ({ route, navigation }) => {
     dispatch(toggleEditButtonAndBio());
   };
 
+  const navigateToTeamProfile = () => {
+    navigation.navigate("TeamProfile", { profile });
+  };
+
   useEffect(() => {
     const loadMessages = async () => {
       try {
@@ -66,12 +70,14 @@ const ChatScreen = ({ route, navigation }) => {
               marginHorizontal: 10,
             }}
           />
-          <View style={styles.headerProfile}>
-            <Text style={styles.nameContainer}>
-              {profile.name1} & {profile.name2}
-            </Text>
-            <Text style={styles.matchTextContainer}>Matched 3 days ago</Text>
-          </View>
+          <TouchableOpacity onPress={navigateToTeamProfile}>
+            <View style={styles.headerProfile}>
+              <Text style={styles.nameContainer}>
+                {profile.name1} & {profile.name2}
+              </Text>
+              <Text style={styles.matchTextContainer}>Matched 3 days ago</Text>
+            </View>
+          </TouchableOpacity>
           <View style={styles.iconContainer}>
             <Icon1 name="phone" size={24} style={styles.icon} />
             <Icon2

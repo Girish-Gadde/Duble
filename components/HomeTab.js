@@ -164,6 +164,7 @@ const HomeTab = () => {
         <Tab.Screen
           name="Matches"
           component={Matches}
+          initialParams={{ navigation }}
           options={{
             tabBarIcon: ({ focused, color, size }) => (
               <View style={{ position: "relative" }}>

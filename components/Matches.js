@@ -5,10 +5,11 @@ import MatchScreen from "./MatchesScreens/MatchScreen";
 import ChatScreen from "./MatchesScreens/ChatScreen";
 import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
 import UnlikedMatch from "./MatchesScreens/UnlikedMatch";
+import TeamProfile from "./Team/TeamProfile";
 
 const Stack = createStackNavigator();
 
-const Matches = () => {
+const Matches = ({ navigation }) => {
   return (
     <NavigationContainer independent="true">
       <Stack.Navigator initialRouteName="MatchScreen">
@@ -35,6 +36,12 @@ const Matches = () => {
             ),
             headerTitleAlign: "center",
           }}
+        />
+        <Stack.Screen
+          name="TeamProfile"
+          component={TeamProfile}
+          initialParams={{ navigation }}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

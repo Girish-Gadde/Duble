@@ -84,7 +84,8 @@ const profiles = [
   // Add more profiles as needed
 ];
 
-const TeamProfile = ({ navigation }) => {
+const TeamProfile = ({ route, navigation }) => {
+  const { profile } = route.params;
   const [isHeartActive, setIsHeartActive] = useState(false);
   // const [showIcons, setShowIcons] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -196,16 +197,16 @@ const TeamProfile = ({ navigation }) => {
       scrollEventThrottle={16}
       style={{ backgroundColor: "#EDEEF1" }}
     >
-      <View style={styles.headerStyle}>
+      {/* <View style={styles.headerStyle}>
         <HeaderTitleWithIcon2
           title="duble"
           iconName="arrow-back"
           iconName1="menu"
         />
-      </View>
+      </View> */}
       <View style={{ flex: 1 }}>
         <Image
-          source={profiles[currentProfileIndex].imageSource}
+          source={profile.imageSource}
           style={styles.image}
           resizeMode="cover"
         />
@@ -227,19 +228,11 @@ const TeamProfile = ({ navigation }) => {
         )}
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.nameText}>
-              {profiles[currentProfileIndex].name1},
-            </Text>
-            <Text style={styles.ageText}>
-              {profiles[currentProfileIndex].age1}
-            </Text>
+            <Text style={styles.nameText}>{profile.name1},</Text>
+            <Text style={styles.ageText}>{profile.age1}</Text>
             <View style={styles.divider} />
-            <Text style={styles.nameText}>
-              {profiles[currentProfileIndex].name2},
-            </Text>
-            <Text style={styles.ageText}>
-              {profiles[currentProfileIndex].age2}
-            </Text>
+            <Text style={styles.nameText}>{profile.name2},</Text>
+            <Text style={styles.ageText}>{profile.age2}</Text>
           </View>
           <View style={styles.locationContainer}>
             <MaterialIcons
@@ -248,13 +241,9 @@ const TeamProfile = ({ navigation }) => {
               color="white"
               style={styles.locationIcon}
             />
-            <Text style={styles.locationText}>
-              {profiles[currentProfileIndex].location}
-            </Text>
+            <Text style={styles.locationText}>{profile.location}</Text>
           </View>
-          <Text style={styles.descriptionText}>
-            "{profiles[currentProfileIndex].description}"
-          </Text>
+          <Text style={styles.descriptionText}>"{profile.description}"</Text>
         </View>
       </View>
       {showIcons ? (
@@ -293,29 +282,21 @@ const TeamProfile = ({ navigation }) => {
           <Ionicons name="search" size={16} color="#454545" />
           <Text style={styles.searchText}>Our Story</Text>
         </View>
-        <Text style={styles.text}>
-          {profiles[currentProfileIndex].ourStory}{" "}
-        </Text>
+        <Text style={styles.text}>{profile.ourStory} </Text>
       </View>
       <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
           <Ionicons name="star" size={16} color="#FFFF66" />
           <Text style={styles.searchText}>Our Idea of a Fun Date</Text>
         </View>
-        <Text style={styles.text}>
-          {profiles[currentProfileIndex].funDate}{" "}
-        </Text>
+        <Text style={styles.text}>{profile.funDate} </Text>
       </View>
       <View style={styles.singleBioContainer}>
         <Image source={profiles[0].singleImage1} style={styles.singleImage} />
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>
-              {profiles[currentProfileIndex].name1},
-            </Text>
-            <Text style={styles.ageText1}>
-              {profiles[currentProfileIndex].age1}
-            </Text>
+            <Text style={styles.nameText1}>{profile.name1},</Text>
+            <Text style={styles.ageText1}>{profile.age1}</Text>
           </View>
           <View style={styles.rowContainer}>
             <View style={styles.iconContainer}>
@@ -368,12 +349,8 @@ const TeamProfile = ({ navigation }) => {
         <Image source={profiles[0].singleImage2} style={styles.singleImage} />
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>
-              {profiles[currentProfileIndex].name2},
-            </Text>
-            <Text style={styles.ageText1}>
-              {profiles[currentProfileIndex].age2}
-            </Text>
+            <Text style={styles.nameText1}>{profile.name2},</Text>
+            <Text style={styles.ageText1}>{profile.age2}</Text>
           </View>
           <View style={styles.rowContainer}>
             <View style={styles.iconContainer}>
