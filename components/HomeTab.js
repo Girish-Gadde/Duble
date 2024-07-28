@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { LikeStack } from "./LikeScreens/LikeStack";
 import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
 import { ProfileStack } from "./ProfileScreens/ProfileStack";
+import ImageScreen2 from "./ImageScreens/ImageScreen2";
 
 const Tab = createBottomTabNavigator();
 
@@ -129,7 +130,7 @@ const HomeTab = () => {
         />
         <Tab.Screen
           name="Home"
-          component={Home}
+          component={ImageScreen2}
           options={{
             tabBarIcon: ({ focused, color, size }) => (
               <Ionicons

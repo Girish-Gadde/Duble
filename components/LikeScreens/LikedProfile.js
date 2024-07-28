@@ -6,6 +6,7 @@ import {
   Text,
   ScrollView,
   StyleSheet,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -16,6 +17,9 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Carousel from "react-native-snap-carousel";
+
+const { width: viewportWidth } = Dimensions.get("window");
 
 const LikedProfile = ({ route, navigation }) => {
   const { profile } = route.params;
@@ -42,6 +46,17 @@ const LikedProfile = ({ route, navigation }) => {
     }
   };
 
+  const renderCarouselItem = ({ item }) => {
+    return <Image source={item} style={styles.image} resizeMode="cover" />;
+  };
+
+  const images = [
+    profile.imageSource,
+    profile.imageSource1,
+    profile.imageSource2,
+    profile.imageSource3,
+  ];
+
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
@@ -50,11 +65,15 @@ const LikedProfile = ({ route, navigation }) => {
       style={{ backgroundColor: "#EDEEF1" }}
     >
       <View style={{ flex: 1 }}>
-        <Image
-          source={profile.imageSource}
-          style={styles.image}
-          resizeMode="cover"
-        />
+        <View style={styles.carouselContainer}>
+          <Carousel
+            data={images}
+            renderItem={renderCarouselItem}
+            sliderWidth={viewportWidth}
+            itemWidth={viewportWidth - 10}
+            //onSnapToItem={(index) => setCurrentProfileIndex(index)}
+          />
+        </View>
         <View style={styles.likedView}>
           <Icon name="heart" size={18} color="#fff" />
           <Text style={styles.likedText}>Likes you</Text>
@@ -496,6 +515,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     lineHeight: 19.36,
+  },
+  carouselContainer: {
+    marginVertical: 10,
   },
 });
 

@@ -16,6 +16,9 @@ const profiles = [
   {
     id: 1,
     imageSource: require("../../assets/profile-1.jpg"),
+    imageSource1: require("../../assets/profile-6.jpg"),
+    imageSource2: require("../../assets/profile-7.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Neha",
     age1: 25,
     name2: "Shruthi",
@@ -33,6 +36,9 @@ const profiles = [
   {
     id: 2,
     imageSource: require("../../assets/profile-2.png"),
+    imageSource1: require("../../assets/profile-9.jpg"),
+    imageSource2: require("../../assets/profile-10.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Anusha",
     age1: 24,
     name2: "Nikitha",
@@ -47,6 +53,9 @@ const profiles = [
   {
     id: 3,
     imageSource: require("../../assets/profile-3.png"),
+    imageSource1: require("../../assets/profile-10.jpg"),
+    imageSource2: require("../../assets/profile-9.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Julia",
     age1: 27,
     name2: "Jenny",
@@ -63,6 +72,9 @@ const profiles = [
   {
     id: 4,
     imageSource: require("../../assets/profile-4.png"),
+    imageSource1: require("../../assets/profile-6.jpg"),
+    imageSource2: require("../../assets/profile-7.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Shivani",
     age1: 23,
     name2: "Chandini",
@@ -80,6 +92,9 @@ const profiles = [
   {
     id: 5,
     imageSource: require("../../assets/profile-4.png"),
+    imageSource1: require("../../assets/profile-6.jpg"),
+    imageSource2: require("../../assets/profile-7.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Shivani",
     age1: 23,
     name2: "Chandini",
@@ -96,6 +111,9 @@ const profiles = [
   {
     id: 6,
     imageSource: require("../../assets/profile-6.jpg"),
+    imageSource1: require("../../assets/profile-6.jpg"),
+    imageSource2: require("../../assets/profile-7.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Shivani",
     age1: 23,
     name2: "Chandini",
@@ -113,6 +131,9 @@ const profiles = [
   {
     id: 7,
     imageSource: require("../../assets/profile-7.jpg"),
+    imageSource1: require("../../assets/profile-6.jpg"),
+    imageSource2: require("../../assets/profile-7.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Shivani",
     age1: 23,
     name2: "Chandini",
@@ -130,6 +151,9 @@ const profiles = [
   {
     id: 8,
     imageSource: require("../../assets/profile-8.jpg"),
+    imageSource1: require("../../assets/profile-6.jpg"),
+    imageSource2: require("../../assets/profile-7.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Shivani",
     age1: 23,
     name2: "Chandini",
@@ -147,6 +171,9 @@ const profiles = [
   {
     id: 9,
     imageSource: require("../../assets/profile-9.jpg"),
+    imageSource1: require("../../assets/profile-6.jpg"),
+    imageSource2: require("../../assets/profile-7.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Shivani",
     age1: 23,
     name2: "Chandini",
@@ -164,6 +191,9 @@ const profiles = [
   {
     id: 10,
     imageSource: require("../../assets/profile-10.jpg"),
+    imageSource1: require("../../assets/profile-6.jpg"),
+    imageSource2: require("../../assets/profile-7.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Shivani",
     age1: 23,
     name2: "Chandini",

@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import {
@@ -19,11 +20,17 @@ import { useNavigation } from "@react-navigation/native";
 import TinderCard from "react-tinder-card";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleShowIcons } from "../Redux/Actions";
+import Carousel from "react-native-snap-carousel";
+
+const { width: viewportWidth } = Dimensions.get("window");
 
 const profiles = [
   {
     id: 1,
     imageSource: require("../../assets/profile-1.jpg"),
+    imageSource1: require("../../assets/profile-6.jpg"),
+    imageSource2: require("../../assets/profile-7.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Neha",
     age1: 25,
     name2: "Shruthi",
@@ -41,6 +48,9 @@ const profiles = [
   {
     id: 2,
     imageSource: require("../../assets/profile-2.png"),
+    imageSource1: require("../../assets/profile-9.jpg"),
+    imageSource2: require("../../assets/profile-10.jpg"),
+    imageSource3: require("../../assets/profile-11.jpg"),
     name1: "Anusha",
     age1: 24,
     name2: "Nikitha",
@@ -53,6 +63,9 @@ const profiles = [
   {
     id: 3,
     imageSource: require("../../assets/profile-3.png"),
+    imageSource1: require("../../assets/profile-5.jpg"),
+    imageSource2: require("../../assets/profile-13.jpg"),
+    imageSource3: require("../../assets/profile-12.jpg"),
     name1: "Julia",
     age1: 27,
     name2: "Jenny",
@@ -67,6 +80,9 @@ const profiles = [
   {
     id: 4,
     imageSource: require("../../assets/profile-4.png"),
+    imageSource1: require("../../assets/profile-14.jpg"),
+    imageSource2: require("../../assets/profile-7.jpg"),
+    imageSource3: require("../../assets/profile-8.jpg"),
     name1: "Shivani",
     age1: 23,
     name2: "Chandini",
@@ -97,30 +113,7 @@ const ImageScreen2 = () => {
   const dispatch = useDispatch();
   const showIcons = useSelector((state) => state.showIcons);
 
-  // const childRefs = useMemo(
-  //   () =>
-  //     Array(profiles.length)
-  //       .fill(0)
-  //       .map((i) => React.createRef()),
-  //   []
-  // );
   const childRefs = useRef(profiles.map(() => React.createRef()));
-  // const childRefs = useMemo(
-  //   () =>
-  //     Array(profiles.length)
-  //       .fill(0)
-  //       .map((i) => React.createRef()),
-  //   []
-  // );
-
-  // const swipe = async (dir) => {
-  //   console.log(canSwipe, currentProfileIndex, profiles.length);
-  //   if (canSwipe && currentProfileIndex < profiles.length) {
-  //     console.log("FOG", childRefs, "IND", currentProfileIndex);
-  //     console.log("LOG", childRefs[currentProfileIndex]);
-  //     await childRefs[currentProfileIndex].swipe(dir); // Swipe the card!
-  //   }
-  // };
 
   const updateCurrentIndex = (val) => {
     setCurrentProfileIndex(val);
@@ -130,35 +123,6 @@ const ImageScreen2 = () => {
   const canGoBack = currentProfileIndex < profiles.length - 1;
 
   const canSwipe = currentProfileIndex >= 0;
-
-  // const swiped = (direction, nameToDelete, index) => {
-  //   console.log("DIR", direction, lastDirection);
-  //   setLastDirection(direction);
-  //   //setLoading(true);
-  //   //updateCurrentIndex(index - 1);
-  //   setTimeout(() => {
-  //     updateCurrentIndex(
-  //       currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-  //     );
-  //     setLoading(false);
-  //   }, 500);
-  // };
-
-  // const outOfFrame = (name, idx) => {
-  //   console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
-  //   // handle the case in which go back is pressed before card goes outOfFrame
-  //   currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
-  //   // TODO: when quickly swipe and restore multiple times the same card,
-  //   // it happens multiple outOfFrame events are queued and the card disappear
-  //   // during latest swipes. Only the last outOfFrame event should be considered valid
-  // };
-
-  // const goBack = async () => {
-  //   if (!canGoBack) return;
-  //   const newIndex = currentProfileIndex + 1;
-  //   updateCurrentIndex(newIndex);
-  //   await childRefs[newIndex].current.restoreCard();
-  // };
 
   const toggleHeart = async () => {
     setIsHeartActive(!isHeartActive);
@@ -180,6 +144,17 @@ const ImageScreen2 = () => {
     }
   };
 
+  const renderCarouselItem = ({ item }) => {
+    return <Image source={item} style={styles.image} resizeMode="cover" />;
+  };
+
+  const images = [
+    profiles[currentProfileIndex].imageSource,
+    profiles[currentProfileIndex].imageSource1,
+    profiles[currentProfileIndex].imageSource2,
+    profiles[currentProfileIndex].imageSource3,
+  ];
+
   return (
     <ScrollView
       ref={scrollViewRef}
@@ -189,11 +164,15 @@ const ImageScreen2 = () => {
       style={{ backgroundColor: "#EDEEF1" }}
     >
       <View style={{ flex: 1 }}>
-        <Image
-          source={profiles[currentProfileIndex].imageSource}
-          style={styles.image}
-          resizeMode="cover"
-        />
+        <View style={styles.carouselContainer}>
+          <Carousel
+            data={images}
+            renderItem={renderCarouselItem}
+            sliderWidth={viewportWidth}
+            itemWidth={viewportWidth - 1}
+            //onSnapToItem={(index) => setCurrentProfileIndex(index)}
+          />
+        </View>
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
             <Text style={styles.nameText}>
@@ -256,6 +235,24 @@ const ImageScreen2 = () => {
           </TouchableOpacity>
         </View>
       ) : null}
+
+      {/* <View style={styles.imageContainer}>
+        <Image
+          source={profiles[currentProfileIndex].imageSource1}
+          style={styles.image1}
+          resizeMode="cover"
+        />
+        <Image
+          source={profiles[currentProfileIndex].imageSource2}
+          style={styles.image1}
+          resizeMode="cover"
+        />
+        <Image
+          source={profiles[currentProfileIndex].imageSource3}
+          style={styles.image1}
+          resizeMode="cover"
+        />
+      </View> */}
 
       <View style={styles.viewContainer1}>
         <View style={styles.searchContainer}>
@@ -423,6 +420,14 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 12,
     marginRight: 3,
+  },
+  image1: {
+    width: "92%",
+    height: 600,
+    alignSelf: "center",
+    borderRadius: 12,
+    marginRight: 3,
+    marginVertical: 20,
   },
   textContainer: {
     position: "absolute",
@@ -650,6 +655,17 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     lineHeight: 16.77,
   },
+  imageContainer: {
+    marginTop: 40,
+  },
+  carouselContainer: {
+    marginVertical: 5,
+  },
+  // carouselImage: {
+  //   width: viewportWidth - 60,
+  //   height: 200,
+  //   borderRadius: 10,
+  // },
 });
 
 export default ImageScreen2;
