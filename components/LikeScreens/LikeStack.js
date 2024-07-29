@@ -5,6 +5,7 @@ import Likes from "./Likes";
 import LikedProfile from "./LikedProfile";
 import LikedMatch from "./LikedMatch";
 import LikedChat from "./LikedChat";
+import MatchedTeamProfile from "../MatchesScreens/MatchedTeamProfile";
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,12 @@ export const LikeStack = ({ navigation }) => {
           component={LikedChat}
           initialParams={{ navigation }}
           // options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TeamProfile"
+          component={MatchedTeamProfile}
+          initialParams={{ navigation }}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -98,7 +98,7 @@ const profiles = [
   // Add more profiles as needed
 ];
 
-const ImageScreen2 = () => {
+const HomeScreen = () => {
   const [isHeartActive, setIsHeartActive] = useState(false);
   // const [showIcons, setShowIcons] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -668,4 +668,4 @@ const styles = StyleSheet.create({
   // },
 });
 
-export default ImageScreen2;
+export default HomeScreen;

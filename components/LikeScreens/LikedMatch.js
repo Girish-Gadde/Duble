@@ -2,19 +2,9 @@ import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 
-const LikedMatch = ({ navigation }) => {
-  const profile = {
-    id: 1,
-    imageSource: require("../../assets/profile-8.jpg"),
-    name1: "Rahul",
-    age1: 24,
-    name2: "Rishi",
-    age2: 26,
-    location: "3 km away",
-    description: "Crazy cat lady who is as crazy as a cat who loves to explore",
-    ourStory: "We met at a coffee shop and bonded over our love for cats",
-    funDate: "Visiting a cat café and having a cat-themed movie marathon",
-  };
+const LikedMatch = ({ route, navigation }) => {
+  const { profile } = route.params;
+
   const navigateBack = () => {
     navigation.goBack();
   };
@@ -27,7 +17,9 @@ const LikedMatch = ({ navigation }) => {
         source={require("../../assets/nimbus_link.jpg")}
         style={styles.image}
       />
-      <Text style={styles.text}>You matched with Neha & Shruti!</Text>
+      <Text style={styles.text}>
+        You matched with {profile.name1} & {profile.name2}!
+      </Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {

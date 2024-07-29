@@ -2,13 +2,13 @@ import React from "react";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { View, StyleSheet, Text } from "react-native";
 import ImageScreen1 from "./ImageScreens/ImageScreen1";
-import ImageScreen2 from "./ImageScreens/ImageScreen2";
 import ImageScreen3 from "./ImageScreens/ImageScreen3";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import ImageScreen4 from "./ImageScreens/ImageScreen4";
 import ImageScreen5 from "./ImageScreens/ImageScreen5";
 import ProfileScreen1 from "./ProfileScreens/ProfileScreen1";
 import { ProfileStack } from "./ProfileScreens/ProfileStack";
+import HomeScreen from "./ImageScreens/HomeScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -62,7 +62,7 @@ const Profile = () => {
         />
         <Tab.Screen
           name="Profile-2"
-          component={ImageScreen2}
+          component={HomeScreen}
           options={{ gestureEnabled: false }}
         />
         <Tab.Screen

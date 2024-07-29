@@ -102,30 +102,7 @@ const TeamProfile = ({ route, navigation }) => {
 
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
 
-  // const childRefs = useMemo(
-  //   () =>
-  //     Array(profiles.length)
-  //       .fill(0)
-  //       .map((i) => React.createRef()),
-  //   []
-  // );
   const childRefs = useRef(profiles.map(() => React.createRef()));
-  // const childRefs = useMemo(
-  //   () =>
-  //     Array(profiles.length)
-  //       .fill(0)
-  //       .map((i) => React.createRef()),
-  //   []
-  // );
-
-  // const swipe = async (dir) => {
-  //   console.log(canSwipe, currentProfileIndex, profiles.length);
-  //   if (canSwipe && currentProfileIndex < profiles.length) {
-  //     console.log("FOG", childRefs, "IND", currentProfileIndex);
-  //     console.log("LOG", childRefs[currentProfileIndex]);
-  //     await childRefs[currentProfileIndex].swipe(dir); // Swipe the card!
-  //   }
-  // };
 
   const updateCurrentIndex = (val) => {
     setCurrentProfileIndex(val);
@@ -135,35 +112,6 @@ const TeamProfile = ({ route, navigation }) => {
   const canGoBack = currentProfileIndex < profiles.length - 1;
 
   const canSwipe = currentProfileIndex >= 0;
-
-  // const swiped = (direction, nameToDelete, index) => {
-  //   console.log("DIR", direction, lastDirection);
-  //   setLastDirection(direction);
-  //   //setLoading(true);
-  //   //updateCurrentIndex(index - 1);
-  //   setTimeout(() => {
-  //     updateCurrentIndex(
-  //       currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-  //     );
-  //     setLoading(false);
-  //   }, 500);
-  // };
-
-  // const outOfFrame = (name, idx) => {
-  //   console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
-  //   // handle the case in which go back is pressed before card goes outOfFrame
-  //   currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
-  //   // TODO: when quickly swipe and restore multiple times the same card,
-  //   // it happens multiple outOfFrame events are queued and the card disappear
-  //   // during latest swipes. Only the last outOfFrame event should be considered valid
-  // };
-
-  // const goBack = async () => {
-  //   if (!canGoBack) return;
-  //   const newIndex = currentProfileIndex + 1;
-  //   updateCurrentIndex(newIndex);
-  //   await childRefs[newIndex].current.restoreCard();
-  // };
 
   const goToTeamProfileDetails = () => {
     navigation.navigate("TeamProfileDetails");

@@ -1,30 +1,25 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/AntDesign";
 
-const UnlikedMatch = ({ navigation }) => {
-  const profile = {
-    id: 1,
-    imageSource: require("../../assets/profile-8.jpg"),
-    name1: "Rahul",
-    age1: 24,
-    name2: "Rishi",
-    age2: 26,
-    location: "3 km away",
-    description: "Crazy cat lady who is as crazy as a cat who loves to explore",
-    ourStory: "We met at a coffee shop and bonded over our love for cats",
-    funDate: "Visiting a cat café and having a cat-themed movie marathon",
+const UnlikedMatch = ({ route, navigation }) => {
+  const { profile } = route.params;
+
+  const navigateBack = () => {
+    navigation.goBack();
   };
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.crossIcon}>
-        <Icon name="times" size={24} color="#000" />
+      <TouchableOpacity style={styles.crossIcon} onPress={navigateBack}>
+        <Icon name="close" size={24} color="#000" />
       </TouchableOpacity>
       <Image
         source={require("../../assets/nimbus_link.jpg")}
         style={styles.image}
       />
-      <Text style={styles.text}>You unmatched with Neha & Shruti!</Text>
+      <Text style={styles.text}>
+        You unmatched with {profile.name1} & {profile.name2}!
+      </Text>
       <View style={styles.unMatchContainer}>
         <TouchableOpacity>
           <Text style={styles.unMatchText}>It was a mistake</Text>

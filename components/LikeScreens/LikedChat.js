@@ -39,6 +39,10 @@ const LikedChat = ({ route, navigation }) => {
     loadMessages();
   }, []);
 
+  const navigateToTeamProfile = () => {
+    navigation.navigate("TeamProfile", { profile });
+  };
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
@@ -52,12 +56,14 @@ const LikedChat = ({ route, navigation }) => {
               marginHorizontal: 10,
             }}
           />
-          <View style={styles.headerProfile}>
-            <Text style={styles.nameContainer}>
-              {profile.name1} & {profile.name2}
-            </Text>
-            <Text style={styles.matchTextContainer}>Matched 3 days ago</Text>
-          </View>
+          <TouchableOpacity onPress={navigateToTeamProfile}>
+            <View style={styles.headerProfile}>
+              <Text style={styles.nameContainer}>
+                {profile.name1} & {profile.name2}
+              </Text>
+              <Text style={styles.matchTextContainer}>Matched 3 days ago</Text>
+            </View>
+          </TouchableOpacity>
           <View style={styles.iconContainer}>
             <Icon name="more-vert" size={30} style={styles.icon} />
             <Icon1 name="phone" size={24} style={styles.icon} />

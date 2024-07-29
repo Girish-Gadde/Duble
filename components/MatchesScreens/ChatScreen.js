@@ -29,7 +29,7 @@ const ChatScreen = ({ route, navigation }) => {
   console.log("PRO", profile);
 
   const goToUnlikedMatch = () => {
-    navigation.navigate("UnlikedMatch");
+    navigation.navigate("UnlikedMatch", { profile });
   };
 
   const handleMenuClick = () => {

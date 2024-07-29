@@ -29,7 +29,7 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
           left: -128,
           top: -3,
         }}
-        onPress={navigateToTeamProfile}
+        // onPress={navigateToTeamProfile}
       >
         <View
           style={{

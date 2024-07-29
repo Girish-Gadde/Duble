@@ -21,7 +21,7 @@ import Carousel from "react-native-snap-carousel";
 
 const { width: viewportWidth } = Dimensions.get("window");
 
-const LikedProfile = ({ route, navigation }) => {
+const MatchedTeamProfile = ({ route, navigation }) => {
   const { profile } = route.params;
   console.log("NAME", profile);
   const [isHeartActive, setIsHeartActive] = useState(false);
@@ -78,10 +78,10 @@ const LikedProfile = ({ route, navigation }) => {
             //onSnapToItem={(index) => setCurrentProfileIndex(index)}
           />
         </View>
-        <View style={styles.likedView}>
+        {/* <View style={styles.likedView}>
           <Icon name="heart" size={18} color="#fff" />
           <Text style={styles.likedText}>Likes you</Text>
-        </View>
+        </View> */}
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
             <Text style={styles.nameText}>{profile.name1},</Text>
@@ -528,4 +528,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LikedProfile;
+export default MatchedTeamProfile;

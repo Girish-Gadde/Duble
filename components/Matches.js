@@ -5,8 +5,7 @@ import MatchScreen from "./MatchesScreens/MatchScreen";
 import ChatScreen from "./MatchesScreens/ChatScreen";
 import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
 import UnlikedMatch from "./MatchesScreens/UnlikedMatch";
-import TeamProfile from "./Team/TeamProfile";
-
+import MatchedTeamProfile from "./MatchesScreens/MatchedTeamProfile";
 const Stack = createStackNavigator();
 
 const Matches = ({ navigation }) => {
@@ -39,7 +38,7 @@ const Matches = ({ navigation }) => {
         />
         <Stack.Screen
           name="TeamProfile"
-          component={TeamProfile}
+          component={MatchedTeamProfile}
           initialParams={{ navigation }}
           options={{ headerShown: false }}
         />
