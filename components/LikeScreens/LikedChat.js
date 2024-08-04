@@ -65,14 +65,14 @@ const LikedChat = ({ route, navigation }) => {
             </View>
           </TouchableOpacity>
           <View style={styles.iconContainer}>
-            <Icon name="more-vert" size={30} style={styles.icon} />
             <Icon1 name="phone" size={24} style={styles.icon} />
             <Icon2
               name="device-camera-video"
               size={30}
               color="#000"
-              style={styles.icon}
+              style={styles.icon1}
             />
+            <Icon name="more-vert" size={30} style={styles.icon} />
           </View>
         </View>
       ),
@@ -216,7 +216,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 12,
     color: "#000",
-    marginHorizontal: 5,
+    marginHorizontal: 10,
+  },
+  icon1: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    color: "#000",
+    marginLeft: 6,
   },
   headerContainer: {
     flexDirection: "row",

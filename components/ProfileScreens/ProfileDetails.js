@@ -111,6 +111,7 @@ const ProfileDetails = () => {
   const [selectedPrompt, setSelectedPrompt] = useState(null);
   const [inputText, setInputText] = useState("");
   const [promptText, setPromptText] = useState(null);
+  const [promptVisible, setPromptVisible] = useState(false);
 
   const prompts = [
     "🗣️ I can talk for hours about",
@@ -183,16 +184,22 @@ const ProfileDetails = () => {
   const handlePromptDone = () => {
     setPromptText(inputText);
     setInputText("");
+    setPromptVisible(false);
   };
 
   const handleDelete = () => {
     setPromptText(null);
     setInputText("");
+    setPromptVisible(false);
   };
   const handlePromptEdit = () => {
     setIsPromptEditing(false);
   };
 
+  const addSelectedPrompt = () => {
+    setSelectedPrompt(prompts[0]);
+    setPromptVisible(true);
+  };
   // Function to render profile pictures
   const renderProfilePictures = () => {
     const renderedImages = profiles.map((profile, index) => (
@@ -564,12 +571,12 @@ const ProfileDetails = () => {
         </View>
       )}
       <View style={styles.promptContainer}>
-        <TouchableOpacity onPress={() => setSelectedPrompt(prompts[0])}>
+        <TouchableOpacity onPress={addSelectedPrompt}>
           <Text style={styles.searchText1}>💡 Add a prompt +</Text>
         </TouchableOpacity>
       </View>
 
-      {selectedPrompt && (
+      {promptVisible && (
         <View style={styles.selectedPromptContainer}>
           <TouchableOpacity
             onPress={toggleDropdown}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Text,
   View,
@@ -82,7 +82,7 @@ const profiles = [
 
 const Teams = () => {
   // const [isModalVisible, setModalVisible] = useState(true);
-  const translateY = new Animated.Value(height);
+  const translateY = useRef(new Animated.Value(height)).current;
   const navigation = useNavigation();
   const [selectedProfileId, setSelectedProfileId] = useState(null);
   const [showView, setShowView] = useState(true);
@@ -142,7 +142,7 @@ const Teams = () => {
                   name="add"
                   size={20}
                   color="#FF3156"
-                  style={{ position: "relative", top: -118, right: 18 }}
+                  // style={{ position: "relative", top: -118, right: 18 }}
                 />
                 <Text style={styles.createTeamBtnText}>Create New Team</Text>
               </TouchableOpacity>
@@ -214,11 +214,19 @@ const Teams = () => {
                 <Text style={styles.buttonText}>Back</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
-              <View style={styles.buttonContainer2}>
-                <Text style={styles.buttonText}>Switch</Text>
-              </View>
-            </TouchableOpacity>
+            {showView ? (
+              <TouchableOpacity style={styles.actionButton}>
+                <View style={styles.buttonContainer2}>
+                  <Text style={styles.buttonText}>Switch</Text>
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.actionButton}>
+                <View style={styles.buttonContainer2}>
+                  <Text style={styles.buttonText}>Share</Text>
+                </View>
+              </TouchableOpacity>
+            )}
           </View>
         </Animated.View>
       </View>
@@ -261,10 +269,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    // backgroundColor: "#f0f0f0",
+    //backgroundColor: "#ccc",
     borderRadius: 5,
     position: "absolute",
-    top: 70,
+    top: -55,
     left: 25,
   },
   createTeamBtnText: {
@@ -272,9 +280,9 @@ const styles = StyleSheet.create({
     color: "#FF3156",
     marginLeft: 5,
     textDecorationLine: "underline",
-    position: "relative",
-    top: -120,
-    right: 20,
+    // position: "relative",
+    // top: -120,
+    // right: 20,
   },
   actionContainer2: {
     flexDirection: "row",
