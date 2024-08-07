@@ -40,7 +40,7 @@ const Matches = ({ navigation }) => {
           name="TeamProfile"
           component={MatchedTeamProfile}
           initialParams={{ navigation }}
-          options={{ headerShown: false }}
+          // options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

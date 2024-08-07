@@ -21,7 +21,7 @@ export const LikeStack = ({ navigation }) => {
         <Stack.Screen
           name="LikedProfile"
           component={LikedProfile}
-          options={{ headerShown: false }}
+          ///options={{ headerShown: false }}
         />
         <Stack.Screen
           name="LikedMatch"

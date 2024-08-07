@@ -121,7 +121,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                   <AntDesign name="close" size={30} color="white" />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.actionButton2}
                 onPress={toggleHeart}
               >
@@ -133,7 +133,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                 >
                   <AntDesign name="heart" size={30} color="white" />
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           ) : null
           // <View style={styles.actionContainer2}>
@@ -283,7 +283,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
             <Text style={styles.buttonText}>Reject</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton} onPress={toggleHeart}>
+        {/* <TouchableOpacity style={styles.actionButton} onPress={toggleHeart}>
           <View
             style={[
               styles.buttonContainer,
@@ -292,7 +292,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
           >
             <Text style={styles.buttonText}>Like</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </ScrollView>
   );
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     // right: 0,
     marginVertical: 10,
   },
-  actionButton1: { flex: 1, alignItems: "flex-end", marginHorizontal: 15 },
+  actionButton1: { flex: 1, alignItems: "center", marginHorizontal: 15 },
   actionButton2: { flex: 1, alignItems: "flex-start", marginHorizontal: 15 },
   heartButton: {
     borderRadius: 999,
@@ -438,6 +438,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 170,
     height: 49,
+    alignSelf: "center",
   },
   buttonText: {
     color: "white",

@@ -215,13 +215,13 @@ const ProfileScreen1 = ({ navigation }) => {
               mountains, followed by a cozy afternoon painting in my studio.
             </Text>
           </View>
-          {/* <View style={styles.actionContainer2}> */}
+          {/* <View style={styles.actionContainer2}> 
           <TouchableOpacity style={styles.goBackButton} onPress={toggleHeart}>
             <View style={[styles.buttonBackContainer]}>
               <Text style={styles.backButtonText}>Go Back</Text>
             </View>
           </TouchableOpacity>
-          {/* </View> */}
+      </View> */}
         </View>
       </View>
     </ScrollView>
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     marginTop: 30,
     marginHorizontal: 20,
-    marginBottom: 5,
+    marginBottom: 20,
     borderRadius: 6,
     paddingBottom: 10,
   },
