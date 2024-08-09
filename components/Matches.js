@@ -6,6 +6,7 @@ import ChatScreen from "./MatchesScreens/ChatScreen";
 import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
 import UnlikedMatch from "./MatchesScreens/UnlikedMatch";
 import MatchedTeamProfile from "./MatchesScreens/MatchedTeamProfile";
+import HeaderTitleWithIcon2 from "../Icon-functions/HeaderTitle2";
 const Stack = createStackNavigator();
 
 const Matches = ({ navigation }) => {
@@ -15,7 +16,17 @@ const Matches = ({ navigation }) => {
         <Stack.Screen
           name="MatchScreen"
           component={MatchScreen}
-          options={{ headerShown: false }}
+          options={{
+            headerTitle: () => (
+              <HeaderTitleWithIcon1
+                title="duble"
+                iconName="swap-horiz"
+                iconName1="menu"
+              /> // Use the HeaderTitleWithIcon component
+            ),
+            headerTitleAlign: "center",
+            headerLeft: () => null,
+          }}
         />
         <Stack.Screen
           name="UnlikedMatch"
@@ -40,7 +51,17 @@ const Matches = ({ navigation }) => {
           name="TeamProfile"
           component={MatchedTeamProfile}
           initialParams={{ navigation }}
-          // options={{ headerShown: false }}
+          options={{
+            headerTitle: () => (
+              <HeaderTitleWithIcon2
+                title="duble"
+                iconName="swap-horiz"
+                iconName1="arrow-back"
+              /> // Use the HeaderTitleWithIcon component
+            ),
+            headerTitleAlign: "center",
+            headerLeft: () => null,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

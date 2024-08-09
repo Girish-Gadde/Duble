@@ -118,14 +118,7 @@ const HomeTab = () => {
               marginBottom: 20, // Adjust as needed to decrease the gap
               fontWeight: "bold",
             },
-            headerTitle: () => (
-              <HeaderTitleWithIcon1
-                title="duble"
-                iconName="swap-horiz"
-                iconName1="menu"
-              /> // Use the HeaderTitleWithIcon component
-            ),
-            headerTitleAlign: "center",
+            headerShown: false,
           }}
         />
         <Tab.Screen
@@ -195,14 +188,7 @@ const HomeTab = () => {
               marginBottom: 20, // Adjust as needed to decrease the gap
               fontWeight: "bold",
             },
-            headerTitle: () => (
-              <HeaderTitleWithIcon1
-                title="duble"
-                iconName="swap-horiz"
-                iconName1="menu"
-              /> // Use the HeaderTitleWithIcon component
-            ),
-            headerTitleAlign: "center",
+            headerShown: false,
           }}
         />
         <Tab.Screen

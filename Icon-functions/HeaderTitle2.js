@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import { MaterialIcons, Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { toggleEditButtonAndBio } from "../components/Redux/Actions";
 import { useNavigation } from "@react-navigation/native";
@@ -8,15 +9,13 @@ import { useNavigation } from "@react-navigation/native";
 const HeaderTitleWithIcon2 = ({ title, iconName, iconName1 }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
   const handleMenuClick = () => {
     // Dispatch action to toggle the state
-    console.log("HT");
-    dispatch(toggleEditButtonAndBio());
+    navigation.goBack();
+    // dispatch(toggleEditButtonAndBio());
   };
 
-  const handleBackClick = () => {
-    navigation.goBack();
-  };
   return (
     <View
       style={{
@@ -48,8 +47,6 @@ const HeaderTitleWithIcon2 = ({ title, iconName, iconName1 }) => {
           height: 28,
           borderRadius: 6,
           marginLeft: 2,
-          position: "relative",
-          right: 42,
         }} // Adjust width, height, and border-radius as needed
       />
 
@@ -64,18 +61,26 @@ const HeaderTitleWithIcon2 = ({ title, iconName, iconName1 }) => {
       <TouchableOpacity
         style={{
           position: "absolute",
-          left: -165,
-          top: -1,
+          right: -125,
+          //top: -1,
         }}
-        onPress={handleBackClick}
+        onPress={handleMenuClick}
       >
         {/* Your button icon or text */}
-
-        <Ionicons
-          name={iconName} // Example icon name
-          size={30}
-          color="black"
+        <Image
+          source={require("../assets/Group.jpg")} // Replace with your image source
+          style={{
+            width: 20,
+            height: 20,
+            borderRadius: 1,
+            marginLeft: 2,
+          }} // Adjust width, height, and border-radius as needed
         />
+        {/* <MaterialIcons
+          name={iconName} // Example icon name
+          size={34}
+          color="black"
+        /> */}
       </TouchableOpacity>
     </View>
   );
