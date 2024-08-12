@@ -15,8 +15,10 @@
     "@react-navigation/native": "^6.0.0",
     "@react-navigation/stack": "^6.3.29",
     "@react-spring/native": "^9.7.3",
-    "expo": "~50.0.14",
+    "expo": "^51.0.26",
     "expo-status-bar": "~1.11.1",
+    "install": "^0.13.0",
+    "npx": "^10.2.2",
     "react": "18.2.0",
     "react-native": "0.73.6",
     "react-native-deck-swiper": "^2.0.17",
@@ -38,7 +40,8 @@
     "redux": "^5.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@babel/plugin-transform-template-literals": "^7.24.7"
   },
   "private": true
 }
