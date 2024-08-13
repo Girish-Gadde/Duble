@@ -80,6 +80,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-end",
+    //alignContent:'center',
+    alignItems:'center',
     padding: 20,
   },
   buttonContainer: {
