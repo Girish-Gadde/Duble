@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 //import Login from '../Login Screens/Login'
 import ProfileDetails from "./components/ProfileScreens/ProfileDetails";
 import { Provider } from "react-redux";
 import store from "./components/Store";
-//import HomeTab from "./components/HomeTab";
+import HomeTab from "./components/HomeTab";
 import ProfileScreen1 from "./components/ProfileScreens/ProfileScreen1";
 import Login from "./Login Screens/Login";
 import PhoneLogin from "./Login Screens/PhoneLogin";
@@ -24,11 +24,16 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer independent={true}>
-      <Stack.Navigator>
-        {/* You can add your screens here */}
-         <Stack.Screen name="Home" component={Login} /> 
-         <Stack.Screen
+    <Provider store={store}>
+      <NavigationContainer independent={true}>
+        <Stack.Navigator>
+          {/* You can add your screens here */}
+          {/* <Stack.Screen
+          name="Home"
+          component={Login}
+          options={{ headerShown: false }}
+        /> */}
+          <Stack.Screen
             name="Login"
             component={Login}
             options={{ headerShown: false }}
@@ -38,7 +43,7 @@ export default function App() {
             component={PhoneLogin}
             options={{ headerShown: false }}
           />
-           <Stack.Screen
+          <Stack.Screen
             name="PhoneLogin1"
             component={PhoneLogin1}
             options={{ headerShown: false }}
@@ -63,7 +68,7 @@ export default function App() {
             component={DOBScreen}
             options={{ headerShown: false }}
           />
-         <Stack.Screen
+          <Stack.Screen
             name="LocationScreen"
             component={LocationScreen}
             options={{ headerShown: false }}
@@ -73,23 +78,24 @@ export default function App() {
             component={PictureScreen}
             options={{ headerShown: false }}
           />
-         <Stack.Screen
+          <Stack.Screen
             name="SetUpScreen"
             component={SetUpScreen}
             options={{ headerShown: false }}
           />
-           {/* <Stack.Screen
+          <Stack.Screen
             name="HomeTab"
             component={HomeTab}
             options={{ headerShown: false }}
-          /> */}
+          />
           <Stack.Screen
             name="TeamProfileStack"
             component={TeamProfileStack}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="ProfileDetails" component={ProfileDetails} /> 
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }

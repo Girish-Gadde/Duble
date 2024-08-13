@@ -17,7 +17,7 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
-import Carousel from "react-native-snap-carousel";
+//import Carousel from "react-native-snap-carousel";
 
 const { width: viewportWidth } = Dimensions.get("window");
 
