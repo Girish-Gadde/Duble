@@ -17,9 +17,9 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
-//import Carousel from "react-native-snap-carousel";
+import Carousel from "react-native-reanimated-carousel";
 
-const { width: viewportWidth } = Dimensions.get("window");
+const width = Dimensions.get("window").width;
 
 const LikedProfile = ({ route, navigation }) => {
   const { profile } = route.params;
@@ -71,10 +71,11 @@ const LikedProfile = ({ route, navigation }) => {
       <View style={{ flex: 1 }}>
         <View style={styles.carouselContainer}>
           <Carousel
+            loop={false}
             data={images}
             renderItem={renderCarouselItem}
-            sliderWidth={viewportWidth}
-            itemWidth={viewportWidth - 10}
+            width={width}
+            height={654}
             //onSnapToItem={(index) => setCurrentProfileIndex(index)}
           />
         </View>

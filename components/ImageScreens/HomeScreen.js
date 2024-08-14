@@ -17,12 +17,11 @@ import {
   FontAwesome5,
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import TinderCard from "react-tinder-card";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleShowIcons } from "../Redux/Actions";
-//import Carousel from "react-native-snap-carousel";
+import Carousel from "react-native-reanimated-carousel";
 
-const { width: viewportWidth } = Dimensions.get("window");
+const width = Dimensions.get("window").width;
 
 const profiles = [
   {
@@ -136,12 +135,11 @@ const HomeScreen = () => {
   }, [currentProfileIndex]);
 
   const handleScroll = (event) => {
-    const currentOffset = event.nativeEvent.contentOffset.y;
-    const show = currentOffset <= 0;
-
-    if (show !== showIcons) {
-      dispatch(toggleShowIcons());
-    }
+    // const currentOffset = event.nativeEvent.contentOffset.y;
+    // const show = currentOffset <= 0;
+    // if (show !== showIcons) {
+    //   dispatch(toggleShowIcons());
+    // }
   };
 
   const renderCarouselItem = ({ item }) => {
@@ -159,17 +157,19 @@ const HomeScreen = () => {
     <ScrollView
       ref={scrollViewRef}
       contentContainerStyle={{ flexGrow: 1 }}
-      onScroll={handleScroll}
+      // onScroll={handleScroll}
       scrollEventThrottle={16}
       style={{ backgroundColor: "#EDEEF1" }}
     >
       <View style={{ flex: 1 }}>
         <View style={styles.carouselContainer}>
           <Carousel
+            loop={false}
             data={images}
+            // autoPlay={true}
             renderItem={renderCarouselItem}
-            sliderWidth={viewportWidth}
-            itemWidth={viewportWidth - 1}
+            width={width}
+            height={654}
             //onSnapToItem={(index) => setCurrentProfileIndex(index)}
           />
         </View>

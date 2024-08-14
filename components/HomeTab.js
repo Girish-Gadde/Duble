@@ -1,7 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { Image, View } from "react-native";
 import Teams from "./Teams";
 import Likes from "./LikeScreens/Likes";
@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { LikeStack } from "./LikeScreens/LikeStack";
 import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
 import { ProfileStack } from "./ProfileScreens/ProfileStack";
-//import HomeScreen from "./ImageScreens/HomeScreen";
+import HomeScreen from "./ImageScreens/HomeScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -121,7 +121,7 @@ const HomeTab = () => {
             headerShown: false,
           }}
         />
-        {/* <Tab.Screen
+        <Tab.Screen
           name="Home"
           component={HomeScreen}
           options={{
@@ -154,7 +154,7 @@ const HomeTab = () => {
             ),
             headerTitleAlign: "center",
           }}
-        /> */}
+        />
         <Tab.Screen
           name="Matches"
           component={Matches}

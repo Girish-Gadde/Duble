@@ -16,7 +16,6 @@ import {
   FontAwesome5,
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import TinderCard from "react-tinder-card";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleShowIcons } from "../Redux/Actions";
 import HeaderTitleWithIcon1 from "../../Icon-functions/HeaderTitle1";
