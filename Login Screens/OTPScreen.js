@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,13 +10,38 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import OTPTextInput from "react-native-otp-textinput";
+import { serverIP } from "@/config";
 
-const OTPScreen = ({ route }) => {
-  const { number } = route.params;
-  const navigation = useNavigation();
-  const navigateToVerifyScreen = () => {
-    navigation.navigate("VerifyScreen");
+const OTPScreen = ({ route, navigation }) => {
+  const { mobileNumber } = route.params;
+  const [otp, setOtp] = useState("");
+  //const navigation = useNavigation();
+  const verifyUserOtp = async () => {
+    try {
+      const response = await fetch(`${serverIP}/auth/verifyUserOtp`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          otp,
+          mobileNumber,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Response: ", data);
+      navigation.navigate("VerifyScreen", { otp });
+    } catch (error) {
+      console.error("Error: ", error);
+    }
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -34,11 +59,12 @@ const OTPScreen = ({ route }) => {
         offTintColor="#6420AA"
         containerStyle={styles.otpContainer}
         textInputStyle={styles.otpInput}
+        handleTextChange={setOtp}
       />
 
-      <Text style={styles.subtitle}>Enter OTP sent to {number}</Text>
+      <Text style={styles.subtitle}>Enter OTP sent to {mobileNumber}</Text>
 
-      <TouchableOpacity style={styles.button} onPress={navigateToVerifyScreen}>
+      <TouchableOpacity style={styles.button} onPress={verifyUserOtp}>
         <Text style={styles.buttonText}>Done</Text>
       </TouchableOpacity>
       <TouchableOpacity>

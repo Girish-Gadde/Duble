@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,15 +8,41 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
+import { serverIP } from "../config";
 
 const PhoneLogin = () => {
+  const [mobileNumber, setMobileNumber] = useState("");
   const navigation = useNavigation();
 
-  const number = "9998886644";
+  const sendPhoneNumberForOtp = async () => {
+    navigation.navigate("OTPScreen", { mobileNumber });
+    try {
+      const response = await fetch(`${serverIP}/auth/sendOtp`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mobileNumber,
+          newUser: false,
+        }),
+      });
 
-  const navigateToOTPScreen = () => {
-    navigation.navigate("OTPScreen", { number });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Response: ", data);
+    } catch (error) {
+      console.error("Error: ", error);
+    }
   };
+
+  // const navigateToOTPScreen = (phoneNumber) => {
+  //   navigation.navigate("OTPScreen", { phoneNumber });
+  // };
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Log in</Text>
@@ -26,10 +52,12 @@ const PhoneLogin = () => {
           style={styles.input}
           placeholder="Phone number"
           keyboardType="phone-pad"
+          value={mobileNumber}
+          onChangeText={setMobileNumber}
         />
         <Text style={styles.subtitle}>OTP will be sent to this number</Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={navigateToOTPScreen}>
+      <TouchableOpacity style={styles.button} onPress={sendPhoneNumberForOtp}>
         <Text style={styles.buttonText}>Verify</Text>
       </TouchableOpacity>
     </SafeAreaView>
