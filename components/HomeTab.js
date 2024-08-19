@@ -14,6 +14,8 @@ import { LikeStack } from "./LikeScreens/LikeStack";
 import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
 import { ProfileStack } from "./ProfileScreens/ProfileStack";
 import HomeScreen from "./ImageScreens/HomeScreen";
+import Chat from '../Chat'
+
 
 const Tab = createBottomTabNavigator();
 
@@ -42,7 +44,7 @@ const HomeTab = () => {
               display: "flex",
               paddingHorizontal: 12,
               paddingVertical: 20,
-              height: 80,
+              height:110,
               justifyContent: "center",
               //marginBottom: 10,
             },
@@ -60,6 +62,7 @@ const HomeTab = () => {
                   name={focused ? "shuffle" : "shuffle"}
                   size={size}
                   color={color}
+                  
                 />
 
                 <View
@@ -71,6 +74,7 @@ const HomeTab = () => {
                     borderRadius: 6,
                     width: 8,
                     height: 8,
+                    
                   }}
                 />
               </View>
@@ -157,7 +161,7 @@ const HomeTab = () => {
         />
         <Tab.Screen
           name="Matches"
-          component={Matches}
+          component={Chat}
           initialParams={{ navigation }}
           options={{
             tabBarIcon: ({ focused, color, size }) => (

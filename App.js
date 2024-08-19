@@ -19,6 +19,7 @@ import PictureScreen from "./Login Screens/PictureScreen";
 import SetUpScreen from "./Login Screens/SetUpScreen";
 import { TeamProfileStack } from "./components/Team/TeamProfileStack";
 import PhoneLogin1 from "./Login Screens/PhoneLogin1";
+import Chat from './Chat'
 
 const Stack = createNativeStackNavigator();
 
@@ -35,7 +36,7 @@ export default function App() {
         /> */}
           <Stack.Screen
             name="Login"
-            component={Login}
+            component={HomeTab}
             options={{ headerShown: false }}
           />
           <Stack.Screen
