@@ -7,6 +7,7 @@ import {
   StyleSheet,
   SafeAreaView,
   TextInput,
+  Alert,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import OTPTextInput from "react-native-otp-textinput";
@@ -16,7 +17,45 @@ const OTPScreen = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
   const [otp, setOtp] = useState("");
   //const navigation = useNavigation();
-  const verifyUserOtp = async () => {
+
+  const sendPhoneNumberForOtp = async () => {
+    //  navigation.navigate("OTPScreen", { mobileNumber });
+    try {
+      const response = await fetch(`${serverIP}/auth/sendOtp`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          mobileNumber,
+          newUser: false,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Response: ", data);
+      Alert.alert(
+        "OTP Sent",
+        "OTP is sent once again to the given mobile number.",
+        [
+          {
+            text: "Press Ok and enter OTP",
+            onPress: () => console.log("Alert closed"),
+          },
+        ],
+        { cancelable: false }
+      );
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
+  const verifyUserOtp = async (otp) => {
     navigation.navigate("VerifyScreen", { otp });
     try {
       const response = await fetch(`${serverIP}/auth/verifyUserOtp`, {
@@ -42,6 +81,15 @@ const OTPScreen = ({ route, navigation }) => {
     }
   };
 
+  const handleOtpChange = (enteredOtp) => {
+    setOtp(enteredOtp);
+
+    // Automatically verify OTP if it is 4 digits long
+    if (enteredOtp.length === 4) {
+      verifyUserOtp(enteredOtp);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -59,7 +107,7 @@ const OTPScreen = ({ route, navigation }) => {
         offTintColor="#6420AA"
         containerStyle={styles.otpContainer}
         textInputStyle={styles.otpInput}
-        handleTextChange={setOtp}
+        handleTextChange={handleOtpChange}
       />
 
       <Text style={styles.subtitle}>Enter OTP sent to {mobileNumber}</Text>
@@ -67,7 +115,7 @@ const OTPScreen = ({ route, navigation }) => {
       <TouchableOpacity style={styles.button} onPress={verifyUserOtp}>
         <Text style={styles.buttonText}>Done</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={sendPhoneNumberForOtp}>
         <Text style={styles.sendText}>Send again</Text>
       </TouchableOpacity>
     </SafeAreaView>

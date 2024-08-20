@@ -14,6 +14,14 @@ const PhoneLogin = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const navigation = useNavigation();
 
+  const handleMobileNumberChange = (text) => {
+    // Allow only numeric input and limit the length to 10 digits
+    const formattedText = text.replace(/[^0-9]/g, "");
+    if (formattedText.length <= 10) {
+      setMobileNumber(formattedText);
+    }
+  };
+
   const sendPhoneNumberForOtp = async () => {
     navigation.navigate("OTPScreen", { mobileNumber });
     try {
@@ -53,7 +61,7 @@ const PhoneLogin = () => {
           placeholder="Phone number"
           keyboardType="phone-pad"
           value={mobileNumber}
-          onChangeText={setMobileNumber}
+          onChangeText={handleMobileNumberChange}
         />
         <Text style={styles.subtitle}>OTP will be sent to this number</Text>
       </View>
@@ -95,9 +103,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#6420AA",
     marginBottom: 7,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     backgroundColor: "#fff",
     borderRadius: 35,
+    fontSize: 24,
+    // textAlign: "center",
   },
   button: {
     width: 356,

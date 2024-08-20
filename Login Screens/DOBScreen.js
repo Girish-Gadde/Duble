@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,10 +7,27 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  Platform,
 } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const DOBScreen = ({ route }) => {
   const navigation = useNavigation();
+
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const [dob, setDob] = useState("");
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+    setDob(currentDate.toLocaleDateString());
+  };
+
+  const showDatepicker = () => {
+    setShow(true);
+  };
 
   const navigateToLocationScreen = () => {
     navigation.navigate("LocationScreen");
@@ -20,13 +37,27 @@ const DOBScreen = ({ route }) => {
       <Text style={styles.title}>Set Up</Text>
       <View style={styles.textLogin}>
         <Text style={styles.subtitle}>Hi [Name]! When’s your birthday?</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter nmae"
-          keyboardType="phone-pad"
-        />
+        <TouchableOpacity onPress={showDatepicker}>
+          <TextInput
+            style={styles.input}
+            placeholder="Select date of birth"
+            value={dob}
+            editable={false}
+          />
+        </TouchableOpacity>
         <Text style={styles.subtitle1}>This can’t be changed later</Text>
       </View>
+
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode="date"
+          display="default"
+          onChange={onChange}
+          maximumDate={new Date()}
+        />
+      )}
       <TouchableOpacity
         style={styles.button}
         onPress={navigateToLocationScreen}
@@ -43,7 +74,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 50,
     backgroundColor: "#fff",
-    
   },
   title: {
     fontSize: 45,
@@ -82,6 +112,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#fff",
     borderRadius: 35,
+    color: "black",
   },
   button: {
     width: 356,
