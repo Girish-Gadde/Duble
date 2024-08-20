@@ -24,6 +24,10 @@ const Login = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Image
+        source={require("../assets/Duble-Image.jpg")}
+        style={styles.headerImage}
+      />
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[
@@ -81,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     //alignContent:'center',
-    alignItems:'center',
+    alignItems: "center",
     padding: 20,
   },
   buttonContainer: {
@@ -117,6 +121,11 @@ const styles = StyleSheet.create({
     width: 14.78,
     height: 15,
     marginRight: 5,
+  },
+  headerImage: {
+    width: "112%",
+    height: "78%",
+    marginBottom: 20,
   },
 });
 

@@ -14,8 +14,7 @@ import { LikeStack } from "./LikeScreens/LikeStack";
 import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
 import { ProfileStack } from "./ProfileScreens/ProfileStack";
 import HomeScreen from "./ImageScreens/HomeScreen";
-import Chat from '../Chat'
-
+import Chat from "../Chat";
 
 const Tab = createBottomTabNavigator();
 
@@ -44,7 +43,7 @@ const HomeTab = () => {
               display: "flex",
               paddingHorizontal: 12,
               paddingVertical: 20,
-              height:110,
+              height: "10%",
               justifyContent: "center",
               //marginBottom: 10,
             },
@@ -62,7 +61,6 @@ const HomeTab = () => {
                   name={focused ? "shuffle" : "shuffle"}
                   size={size}
                   color={color}
-                  
                 />
 
                 <View
@@ -74,7 +72,6 @@ const HomeTab = () => {
                     borderRadius: 6,
                     width: 8,
                     height: 8,
-                    
                   }}
                 />
               </View>

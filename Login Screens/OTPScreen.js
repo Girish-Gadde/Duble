@@ -17,6 +17,7 @@ const OTPScreen = ({ route, navigation }) => {
   const [otp, setOtp] = useState("");
   //const navigation = useNavigation();
   const verifyUserOtp = async () => {
+    navigation.navigate("VerifyScreen", { otp });
     try {
       const response = await fetch(`${serverIP}/auth/verifyUserOtp`, {
         method: "POST",
@@ -36,7 +37,6 @@ const OTPScreen = ({ route, navigation }) => {
 
       const data = await response.json();
       console.log("Response: ", data);
-      navigation.navigate("VerifyScreen", { otp });
     } catch (error) {
       console.error("Error: ", error);
     }

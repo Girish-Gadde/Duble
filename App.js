@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import store from "./components/Store";
 import HomeTab from "./components/HomeTab";
 import ProfileScreen1 from "./components/ProfileScreens/ProfileScreen1";
+import DubleStart from "./Login Screens/DubleStart";
 import Login from "./Login Screens/Login";
 import PhoneLogin from "./Login Screens/PhoneLogin";
 import OTPScreen from "./Login Screens/OTPScreen";
@@ -19,7 +20,7 @@ import PictureScreen from "./Login Screens/PictureScreen";
 import SetUpScreen from "./Login Screens/SetUpScreen";
 import { TeamProfileStack } from "./components/Team/TeamProfileStack";
 import PhoneLogin1 from "./Login Screens/PhoneLogin1";
-import Chat from './Chat'
+import Chat from "./Chat";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,8 +36,13 @@ export default function App() {
           options={{ headerShown: false }}
         /> */}
           <Stack.Screen
+            name="DubleStart"
+            component={DubleStart}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="Login"
-            component={HomeTab}
+            component={Login}
             options={{ headerShown: false }}
           />
           <Stack.Screen

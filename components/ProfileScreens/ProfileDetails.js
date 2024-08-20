@@ -725,8 +725,8 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 20,
-    marginTop: 15,
+    paddingHorizontal: "6%",
+    marginTop: "4%",
   },
   searchText: {
     fontSize: 20,
@@ -734,7 +734,7 @@ const styles = StyleSheet.create({
     //marginLeft: 0,
     fontWeight: "bold",
     lineHeight: 23.96,
-    marginRight: 80,
+    marginRight: "25%",
   },
   searchText1: {
     fontSize: 20,
@@ -742,7 +742,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontWeight: "bold",
     lineHeight: 23.96,
-    marginRight: 80,
+    marginRight: "25%",
   },
   searchText2: {
     fontSize: 20,
@@ -770,16 +770,16 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     lineHeight: 19.17,
-    paddingHorizontal: 20,
-    paddingVertical: 8,
+    paddingHorizontal: "6%",
+    paddingVertical: "2%",
   },
   viewContainer: {
     backgroundColor: "#FFFFFF",
-    marginTop: 30,
-    marginHorizontal: 20,
-    marginBottom: 5,
+    marginTop: "8%",
+    marginHorizontal: "5%",
+    marginBottom: "4.5%",
     borderRadius: 6,
-    paddingBottom: 10,
+    paddingBottom: "3%",
   },
   actionButton: {
     flex: 1,

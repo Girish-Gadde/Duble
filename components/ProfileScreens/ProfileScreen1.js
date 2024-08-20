@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     color: "#EDEEF1",
-    marginRight: 10,
+    marginRight: "3.5%",
   },
   ageText: {
     fontSize: 25,
@@ -315,8 +315,8 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 20,
-    marginTop: 15,
+    paddingHorizontal: "6%",
+    marginTop: "4%",
   },
   searchText: {
     fontSize: 16,
@@ -327,16 +327,16 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     lineHeight: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 8,
+    paddingHorizontal: "6%",
+    paddingVertical: "2%",
   },
   viewContainer: {
     backgroundColor: "#FFFFFF",
-    marginTop: 30,
-    marginHorizontal: 20,
-    marginBottom: 20,
+    marginTop: "8%",
+    marginHorizontal: "5%",
+    marginBottom: "4.5%",
     borderRadius: 6,
-    paddingBottom: 10,
+    paddingBottom: "3%",
   },
   actionButton: {
     flex: 1,
