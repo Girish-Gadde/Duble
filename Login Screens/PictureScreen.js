@@ -1,30 +1,67 @@
-import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
   SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  StyleSheet,
+  Alert,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
-const PictureScreen = ({ route }) => {
-  const navigation = useNavigation();
+const PictureScreen = ({ route, navigation }) => {
+  const { name, dob, mobileNumber, location, address } = route.params;
+  console.log("DETAILS: ", name, dob, location, mobileNumber, address);
+  const [images, setImages] = useState([]);
+
+  const pickImages = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsMultipleSelection: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      if (images.length + result.assets.length > 4) {
+        Alert.alert("Limit Reached", "You can only upload up to 4 images.");
+        return;
+      }
+      setImages([...images, ...result.assets.map((asset) => asset.uri)]);
+    }
+  };
 
   const navigateToSetUpScreen = () => {
     navigation.navigate("SetUpScreen");
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Set Up</Text>
       <View style={styles.textLogin}>
         <Text style={styles.subtitle}>Let’s add a few pictures!</Text>
       </View>
-      <View style={styles.viewContainer}>
-        <Text style={styles.uploadText}>Upload</Text>
+
+      <View style={styles.imageGrid}>
+        {images.map((image, index) => (
+          <Image key={index} source={{ uri: image }} style={styles.image} />
+        ))}
       </View>
-      <Text style={styles.AddText}>Add more+</Text>
+
+      {images.length === 0 && (
+        <View style={styles.viewContainer}>
+          <TouchableOpacity onPress={pickImages}>
+            <Text style={styles.uploadText}>Upload</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {images.length > 0 && images.length < 4 && (
+        <TouchableOpacity onPress={pickImages}>
+          <Text style={styles.AddText}>Add more+</Text>
+        </TouchableOpacity>
+      )}
+
       <TouchableOpacity style={styles.button} onPress={navigateToSetUpScreen}>
         <Text style={styles.buttonText}>Done</Text>
       </TouchableOpacity>
@@ -52,12 +89,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 45,
     alignSelf: "center",
-    // marginLeft: 20,
     fontWeight: "400",
     lineHeight: 23.96,
     color: "#121212",
   },
-
   button: {
     width: 356,
     height: 49,
@@ -77,6 +112,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 20,
   },
   uploadText: {
     fontSize: 20,
@@ -92,6 +128,18 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
     color: "#121212",
     marginTop: 25,
+  },
+  imageGrid: {
+    width: "90%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  image: {
+    width: "48%",
+    height: 150,
+    marginBottom: 10,
+    borderRadius: 10,
   },
 });
 

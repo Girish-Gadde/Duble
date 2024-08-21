@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,11 +9,12 @@ import {
   SafeAreaView,
 } from "react-native";
 
-const NameScreen = () => {
-  const navigation = useNavigation();
-
+const NameScreen = ({ route, navigation }) => {
+  // const navigation = useNavigation();
+  const { mobileNumber } = route.params;
+  const [name, setName] = useState(null);
   const navigateToDOBScreen = () => {
-    navigation.navigate("DOBScreen");
+    navigation.navigate("DOBScreen", { name, mobileNumber, navigation });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -23,8 +24,12 @@ const NameScreen = () => {
         <TextInput
           style={styles.input}
           placeholder="Enter name"
-          keyboardType="phone-pad"
+          keyboardType="default"
+          autoCapitalize="none"
+          value={name}
+          onChangeText={(text) => setName(text)}
         />
+
         <Text style={styles.subtitle1}>This will appear on your profile</Text>
       </View>
       <TouchableOpacity style={styles.button} onPress={navigateToDOBScreen}>
@@ -75,9 +80,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#6420AA",
     marginBottom: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     backgroundColor: "#fff",
     borderRadius: 35,
+    fontSize: 20,
   },
   button: {
     width: 356,

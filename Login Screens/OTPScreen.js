@@ -56,7 +56,7 @@ const OTPScreen = ({ route, navigation }) => {
   };
 
   const verifyUserOtp = async (otp) => {
-    navigation.navigate("VerifyScreen", { otp });
+    navigation.navigate("VerifyScreen", { otp, mobileNumber, navigation });
     try {
       const response = await fetch(`${serverIP}/auth/verifyUserOtp`, {
         method: "POST",

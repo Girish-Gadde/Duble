@@ -11,9 +11,9 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-const DOBScreen = ({ route }) => {
-  const navigation = useNavigation();
-
+const DOBScreen = ({ route, navigation }) => {
+  //const navigation = useNavigation();
+  const { name, mobileNumber } = route.params;
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [dob, setDob] = useState("");
@@ -30,13 +30,18 @@ const DOBScreen = ({ route }) => {
   };
 
   const navigateToLocationScreen = () => {
-    navigation.navigate("LocationScreen");
+    navigation.navigate("LocationScreen", {
+      name,
+      dob,
+      mobileNumber,
+      navigation,
+    });
   };
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Set Up</Text>
       <View style={styles.textLogin}>
-        <Text style={styles.subtitle}>Hi [Name]! When’s your birthday?</Text>
+        <Text style={styles.subtitle}>Hi {name} When’s your birthday?</Text>
         <TouchableOpacity onPress={showDatepicker}>
           <TextInput
             style={styles.input}

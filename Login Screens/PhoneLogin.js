@@ -10,9 +10,9 @@ import {
 } from "react-native";
 import { serverIP } from "../config";
 
-const PhoneLogin = () => {
+const PhoneLogin = ({ navigation }) => {
   const [mobileNumber, setMobileNumber] = useState("");
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
 
   const handleMobileNumberChange = (text) => {
     // Allow only numeric input and limit the length to 10 digits
@@ -23,7 +23,7 @@ const PhoneLogin = () => {
   };
 
   const sendPhoneNumberForOtp = async () => {
-    navigation.navigate("OTPScreen", { mobileNumber });
+    navigation.navigate("OTPScreen", { mobileNumber, navigation });
     try {
       const response = await fetch(`${serverIP}/auth/sendOtp`, {
         method: "POST",
