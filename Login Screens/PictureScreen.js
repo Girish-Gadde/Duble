@@ -9,11 +9,13 @@ import {
   Alert,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { serverIP } from "@/config";
 
 const PictureScreen = ({ route, navigation }) => {
   const { name, dob, mobileNumber, location, address } = route.params;
   console.log("DETAILS: ", name, dob, location, mobileNumber, address);
   const [images, setImages] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
 
   const pickImages = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -28,6 +30,57 @@ const PictureScreen = ({ route, navigation }) => {
         return;
       }
       setImages([...images, ...result.assets.map((asset) => asset.uri)]);
+    }
+  };
+
+  const uploadData = async () => {
+    if (images.length === 0) {
+      Alert.alert("No Images", "Please upload at least one image.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("dob", dob);
+    formData.append("mobileNumber", mobileNumber);
+    formData.append("location", JSON.stringify(location));
+    formData.append("address", address);
+
+    images.forEach((uri, index) => {
+      const filename = uri.split("/").pop();
+      const match = /\.(\w+)$/.exec(filename);
+      const type = match ? `image/${match[1]}` : `image`;
+
+      formData.append("images", {
+        uri,
+        name: filename,
+        type,
+      });
+    });
+
+    setIsUploading(true);
+    try {
+      const response = await fetch(`${serverIP}/auth/save-user-data`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to upload data");
+      }
+
+      const responseData = await response.json();
+      console.log("Response:", responseData);
+      Alert.alert("Success", "Data uploaded successfully!");
+      navigateToSetUpScreen();
+    } catch (error) {
+      console.error("Upload failed:", error);
+      Alert.alert("Upload Failed", "Failed to upload data, please try again.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -62,7 +115,7 @@ const PictureScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       )}
 
-      <TouchableOpacity style={styles.button} onPress={navigateToSetUpScreen}>
+      <TouchableOpacity style={styles.button} onPress={uploadData}>
         <Text style={styles.buttonText}>Done</Text>
       </TouchableOpacity>
     </SafeAreaView>
