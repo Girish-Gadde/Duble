@@ -20,92 +20,95 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleShowIcons } from "../Redux/Actions";
 import Carousel from "react-native-reanimated-carousel";
+import { serverIP } from "@/config";
 
 const width = Dimensions.get("window").width;
 
-const profiles = [
-  {
-    id: 1,
-    imageSource: require("../../assets/profile-1.jpg"),
-    imageSource1: require("../../assets/profile-6.jpg"),
-    imageSource2: require("../../assets/profile-7.jpg"),
-    imageSource3: require("../../assets/profile-8.jpg"),
-    name1: "Neha",
-    age1: 25,
-    name2: "Shruthi",
-    age2: 24,
-    location: "2 km away",
-    description:
-      "Your go to adventure enthusiast and amateur stand-up comedian",
-    ourStory:
-      "We met at a comedy show where shruthi was performing her stand-up routine and Neha was in the audience",
-    funDate:
-      "Hiking in the mountains, laughing, roasting marshmallows and sharing stories",
-    singleImage1: require("../../assets/image20.jpg"),
-    singleImage2: require("../../assets/image21.jpg"),
-  },
-  {
-    id: 2,
-    imageSource: require("../../assets/profile-2.png"),
-    imageSource1: require("../../assets/profile-9.jpg"),
-    imageSource2: require("../../assets/profile-10.jpg"),
-    imageSource3: require("../../assets/profile-11.jpg"),
-    name1: "Anusha",
-    age1: 24,
-    name2: "Nikitha",
-    age2: 26,
-    location: "3 km away",
-    description: "Crazy cat lady who is as crazy as a cat who loves to explore",
-    ourStory: "We met at a coffee shop and bonded over our love for cats",
-    funDate: "Visiting a cat café and having a cat-themed movie marathon",
-  },
-  {
-    id: 3,
-    imageSource: require("../../assets/profile-3.png"),
-    imageSource1: require("../../assets/profile-5.jpg"),
-    imageSource2: require("../../assets/profile-13.jpg"),
-    imageSource3: require("../../assets/profile-12.jpg"),
-    name1: "Julia",
-    age1: 27,
-    name2: "Jenny",
-    age2: 24,
-    location: "4 km away",
-    description:
-      "Your go to adventure enthusiast and amateur stand-up comedian",
-    ourStory:
-      "We met at a hiking event and instantly clicked while exploring nature",
-    funDate: "Going on a spontaneous road trip to explore new hiking trails",
-  },
-  {
-    id: 4,
-    imageSource: require("../../assets/profile-4.png"),
-    imageSource1: require("../../assets/profile-14.jpg"),
-    imageSource2: require("../../assets/profile-7.jpg"),
-    imageSource3: require("../../assets/profile-8.jpg"),
-    name1: "Shivani",
-    age1: 23,
-    name2: "Chandini",
-    age2: 25,
-    location: "10 km away",
-    description:
-      "We love to travel and experience new places, cultures, animals etc",
-    ourStory:
-      "We met while traveling solo in Europe and decided to explore the rest of the trip together",
-    funDate:
-      "Attending a cultural festival in a foreign country and trying out exotic foods",
-  },
-  // Add more profiles as needed
-];
+// const profiles = [
+//   {
+//     id: 1,
+//     imageSource: require("../../assets/profile-1.jpg"),
+//     imageSource1: require("../../assets/profile-6.jpg"),
+//     imageSource2: require("../../assets/profile-7.jpg"),
+//     imageSource3: require("../../assets/profile-8.jpg"),
+//     name1: "Neha",
+//     age1: 25,
+//     name2: "Shruthi",
+//     age2: 24,
+//     location: "2 km away",
+//     description:
+//       "Your go to adventure enthusiast and amateur stand-up comedian",
+//     ourStory:
+//       "We met at a comedy show where shruthi was performing her stand-up routine and Neha was in the audience",
+//     funDate:
+//       "Hiking in the mountains, laughing, roasting marshmallows and sharing stories",
+//     singleImage1: require("../../assets/image20.jpg"),
+//     singleImage2: require("../../assets/image21.jpg"),
+//   },
+//   {
+//     id: 2,
+//     imageSource: require("../../assets/profile-2.png"),
+//     imageSource1: require("../../assets/profile-9.jpg"),
+//     imageSource2: require("../../assets/profile-10.jpg"),
+//     imageSource3: require("../../assets/profile-11.jpg"),
+//     name1: "Anusha",
+//     age1: 24,
+//     name2: "Nikitha",
+//     age2: 26,
+//     location: "3 km away",
+//     description: "Crazy cat lady who is as crazy as a cat who loves to explore",
+//     ourStory: "We met at a coffee shop and bonded over our love for cats",
+//     funDate: "Visiting a cat café and having a cat-themed movie marathon",
+//   },
+//   {
+//     id: 3,
+//     imageSource: require("../../assets/profile-3.png"),
+//     imageSource1: require("../../assets/profile-5.jpg"),
+//     imageSource2: require("../../assets/profile-13.jpg"),
+//     imageSource3: require("../../assets/profile-12.jpg"),
+//     name1: "Julia",
+//     age1: 27,
+//     name2: "Jenny",
+//     age2: 24,
+//     location: "4 km away",
+//     description:
+//       "Your go to adventure enthusiast and amateur stand-up comedian",
+//     ourStory:
+//       "We met at a hiking event and instantly clicked while exploring nature",
+//     funDate: "Going on a spontaneous road trip to explore new hiking trails",
+//   },
+//   {
+//     id: 4,
+//     imageSource: require("../../assets/profile-4.png"),
+//     imageSource1: require("../../assets/profile-14.jpg"),
+//     imageSource2: require("../../assets/profile-7.jpg"),
+//     imageSource3: require("../../assets/profile-8.jpg"),
+//     name1: "Shivani",
+//     age1: 23,
+//     name2: "Chandini",
+//     age2: 25,
+//     location: "10 km away",
+//     description:
+//       "We love to travel and experience new places, cultures, animals etc",
+//     ourStory:
+//       "We met while traveling solo in Europe and decided to explore the rest of the trip together",
+//     funDate:
+//       "Attending a cultural festival in a foreign country and trying out exotic foods",
+//   },
+//   // Add more profiles as needed
+// ];
 
 const HomeScreen = () => {
   const [isHeartActive, setIsHeartActive] = useState(false);
   // const [showIcons, setShowIcons] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [profiles, setProfiles] = useState([]);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(
     profiles.length - 1
   );
   const navigation = useNavigation();
   const [lastDirection, setLastDirection] = useState();
+  const [images, setImages] = useState([]);
   const currentIndexRef = useRef(currentProfileIndex);
   const scrollViewRef = useRef(null);
 
@@ -128,11 +131,12 @@ const HomeScreen = () => {
     updateCurrentIndex(
       currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
     );
+    getSavedData();
   };
-  useEffect(() => {
-    console.log("BD");
-    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-  }, [currentProfileIndex]);
+  // useEffect(() => {
+  //   console.log("BD");
+
+  // }, [currentProfileIndex]);
 
   const handleScroll = (event) => {
     // const currentOffset = event.nativeEvent.contentOffset.y;
@@ -146,12 +150,59 @@ const HomeScreen = () => {
     return <Image source={item} style={styles.image} resizeMode="cover" />;
   };
 
-  const images = [
-    profiles[currentProfileIndex].imageSource,
-    profiles[currentProfileIndex].imageSource1,
-    profiles[currentProfileIndex].imageSource2,
-    profiles[currentProfileIndex].imageSource3,
-  ];
+  // const images = [
+  //   profiles[currentProfileIndex].imageSource,
+  //   profiles[currentProfileIndex].imageSource1,
+  //   profiles[currentProfileIndex].imageSource2,
+  //   profiles[currentProfileIndex].imageSource3,
+  // ];
+
+  useEffect(() => {
+    getSavedData();
+  }, []);
+
+  const teamName = "Dream Team";
+
+  async function getSavedData() {
+    try {
+      const response = await fetch(
+        `${serverIP}/auth/get-saved-data?teamName=${encodeURIComponent(
+          teamName
+        )}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch saved data");
+      }
+
+      const responseData = await response.json();
+
+      console.log(responseData, "RES0");
+
+      if (responseData.length > 0) {
+        setCurrentProfileIndex(0); // Set to the first profile by default
+        setProfiles(responseData);
+      }
+    } catch (error) {
+      console.error("Fetching data failed:", error);
+      Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
+    }
+  }
+
+  useEffect(() => {
+    if (profiles.length > 0) {
+      const currentProfile = profiles[currentProfileIndex];
+      console.log(currentProfile, "VG");
+      setImages(currentProfile.selectedImages || []);
+    }
+    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+  }, [currentProfileIndex, profiles]);
 
   return (
     <ScrollView
@@ -176,17 +227,17 @@ const HomeScreen = () => {
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
             <Text style={styles.nameText}>
-              {profiles[currentProfileIndex].name1},
+              {profiles[currentProfileIndex]?.name1},
             </Text>
             <Text style={styles.ageText}>
-              {profiles[currentProfileIndex].age1}
+              {profiles[currentProfileIndex]?.age1}
             </Text>
             <View style={styles.divider} />
             <Text style={styles.nameText}>
-              {profiles[currentProfileIndex].name2},
+              {profiles[currentProfileIndex]?.name2},
             </Text>
             <Text style={styles.ageText}>
-              {profiles[currentProfileIndex].age2}
+              {profiles[currentProfileIndex]?.age2}
             </Text>
           </View>
           <View style={styles.locationContainer}>
@@ -197,11 +248,11 @@ const HomeScreen = () => {
               style={styles.locationIcon}
             />
             <Text style={styles.locationText}>
-              {profiles[currentProfileIndex].location}
+              {profiles[currentProfileIndex]?.location}
             </Text>
           </View>
           <Text style={styles.descriptionText}>
-            "{profiles[currentProfileIndex].description}"
+            "{profiles[currentProfileIndex]?.description}"
           </Text>
         </View>
       </View>
@@ -260,7 +311,7 @@ const HomeScreen = () => {
           <Text style={styles.searchText}>Our Story</Text>
         </View>
         <Text style={styles.text}>
-          {profiles[currentProfileIndex].ourStory}{" "}
+          {profiles[currentProfileIndex]?.ourStory}{" "}
         </Text>
       </View>
       <View style={styles.viewContainer}>
@@ -269,18 +320,18 @@ const HomeScreen = () => {
           <Text style={styles.searchText}>Our Idea of a Fun Date</Text>
         </View>
         <Text style={styles.text}>
-          {profiles[currentProfileIndex].funDate}{" "}
+          {profiles[currentProfileIndex]?.funDate}{" "}
         </Text>
       </View>
       <View style={styles.singleBioContainer}>
-        <Image source={profiles[0].singleImage1} style={styles.singleImage} />
+        {/* <Image source={profiles[0].singleImage1} style={styles.singleImage} /> */}
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
             <Text style={styles.nameText1}>
-              {profiles[currentProfileIndex].name1},
+              {profiles[currentProfileIndex]?.name1},
             </Text>
             <Text style={styles.ageText1}>
-              {profiles[currentProfileIndex].age1}
+              {profiles[currentProfileIndex]?.age1}
             </Text>
           </View>
           <View style={styles.rowContainer}>
@@ -331,14 +382,14 @@ const HomeScreen = () => {
         </View>
       </View>
       <View style={styles.singleBioContainer}>
-        <Image source={profiles[0].singleImage2} style={styles.singleImage} />
+        {/* <Image source={profiles[0].singleImage2} style={styles.singleImage} /> */}
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
             <Text style={styles.nameText1}>
-              {profiles[currentProfileIndex].name2},
+              {profiles[currentProfileIndex]?.name2},
             </Text>
             <Text style={styles.ageText1}>
-              {profiles[currentProfileIndex].age2}
+              {profiles[currentProfileIndex]?.age2}
             </Text>
           </View>
           <View style={styles.rowContainer}>
