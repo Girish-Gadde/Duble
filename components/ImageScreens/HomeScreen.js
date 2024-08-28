@@ -131,7 +131,7 @@ const HomeScreen = () => {
     updateCurrentIndex(
       currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
     );
-    getSavedData();
+    // getSavedData();
   };
   // useEffect(() => {
   //   console.log("BD");
