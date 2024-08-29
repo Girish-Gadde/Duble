@@ -115,16 +115,10 @@ const HomeScreen = () => {
   const dispatch = useDispatch();
   const showIcons = useSelector((state) => state.showIcons);
 
-  const childRefs = useRef(profiles.map(() => React.createRef()));
-
   const updateCurrentIndex = (val) => {
     setCurrentProfileIndex(val);
     currentIndexRef.current = val;
   };
-
-  const canGoBack = currentProfileIndex < profiles.length - 1;
-
-  const canSwipe = currentProfileIndex >= 0;
 
   const toggleHeart = async () => {
     setIsHeartActive(!isHeartActive);
@@ -146,16 +140,17 @@ const HomeScreen = () => {
     // }
   };
 
-  const renderCarouselItem = ({ item }) => {
-    return <Image source={item} style={styles.image} resizeMode="cover" />;
-  };
-
   // const images = [
   //   profiles[currentProfileIndex].imageSource,
   //   profiles[currentProfileIndex].imageSource1,
   //   profiles[currentProfileIndex].imageSource2,
   //   profiles[currentProfileIndex].imageSource3,
   // ];
+
+  const renderCarouselItem = ({ item }) => {
+    console.log(item, "PATH");
+    return <Image source={item} style={styles.image} resizeMode="cover" />;
+  };
 
   useEffect(() => {
     getSavedData();
@@ -199,7 +194,11 @@ const HomeScreen = () => {
     if (profiles.length > 0) {
       const currentProfile = profiles[currentProfileIndex];
       console.log(currentProfile, "VG");
-      setImages(currentProfile.selectedImages || []);
+      // setImages(currentProfile.selectedImages || []);
+      const formattedImages = (currentProfile.selectedImages || []).map(
+        (imagePath) => ({ uri: `${serverIP}${imagePath}` })
+      );
+      setImages(formattedImages);
     }
     scrollViewRef.current?.scrollTo({ y: 0, animated: true });
   }, [currentProfileIndex, profiles]);
