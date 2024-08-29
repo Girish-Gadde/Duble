@@ -323,7 +323,12 @@ const HomeScreen = () => {
         </Text>
       </View>
       <View style={styles.singleBioContainer}>
-        {/* <Image source={profiles[0].singleImage1} style={styles.singleImage} /> */}
+        <Image
+          source={{
+            uri: `${serverIP}/uploads/1724755758498_a4d3817e-fde1-4f45-8800-40d09942d5ca.jpeg`,
+          }}
+          style={styles.singleImage}
+        />
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
             <Text style={styles.nameText1}>
@@ -381,7 +386,12 @@ const HomeScreen = () => {
         </View>
       </View>
       <View style={styles.singleBioContainer}>
-        {/* <Image source={profiles[0].singleImage2} style={styles.singleImage} /> */}
+        <Image
+          source={{
+            uri: `${serverIP}/uploads/1724755758531_200a964c-9120-475c-8287-97b17aa8d72b.jpeg`,
+          }}
+          style={styles.singleImage}
+        />
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
             <Text style={styles.nameText1}>
