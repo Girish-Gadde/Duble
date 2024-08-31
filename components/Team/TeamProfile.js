@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -6,173 +6,93 @@ import {
   Text,
   ScrollView,
   StyleSheet,
+  Dimensions,
   ActivityIndicator,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import {
   MaterialIcons,
   Ionicons,
   SimpleLineIcons,
   FontAwesome5,
+  AntDesign,
 } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
-import { toggleShowIcons } from "../Redux/Actions";
-import HeaderTitleWithIcon1 from "../../Icon-functions/HeaderTitle1";
-import HeaderTitleWithIcon2 from "../../Icon-functions/HeaderTitle2";
+import Icon from "react-native-vector-icons/FontAwesome";
+import Carousel from "react-native-reanimated-carousel";
+import { serverIP } from "@/config";
 
-const profiles = [
-  {
-    id: 1,
-    imageSource: require("../../assets/profile-1.jpg"),
-    name1: "Neha",
-    age1: 25,
-    name2: "Shruthi",
-    age2: 24,
-    location: "2 km away",
-    description:
-      "Your go to adventure enthusiast and amateur stand-up comedian",
-    ourStory:
-      "We met at a comedy show where shruthi was performing her stand-up routine and Neha was in the audience",
-    funDate:
-      "Hiking in the mountains, laughing, roasting marshmallows and sharing stories",
-    singleImage1: require("../../assets/image20.jpg"),
-    singleImage2: require("../../assets/image21.jpg"),
-  },
-  {
-    id: 2,
-    imageSource: require("../../assets/profile-2.png"),
-    name1: "Anusha",
-    age1: 24,
-    name2: "Nikitha",
-    age2: 26,
-    location: "3 km away",
-    description: "Crazy cat lady who is as crazy as a cat who loves to explore",
-    ourStory: "We met at a coffee shop and bonded over our love for cats",
-    funDate: "Visiting a cat café and having a cat-themed movie marathon",
-  },
-  {
-    id: 3,
-    imageSource: require("../../assets/profile-3.png"),
-    name1: "Julia",
-    age1: 27,
-    name2: "Jenny",
-    age2: 24,
-    location: "4 km away",
-    description:
-      "Your go to adventure enthusiast and amateur stand-up comedian",
-    ourStory:
-      "We met at a hiking event and instantly clicked while exploring nature",
-    funDate: "Going on a spontaneous road trip to explore new hiking trails",
-  },
-  {
-    id: 4,
-    imageSource: require("../../assets/profile-4.png"),
-    name1: "Shivani",
-    age1: 23,
-    name2: "Chandini",
-    age2: 25,
-    location: "10 km away",
-    description:
-      "We love to travel and experience new places, cultures, animals etc",
-    ourStory:
-      "We met while traveling solo in Europe and decided to explore the rest of the trip together",
-    funDate:
-      "Attending a cultural festival in a foreign country and trying out exotic foods",
-  },
-  // Add more profiles as needed
-];
+const width = Dimensions.get("window").width;
 
 const TeamProfile = ({ route, navigation }) => {
   const { profile } = route.params;
+  console.log(profile, "NAME");
   const [isHeartActive, setIsHeartActive] = useState(false);
-  // const [showIcons, setShowIcons] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [currentProfileIndex, setCurrentProfileIndex] = useState(
-    profiles.length - 1
-  );
+  const [showIcons, setShowIcons] = useState(true);
+  const [images, setImages] = useState([]);
+  const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
   //const navigation = useNavigation();
-  const [lastDirection, setLastDirection] = useState();
-  const currentIndexRef = useRef(currentProfileIndex);
-  const scrollViewRef = useRef(null);
 
-  const dispatch = useDispatch();
-  const showIcons = useSelector((state) => state.showIcons);
-
-  const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
-
-  const childRefs = useRef(profiles.map(() => React.createRef()));
-
-  const updateCurrentIndex = (val) => {
-    setCurrentProfileIndex(val);
-    currentIndexRef.current = val;
-  };
-
-  const canGoBack = currentProfileIndex < profiles.length - 1;
-
-  const canSwipe = currentProfileIndex >= 0;
-
-  const goToTeamProfileDetails = () => {
-    navigation.navigate("TeamProfileDetails");
-  };
-
-  const toggleHeart = async () => {
+  const toggleHeart = () => {
     setIsHeartActive(!isHeartActive);
-    updateCurrentIndex(
-      currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-    );
+    navigation.navigate("LikedMatch", { profile });
+    // setCurrentProfileIndex(
+    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
+    // );
   };
+
   useEffect(() => {
-    console.log("BD");
-    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-  }, [currentProfileIndex]);
+    const formattedImages = (profile.selectedImages || []).map((imagePath) => ({
+      uri: `${serverIP}${imagePath}`,
+    }));
+    setImages(formattedImages);
+  }, []);
 
   const handleScroll = (event) => {
     const currentOffset = event.nativeEvent.contentOffset.y;
     const show = currentOffset <= 0;
 
     if (show !== showIcons) {
-      dispatch(toggleShowIcons());
+      setShowIcons(show);
     }
   };
 
+  const navigateBack = () => {
+    navigation.goBack();
+  };
+
+  const renderCarouselItem = ({ item }) => {
+    return <Image source={item} style={styles.image} resizeMode="cover" />;
+  };
+
+  // const images = [
+  //   profile.imageSource,
+  //   profile.imageSource1,
+  //   profile.imageSource2,
+  //   profile.imageSource3,
+  // ];
+
   return (
     <ScrollView
-      ref={scrollViewRef}
       contentContainerStyle={{ flexGrow: 1 }}
       onScroll={handleScroll}
       scrollEventThrottle={16}
       style={{ backgroundColor: "#EDEEF1" }}
     >
-      {/* <View style={styles.headerStyle}>
-        <HeaderTitleWithIcon2
-          title="duble"
-          iconName="arrow-back"
-          iconName1="menu"
-        />
-      </View> */}
       <View style={{ flex: 1 }}>
-        <Image
-          source={profile.imageSource}
-          style={styles.image}
-          resizeMode="cover"
-        />
-        {isEditVisible && (
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={goToTeamProfileDetails}
-          >
-            <View style={styles.editButtonContainer}>
-              <Ionicons
-                name="infinite-outline"
-                size={24}
-                color="red"
-                style={styles.icon}
-              />
-              <Text style={styles.editButtonText}>Edit</Text>
-            </View>
-          </TouchableOpacity>
-        )}
+        <View style={styles.carouselContainer}>
+          <Carousel
+            loop={false}
+            data={images}
+            renderItem={renderCarouselItem}
+            width={width}
+            height={654}
+            //onSnapToItem={(index) => setCurrentProfileIndex(index)}
+          />
+        </View>
+        {/* <View style={styles.likedView}>
+          <Icon name="heart" size={18} color="#fff" />
+          <Text style={styles.likedText}>Likes you</Text>
+        </View> */}
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
             <Text style={styles.nameText}>{profile.name1},</Text>
@@ -190,139 +110,187 @@ const TeamProfile = ({ route, navigation }) => {
             />
             <Text style={styles.locationText}>{profile.location}</Text>
           </View>
-          <Text style={styles.descriptionText}>"{profile.description}"</Text>
+          <Text style={styles.descriptionText}>"{profile.description}""</Text>
         </View>
-      </View>
-      {showIcons ? (
-        <View style={styles.actionContainer1}>
-          <TouchableOpacity style={styles.actionButton1}>
-            <View
-              style={{
-                backgroundColor: "#6420AA",
-                borderRadius: 999,
-                width: 60,
-                height: 60,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <AntDesign name="close" size={30} color="white" />
+        {
+          // showIcons ? (
+          //   <View style={styles.actionContainer1}>
+          //     <TouchableOpacity
+          //       style={styles.actionButton1}
+          //       onPress={navigateBack}
+          //     >
+          //       <View
+          //         style={{
+          //           backgroundColor: "#6420AA",
+          //           borderRadius: 999,
+          //           width: 60,
+          //           height: 60,
+          //           justifyContent: "center",
+          //           alignItems: "center",
+          //         }}
+          //       >
+          //         <AntDesign name="close" size={30} color="white" />
+          //       </View>
+          //     </TouchableOpacity>
+          //     <TouchableOpacity
+          //       style={styles.actionButton2}
+          //       onPress={toggleHeart}
+          //     >
+          //       <View
+          //         style={[
+          //           styles.heartButton,
+          //           { backgroundColor: isHeartActive ? "#FF3156" : "#FF3156" },
+          //         ]}
+          //       >
+          //         <AntDesign name="heart" size={30} color="white" />
+          //       </View>
+          //     </TouchableOpacity>
+          //   </View>
+          // ) : null
+          // <View style={styles.actionContainer2}>
+          //   <TouchableOpacity style={styles.actionButton}>
+          //     <View style={styles.buttonContainer}>
+          //       <Text style={styles.buttonText}>Reject</Text>
+          //     </View>
+          //   </TouchableOpacity>
+          //   <TouchableOpacity style={styles.actionButton} onPress={toggleHeart}>
+          //     <View
+          //       style={[
+          //         styles.buttonContainer,
+          //         { backgroundColor: isHeartActive ? "#00b300" : "#F75394" },
+          //       ]}
+          //     >
+          //       <Text style={styles.buttonText}>Like</Text>
+          //     </View>
+          //   </TouchableOpacity>
+          // </View>
+          // <View style={styles.viewContainer1}>
+          //   <View style={styles.searchContainer}>
+          //     {/* <Ionicons name="search" size={16} color="#454545" /> */}
+          //     <Text style={styles.searchText}>🔍 Our Story</Text>
+          //   </View>
+          //   <Text style={styles.text}>{profile.ourStory}</Text>
+          // </View>
+          // <View style={styles.viewContainer}>
+          //   <View style={styles.searchContainer}>
+          //     {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
+          //     <Text style={styles.searchText}>🌟 Our Idea of a Fun Date</Text>
+          //   </View>
+          //   <Text style={styles.text}>{profile.funDate}</Text>
+          // </View>
+        }
+        {profile.dynamicContent?.length > 0 ? (
+          profile.dynamicContent.map((content, index) => (
+            <View key={index} style={styles.viewContainer}>
+              <View style={styles.searchContainer}>
+                {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
+                <Text style={styles.searchText}>{content.label}</Text>
+              </View>
+              <Text style={styles.text}>{content.value}</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton2} onPress={toggleHeart}>
-            <View
-              style={[
-                styles.heartButton,
-                {
-                  backgroundColor: isHeartActive ? "#FF3156" : "#FF3156",
-                },
-              ]}
-            >
-              <AntDesign name="heart" size={30} color="white" />
+          ))
+        ) : (
+          // Show activity indicator while loading
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+            <Text style={styles.loadingText}>Loading content...</Text>
+          </View>
+        )}
+        <View style={styles.singleBioContainer}>
+          <Image
+            source={{
+              uri: `${serverIP}/uploads/1724755758498_a4d3817e-fde1-4f45-8800-40d09942d5ca.jpeg`,
+            }}
+            style={styles.singleImage}
+          />
+          <View style={styles.bioDataContainer}>
+            <View style={styles.singleNameContainer}>
+              <Text style={styles.nameText1}>{profile.name1},</Text>
+              <Text style={styles.ageText1}>{profile.age1}</Text>
             </View>
-          </TouchableOpacity>
+            <View style={styles.rowContainer}>
+              <View style={styles.iconContainer}>
+                <MaterialIcons
+                  name="location-on"
+                  size={18}
+                  color="#121212"
+                  style={styles.locationIcon}
+                />
+                <Text style={styles.cell}>{profile.place}</Text>
+              </View>
+
+              <View style={styles.iconContainer}>
+                <SimpleLineIcons
+                  name="graduation"
+                  size={18}
+                  color="#121212"
+                  style={styles.locationIcon}
+                />
+                <Text style={styles.cell}>PhD Student</Text>
+              </View>
+            </View>
+
+            <View style={styles.rowContainer}>
+              <View style={styles.iconContainer3}>
+                <FontAwesome5
+                  name="ruler-vertical"
+                  size={18}
+                  color="#121212"
+                  style={styles.locationIcon}
+                />
+                <Text style={styles.cell}>{profile.height}</Text>
+              </View>
+              <View style={styles.iconContainer}>
+                <AntDesign
+                  name="hearto"
+                  size={17}
+                  color="#121212"
+                  style={styles.locationIcon}
+                />
+                <Text style={styles.cell}>Bisexual</Text>
+              </View>
+            </View>
+            <Text style={styles.singleBioText}>
+              "I bet I run faster than you."
+            </Text>
+          </View>
         </View>
-      ) : null}
+        <View style={styles.singleBioContainer}>
+          <Image
+            source={{
+              uri: `${serverIP}/uploads/1724755758531_200a964c-9120-475c-8287-97b17aa8d72b.jpeg`,
+            }}
+            style={styles.singleImage}
+          />
+          <View style={styles.bioDataContainer}>
+            <View style={styles.singleNameContainer}>
+              <Text style={styles.nameText1}>{profile.name2},</Text>
+              <Text style={styles.ageText1}>{profile.age2}</Text>
+            </View>
+            <View style={styles.rowContainer}>
+              <View style={styles.iconContainer}>
+                <MaterialIcons
+                  name="location-on"
+                  size={18}
+                  color="#121212"
+                  style={styles.locationIcon}
+                />
+                <Text style={styles.cell}>{profile.place}</Text>
+              </View>
 
-      <View style={styles.viewContainer1}>
-        <View style={styles.searchContainer}>
-          <Ionicons name="search" size={16} color="#454545" />
-          <Text style={styles.searchText}>Our Story</Text>
-        </View>
-        <Text style={styles.text}>{profile.ourStory} </Text>
-      </View>
-      <View style={styles.viewContainer}>
-        <View style={styles.searchContainer}>
-          <Ionicons name="star" size={16} color="#FFFF66" />
-          <Text style={styles.searchText}>Our Idea of a Fun Date</Text>
-        </View>
-        <Text style={styles.text}>{profile.funDate} </Text>
-      </View>
-      <View style={styles.singleBioContainer}>
-        <Image source={profiles[0].singleImage1} style={styles.singleImage} />
-        <View style={styles.bioDataContainer}>
-          <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>{profile.name1},</Text>
-            <Text style={styles.ageText1}>{profile.age1}</Text>
-          </View>
-          <View style={styles.rowContainer}>
-            <View style={styles.iconContainer}>
-              <MaterialIcons
-                name="location-on"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>Pitampura</Text>
-            </View>
-
-            <View style={styles.iconContainer}>
-              <SimpleLineIcons
-                name="graduation"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>PhD Student</Text>
-            </View>
-          </View>
-
-          <View style={styles.rowContainer}>
-            <View style={styles.iconContainer3}>
-              <FontAwesome5
-                name="ruler-vertical"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>155 cm</Text>
-            </View>
-            <View style={styles.iconContainer}>
-              <AntDesign
-                name="hearto"
-                size={17}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>Bisexual</Text>
-            </View>
-          </View>
-          <Text style={styles.singleBioText}>
-            "I bet I run faster than you."
-          </Text>
-        </View>
-      </View>
-      <View style={styles.singleBioContainer}>
-        <Image source={profiles[0].singleImage2} style={styles.singleImage} />
-        <View style={styles.bioDataContainer}>
-          <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>{profile.name2},</Text>
-            <Text style={styles.ageText1}>{profile.age2}</Text>
-          </View>
-          <View style={styles.rowContainer}>
-            <View style={styles.iconContainer}>
-              <MaterialIcons
-                name="location-on"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>Pitampura</Text>
+              <View style={styles.iconContainer}>
+                <SimpleLineIcons
+                  name="graduation"
+                  size={18}
+                  color="#121212"
+                  style={styles.locationIcon}
+                />
+                <Text style={styles.cell}>{profile.occupation}</Text>
+              </View>
             </View>
 
-            <View style={styles.iconContainer}>
-              <SimpleLineIcons
-                name="graduation"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>Analyst</Text>
-            </View>
-          </View>
-
-          <View style={styles.rowContainer}>
-            {/* <View style={styles.iconContainer3}>
+            <View style={styles.rowContainer}>
+              {/* <View style={styles.iconContainer3}>
                 <FontAwesome5
                   name="ruler-vertical"
                   size={18}
@@ -331,23 +299,23 @@ const TeamProfile = ({ route, navigation }) => {
                 />
                 <Text style={styles.cell}>155 cm</Text>
               </View> */}
-            <View style={styles.iconContainer}>
-              <AntDesign
-                name="hearto"
-                size={17}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>Straight</Text>
+              <View style={styles.iconContainer}>
+                <AntDesign
+                  name="hearto"
+                  size={17}
+                  color="#121212"
+                  style={styles.locationIcon}
+                />
+                <Text style={styles.cell}>Straight</Text>
+              </View>
             </View>
+            <Text style={styles.singleBioText}>
+              "Joker with a punchline prowess."
+            </Text>
           </View>
-          <Text style={styles.singleBioText}>
-            "Joker with a punchline prowess."
-          </Text>
         </View>
       </View>
-
-      <View style={styles.actionContainer2}>
+      {/* <View style={styles.actionContainer2}>
         <TouchableOpacity style={styles.actionButton}>
           <View style={styles.buttonContainer}>
             <Text style={styles.buttonText}>Reject</Text>
@@ -363,15 +331,12 @@ const TeamProfile = ({ route, navigation }) => {
             <Text style={styles.buttonText}>Like</Text>
           </View>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  // swipe: {
-  //   position: absolute,
-  // },
   image: {
     width: "92%",
     height: 600,
@@ -390,7 +355,7 @@ const styles = StyleSheet.create({
   nameContainer: {
     flexDirection: "row",
     alignItems: "center",
-    // marginBottom: 2,
+    marginBottom: 2,
   },
   nameText: {
     fontSize: 30,
@@ -399,7 +364,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   ageText: {
-    fontSize: 30,
+    fontSize: 25,
     fontWeight: "bold",
     color: "#EDEEF1",
   },
@@ -427,7 +392,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   locationIcon: {
-    marginRight: 3,
+    marginRight: 5,
   },
   locationText: {
     fontSize: 16,
@@ -443,7 +408,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
     position: "absolute",
-    top: 643,
+    top: 565,
     marginBottom: 20,
   },
   actionContainer2: {
@@ -457,7 +422,7 @@ const styles = StyleSheet.create({
     // right: 0,
     marginVertical: 10,
   },
-  actionButton1: { flex: 1, alignItems: "flex-end", marginHorizontal: 15 },
+  actionButton1: { flex: 1, alignItems: "center", marginHorizontal: 15 },
   actionButton2: { flex: 1, alignItems: "flex-start", marginHorizontal: 15 },
   heartButton: {
     borderRadius: 999,
@@ -486,7 +451,7 @@ const styles = StyleSheet.create({
   },
   viewContainer1: {
     backgroundColor: "#FFFFFF",
-    marginTop: 40,
+    marginTop: 5,
     marginHorizontal: 20,
     marginBottom: 10,
     borderRadius: 6,
@@ -511,6 +476,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 170,
     height: 49,
+    alignSelf: "center",
   },
   buttonText: {
     color: "white",
@@ -518,35 +484,6 @@ const styles = StyleSheet.create({
     //fontWeight: "bold",
     // marginTop: 5,
   },
-  loadingContainer: {
-    //flex: 1,
-    height: 600,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "relative",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(255, 255, 255, 0.8)", // Optional: to add a semi-transparent background
-    marginHorizontal: 20,
-    borderRadius: 10,
-  },
-
-  loadingIndicator: {
-    transform: [{ scale: 2 }], // Increase the size of the ActivityIndicator
-  },
-  // loadingContainer: {
-  //   position: "absolute",
-  //   top: 0,
-  //   left: 0,
-  //   right: 0,
-  //   bottom: 0,
-  //   backgroundColor: "rgba(255, 255, 255, 0.8)",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   zIndex: 1000, // Ensure it's above other content
-  // },
   singleImage: {
     height: 110,
     width: 117,
@@ -605,40 +542,39 @@ const styles = StyleSheet.create({
     marginLeft: 3,
     lineHeight: 16.77,
   },
-  headerStyle: {
-    marginTop: 40,
-    position: "relative",
-    left: 180,
-    marginBottom: 10,
-  },
-  editButton: {
-    position: "absolute",
-    width: 98,
-    height: 40,
-    top: 6,
-    left: 262,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-  },
-  editButtonContainer: {
-    // backgroundColor: "#FFFFFF",
+  likedView: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    backgroundColor: "#FF3156",
+    width: 124,
+    height: 29,
+    borderRadius: 48,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    position: "absolute",
+    top: 23,
+    left: 131,
+  },
+  likedText: {
+    color: "#EDEEF1",
+    fontSize: 16,
+    fontWeight: "500",
+    lineHeight: 19.36,
+  },
+  carouselContainer: {
+    marginVertical: 10,
+  },
+  loadingContainer: {
+    flex: 1,
     justifyContent: "center",
-    width: 84,
-    height: 30,
-    paddingTop: 6,
+    alignItems: "center",
+    paddingVertical: 20,
   },
-  editButtonText: {
-    color: "#FF3156",
-    fontSize: 20,
-    marginLeft: 5,
-    //fontWeight: "bold",
-    // marginTop: 5,
-  },
-  icon: {
-    marginTop: 2,
-    marginHorizontal: 7, // Adjust the spacing between icon and text as needed
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#454545",
   },
 });
 

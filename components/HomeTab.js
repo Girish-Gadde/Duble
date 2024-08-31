@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -15,14 +15,46 @@ import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
 import { ProfileStack } from "./ProfileScreens/ProfileStack";
 import HomeScreen from "./ImageScreens/HomeScreen";
 import Chat from "../Chat";
+import { serverIP } from "@/config";
 
 const Tab = createBottomTabNavigator();
 
 const HomeTab = () => {
   const navigation = useNavigation();
+  const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
+  useEffect(() => {
+    getYourTeam();
+  }, []);
+
+  const teamId = "66d302ecccbcf6fd4a2b7953";
+
+  async function getYourTeam() {
+    try {
+      const response = await fetch(
+        `${serverIP}/auth/get-your-team?teamId=${teamId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch your team");
+      }
+
+      const responseData = await response.json();
+      setProfile(responseData);
+      console.log(responseData, "Your Team");
+    } catch (error) {
+      console.error("Failed to fetch your team:", error);
+      //Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
+    }
+  }
   const navigateToTeamProfile = () => {
-    navigation.navigate("TeamProfileStack", { navigation });
+    navigation.navigate("TeamProfileStack", { navigation, profile });
   };
   return (
     <NavigationContainer independent={true}>

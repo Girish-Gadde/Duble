@@ -154,6 +154,8 @@ const HomeScreen = () => {
 
   useEffect(() => {
     getSavedData();
+    const currentProfile = profiles[currentProfileIndex];
+    console.log(currentProfile, "VG");
   }, []);
 
   const teamName = "Dream Team";
@@ -304,7 +306,7 @@ const HomeScreen = () => {
         />
       </View> */}
 
-      <View style={styles.viewContainer1}>
+      {/* <View style={styles.viewContainer1}>
         <View style={styles.searchContainer}>
           <Ionicons name="search" size={16} color="#454545" />
           <Text style={styles.searchText}>Our Story</Text>
@@ -321,7 +323,26 @@ const HomeScreen = () => {
         <Text style={styles.text}>
           {profiles[currentProfileIndex]?.funDate}{" "}
         </Text>
-      </View>
+      </View> */}
+
+      {profiles[currentProfileIndex]?.dynamicContent?.length > 0 ? (
+        profiles[currentProfileIndex].dynamicContent.map((content, index) => (
+          <View key={index} style={styles.viewContainer}>
+            <View style={styles.searchContainer}>
+              {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
+              <Text style={styles.searchText}>{content.label}</Text>
+            </View>
+            <Text style={styles.text}>{content.value}</Text>
+          </View>
+        ))
+      ) : (
+        // Show activity indicator while loading
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text style={styles.loadingText}>Loading content...</Text>
+        </View>
+      )}
+
       <View style={styles.singleBioContainer}>
         <Image
           source={{
@@ -346,7 +367,9 @@ const HomeScreen = () => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>Pitampura</Text>
+              <Text style={styles.cell}>
+                {profiles[currentProfileIndex]?.place}
+              </Text>
             </View>
 
             <View style={styles.iconContainer}>
@@ -356,7 +379,9 @@ const HomeScreen = () => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>PhD Student</Text>
+              <Text style={styles.cell}>
+                {profiles[currentProfileIndex]?.occupation}
+              </Text>
             </View>
           </View>
 
@@ -368,7 +393,9 @@ const HomeScreen = () => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>155 cm</Text>
+              <Text style={styles.cell}>
+                {profiles[currentProfileIndex]?.height}
+              </Text>
             </View>
             <View style={styles.iconContainer}>
               <AntDesign
@@ -377,7 +404,9 @@ const HomeScreen = () => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>Bisexual</Text>
+              <Text style={styles.cell}>
+                {profiles[currentProfileIndex]?.gender}
+              </Text>
             </View>
           </View>
           <Text style={styles.singleBioText}>
@@ -409,7 +438,9 @@ const HomeScreen = () => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>Pitampura</Text>
+              <Text style={styles.cell}>
+                {profiles[currentProfileIndex]?.place}
+              </Text>
             </View>
 
             <View style={styles.iconContainer}>
@@ -419,7 +450,9 @@ const HomeScreen = () => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>Analyst</Text>
+              <Text style={styles.cell}>
+                {profiles[currentProfileIndex]?.occupation}
+              </Text>
             </View>
           </View>
 
@@ -440,7 +473,9 @@ const HomeScreen = () => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>Straight</Text>
+              <Text style={styles.cell}>
+                {profiles[currentProfileIndex]?.gender}
+              </Text>
             </View>
           </View>
           <Text style={styles.singleBioText}>
@@ -720,6 +755,17 @@ const styles = StyleSheet.create({
   },
   carouselContainer: {
     marginVertical: 5,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#454545",
   },
   // carouselImage: {
   //   width: viewportWidth - 60,

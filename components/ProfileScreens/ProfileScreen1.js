@@ -63,7 +63,7 @@ const ProfileScreen1 = ({ navigation }) => {
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
-  const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
+  //  const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
   //const navigation = useNavigation();
 
   const toggleHeart = () => {
@@ -100,7 +100,7 @@ const ProfileScreen1 = ({ navigation }) => {
           style={styles.image}
           resizeMode="cover"
         />
-        {isEditVisible && (
+        {/* {isEditVisible && (
           <TouchableOpacity
             style={styles.editButton}
             onPress={goToProfileDetails}
@@ -115,7 +115,7 @@ const ProfileScreen1 = ({ navigation }) => {
               <Text style={styles.editButtonText}>Edit</Text>
             </View>
           </TouchableOpacity>
-        )}
+        )} */}
 
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
@@ -223,6 +223,18 @@ const ProfileScreen1 = ({ navigation }) => {
           </TouchableOpacity>
       </View> */}
         </View>
+        <TouchableOpacity
+          style={styles.goBackButton}
+          onPress={goToProfileDetails}
+        >
+          {/* <Ionicons
+              name="infinite-outline"
+              size={24}
+              color="red"
+              style={styles.icon}
+            /> */}
+          <Text style={styles.backButtonText}>Edit</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -358,13 +370,16 @@ const styles = StyleSheet.create({
     // marginTop: 5,
   },
   editButton: {
-    position: "absolute",
-    width: 98,
+    // position: "absolute",
+    width: "60%",
     height: 40,
-    top: 6,
-    left: 262,
+    // top: 6,
+    // left: 262,
+    alignSelf: "center",
     backgroundColor: "#FFFFFF",
     borderRadius: 12,
+    alignItems: "center",
+    marginVertical: 20,
   },
   editButtonContainer: {
     // backgroundColor: "#FFFFFF",
@@ -387,15 +402,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 7, // Adjust the spacing between icon and text as needed
   },
   goBackButton: {
-    width: 345,
+    width: "90%",
     height: 49,
     margin: 20,
     backgroundColor: "#FFFFFF",
     borderRadius: 35,
-    // paddingVertical: 10,
-    // paddingHorizontal: 10,
-
-    flex: 1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -414,6 +425,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignItems: "center",
     marginBottom: 4.5,
+    textAlign: "center",
   },
 });
 
