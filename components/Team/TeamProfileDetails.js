@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   Modal,
@@ -85,7 +86,9 @@ const profiles = [
   // Add more profiles as needed
 ];
 
-const TeamProfileDetails = ({ navigation }) => {
+const TeamProfileDetails = ({ route, navigation }) => {
+  const { profile } = route.params;
+  console.log(profile, "DF");
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const tagInputRef = useRef(null);
@@ -250,9 +253,43 @@ const TeamProfileDetails = ({ navigation }) => {
           <Text style={styles.doneText1}>Done</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.viewContainer}>
+      {/* <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
-          {/* <Ionicons name="search" size={16} color="#454545" /> */}
+          <Text style={styles.searchText}>🎨 Our Interests</Text>
+        </View>
+        <View style={styles.renderedTagsContainer}>
+          {tags.map((tag, index) => (
+            <View key={index} style={styles.tag}>
+              <Text>{tag}</Text>
+              <TouchableOpacity onPress={() => handleRemoveTag(index)}>
+                <Text style={styles.removeButton}>x</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+        <View style={styles.textInput}>
+          <Tags
+            initialTags={tags}
+            containerStyle={styles.tagsInputContainer}
+            inputStyle={styles.tagsInput}
+            onTagPress={(index, tagLabel, event, deleted) =>
+              !deleted && handleRemoveTag(index)
+            }
+          />
+          <TextInput
+            ref={tagInputRef}
+            placeholder="Add interests"
+            onChangeText={(text) => setTagInput(text)}
+            value={tagInput}
+          />
+          <TouchableOpacity onPress={handleAddTag}>
+            <Text style={styles.addButton}>+</Text>
+          </TouchableOpacity>
+        </View>
+      </View> */}
+      {/* <View style={styles.viewContainer}>
+        <View style={styles.searchContainer}>
+         <Ionicons name="search" size={16} color="#454545" /> *
           <Text style={styles.searchText}>🔍 Our Story</Text>
           {!isEditing && (
             <TouchableOpacity onPress={handleEdit}>
@@ -282,10 +319,10 @@ const TeamProfileDetails = ({ navigation }) => {
         ) : (
           <Text style={styles.text}>{text}</Text>
         )}
-      </View>
-      <View style={styles.viewContainer}>
+      </View> */}
+      {/* <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
-          {/* <Ionicons name="search" size={16} color="#454545" /> */}
+           <Ionicons name="search" size={16} color="#454545" /> 
           <Text style={styles.searchText}>🔍 Basics</Text>
         </View>
         <View style={styles.basicContainer}>
@@ -367,48 +404,14 @@ const TeamProfileDetails = ({ navigation }) => {
             </View>
           </View>
         </View>
-      </View>
+      </View> */}
       <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
           <Text style={styles.searchText}>📸 Our Pictures</Text>
         </View>
         <View style={styles.pictureContainer}>{renderProfilePictures()}</View>
       </View>
-      <View style={styles.viewContainer}>
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchText}>🎨 Our Interests</Text>
-        </View>
-        <View style={styles.renderedTagsContainer}>
-          {tags.map((tag, index) => (
-            <View key={index} style={styles.tag}>
-              <Text>{tag}</Text>
-              <TouchableOpacity onPress={() => handleRemoveTag(index)}>
-                <Text style={styles.removeButton}>x</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
-        <View style={styles.textInput}>
-          {/* <Tags
-            initialTags={tags}
-            containerStyle={styles.tagsInputContainer}
-            inputStyle={styles.tagsInput}
-            onTagPress={(index, tagLabel, event, deleted) =>
-              !deleted && handleRemoveTag(index)
-            }
-          /> */}
-          <TextInput
-            ref={tagInputRef}
-            placeholder="Add interests"
-            onChangeText={(text) => setTagInput(text)}
-            value={tagInput}
-          />
-          <TouchableOpacity onPress={handleAddTag}>
-            <Text style={styles.addButton}>+</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.viewContainer}>
+      {/* <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
           <Text style={styles.searchText}>😂 Our Humor Styles</Text>
           {!isDateNightEditing && (
@@ -452,7 +455,7 @@ const TeamProfileDetails = ({ navigation }) => {
       </View>
       <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
-          {/* <Ionicons name="search" size={16} color="#454545" /> */}
+           <Ionicons name="search" size={16} color="#454545" /> 
           <Text style={styles.searchText}>🌟 Our Idea of a Fun Date</Text>
           {!talkEditing && (
             <TouchableOpacity onPress={handleTalkEdit}>
@@ -495,7 +498,7 @@ const TeamProfileDetails = ({ navigation }) => {
       </View>
       <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
-          {/* <Ionicons name="search" size={16} color="#454545" /> */}
+           <Ionicons name="search" size={16} color="#454545" /> 
           <Text style={styles.searchText}>🌟 I would like you if</Text>
           {!likeTextEditing && (
             <TouchableOpacity onPress={handlelikeEdit}>
@@ -535,7 +538,25 @@ const TeamProfileDetails = ({ navigation }) => {
         ) : (
           <Text style={styles.text}>{likeText}</Text>
         )}
-      </View>
+      </View> */}
+
+      {profile.dynamicContent?.length > 0 ? (
+        profile.dynamicContent.map((content, index) => (
+          <View key={index} style={styles.viewContainer}>
+            <View style={styles.searchContainer}>
+              {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
+              <Text style={styles.searchText}>{content.label}</Text>
+            </View>
+            <Text style={styles.text}>{content.value}</Text>
+          </View>
+        ))
+      ) : (
+        // Show activity indicator while loading
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text style={styles.loadingText}>Loading content...</Text>
+        </View>
+      )}
 
       {promptText && (
         <View style={styles.viewContainer}>
@@ -1365,6 +1386,17 @@ const styles = StyleSheet.create({
     marginTop: 40,
     position: "relative",
     left: 180,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#454545",
   },
 });
 

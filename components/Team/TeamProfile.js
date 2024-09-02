@@ -25,7 +25,7 @@ const width = Dimensions.get("window").width;
 
 const TeamProfile = ({ route, navigation }) => {
   const { profile } = route.params;
-  console.log(profile, "NAME");
+  // console.log(profile, "NAME");
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [images, setImages] = useState([]);
@@ -54,6 +54,10 @@ const TeamProfile = ({ route, navigation }) => {
     if (show !== showIcons) {
       setShowIcons(show);
     }
+  };
+
+  const goToProfileDetails = () => {
+    navigation.navigate("TeamProfileDetails", { profile });
   };
 
   const navigateBack = () => {
@@ -315,6 +319,18 @@ const TeamProfile = ({ route, navigation }) => {
           </View>
         </View>
       </View>
+      <TouchableOpacity
+        style={styles.goBackButton}
+        onPress={goToProfileDetails}
+      >
+        {/* <Ionicons
+              name="infinite-outline"
+              size={24}
+              color="red"
+              style={styles.icon}
+            /> */}
+        <Text style={styles.backButtonText}>Edit</Text>
+      </TouchableOpacity>
       {/* <View style={styles.actionContainer2}>
         <TouchableOpacity style={styles.actionButton}>
           <View style={styles.buttonContainer}>
@@ -575,6 +591,32 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     color: "#454545",
+  },
+  goBackButton: {
+    width: "90%",
+    height: 49,
+    margin: 20,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 35,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    border: 2,
+    borderWidth: 2,
+    borderColor: "#45474B",
+  },
+  // buttonBackContainer: {
+  //   width: 345,
+  //   height: 49,
+  // },
+  backButtonText: {
+    width: 80,
+    height: 24,
+    color: "#121212",
+    fontSize: 20,
+    alignItems: "center",
+    marginBottom: 4.5,
+    textAlign: "center",
   },
 });
 
