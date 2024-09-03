@@ -19,20 +19,47 @@ import { serverIP } from "@/config";
 
 const Tab = createBottomTabNavigator();
 
-const HomeTab = () => {
-  const navigation = useNavigation();
+const HomeTab = ({ route, navigation }) => {
+  //const navigation = useNavigation();
+  // const { mobileNumber } = route.params;
+  const mobileNumber = "6305148607";
   const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
   useEffect(() => {
-    getYourTeam();
+    getUserId();
   }, []);
 
-  const teamId = "66d302ecccbcf6fd4a2b7953";
-
-  async function getYourTeam() {
+  async function getUserId() {
     try {
       const response = await fetch(
-        `${serverIP}/auth/get-your-team?teamId=${teamId}`,
+        `${serverIP}/auth/get-user-id?mobileNumber=${mobileNumber}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user ID");
+      }
+
+      const responseData = await response.json();
+      //  setUserId(responseData.userId);
+      console.log(responseData.userId, "User ID");
+
+      // Once the user ID is fetched, get the associated teams
+      getYourTeam(responseData.userId);
+    } catch (error) {
+      console.error("Failed to fetch user ID:", error);
+    }
+  }
+
+  async function getYourTeam(userId) {
+    try {
+      const response = await fetch(
+        `${serverIP}/auth/get-your-team?userId=${userId}`,
         {
           method: "GET",
           headers: {
@@ -50,9 +77,33 @@ const HomeTab = () => {
       console.log(responseData, "Your Team");
     } catch (error) {
       console.error("Failed to fetch your team:", error);
-      //Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
     }
   }
+
+  // async function getYourTeam() {
+  //   try {
+  //     const response = await fetch(
+  //       `${serverIP}/auth/get-your-team?mobileNumber=${mobileNumber}`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch your team");
+  //     }
+
+  //     const responseData = await response.json();
+  //     setProfile(responseData);
+  //     console.log(responseData, "Your Team");
+  //   } catch (error) {
+  //     console.error("Failed to fetch your team:", error);
+  //     //Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
+  //   }
+  // }
   const navigateToTeamProfile = () => {
     navigation.navigate("TeamProfileStack", { navigation, profile });
   };

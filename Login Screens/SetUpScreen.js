@@ -2,10 +2,11 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect } from "react";
 import { Text, View, Image, StyleSheet } from "react-native";
 
-const SetUpScreen = () => {
-  const navigation = useNavigation();
+const SetUpScreen = ({ route, navigation }) => {
+  const { mobileNumber } = route.params;
+  // const navigation = useNavigation();
   const navigateToNameScreen = () => {
-    navigation.navigate("HomeTab");
+    navigation.navigate("HomeTab", { mobileNumber });
   };
 
   useEffect(() => {

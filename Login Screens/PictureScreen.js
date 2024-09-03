@@ -85,7 +85,7 @@ const PictureScreen = ({ route, navigation }) => {
   };
 
   const navigateToSetUpScreen = () => {
-    navigation.navigate("SetUpScreen");
+    navigation.navigate("SetUpScreen", { mobileNumber });
   };
 
   return (
