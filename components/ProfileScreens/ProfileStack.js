@@ -7,13 +7,16 @@ import PromptScreen from "./PromptScreen";
 
 const Stack = createStackNavigator();
 
-export const ProfileStack = () => {
+export const ProfileStack = ({ route, navigation }) => {
+  const { profile } = route.params;
+  // console.log(profile, "INDIVIDUAL PROFILE");
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="ProfileScreen1">
         <Stack.Screen
           name="ProfileScreen1"
           component={ProfileScreen1}
+          initialParams={{ navigation, profile }}
           options={{ headerShown: false }}
         />
         <Stack.Screen

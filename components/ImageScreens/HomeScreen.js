@@ -180,7 +180,7 @@ const HomeScreen = () => {
 
       const responseData = await response.json();
 
-      console.log(responseData, "RES0");
+      //  console.log(responseData, "RES0");
 
       if (responseData.length > 0) {
         setCurrentProfileIndex(0); // Set to the first profile by default

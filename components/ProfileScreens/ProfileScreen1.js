@@ -11,6 +11,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
+import { serverIP } from "@/config";
 
 const profiles = [
   {
@@ -59,7 +60,9 @@ const profiles = [
   // Add more profiles as needed
 ];
 
-const ProfileScreen1 = ({ navigation }) => {
+const ProfileScreen1 = ({ route, navigation }) => {
+  const { profile } = route.params;
+  console.log(profile, "INDIVIDUAL PROFILE");
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
@@ -96,7 +99,7 @@ const ProfileScreen1 = ({ navigation }) => {
     >
       <View style={{ flex: 1 }}>
         <Image
-          source={profiles[currentProfileIndex].imageSource}
+          source={{ uri: `${serverIP}${profile.images[0]}` }}
           style={styles.image}
           resizeMode="cover"
         />
@@ -119,12 +122,8 @@ const ProfileScreen1 = ({ navigation }) => {
 
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.nameText}>
-              {profiles[currentProfileIndex].name1},
-            </Text>
-            <Text style={styles.ageText}>
-              {profiles[currentProfileIndex].age1}
-            </Text>
+            <Text style={styles.nameText}>{profile.name},</Text>
+            <Text style={styles.ageText}>{profile.dob}</Text>
           </View>
           <View style={styles.locationContainer}>
             <MaterialIcons
@@ -175,10 +174,27 @@ const ProfileScreen1 = ({ navigation }) => {
           ) : null
         */}
 
-        <View style={{ marginTop: 15 }}>
+        {profile.dynamicContent?.length > 0 ? (
+          profile.dynamicContent.map((content, index) => (
+            <View key={index} style={styles.viewContainer}>
+              <View style={styles.searchContainer}>
+                {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
+                <Text style={styles.searchText}>{content.label}</Text>
+              </View>
+              <Text style={styles.text}>{content.value}</Text>
+            </View>
+          ))
+        ) : (
+          // Show activity indicator while loading
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+            <Text style={styles.loadingText}>Loading content...</Text>
+          </View>
+        )}
+
+        {/* <View style={{ marginTop: 15 }}>
           <View style={styles.viewContainer}>
             <View style={styles.searchContainer}>
-              {/* <Ionicons name="search" size={16} color="#454545" /> */}
               <Text style={styles.searchText}>🔍 Our Story</Text>
             </View>
             <Text style={styles.text}>
@@ -188,7 +204,6 @@ const ProfileScreen1 = ({ navigation }) => {
           </View>
           <View style={styles.viewContainer}>
             <View style={styles.searchContainer}>
-              {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
               <Text style={styles.searchText}>🌟 Our Idea of a Fun Date</Text>
             </View>
             <Text style={styles.text}>
@@ -198,7 +213,6 @@ const ProfileScreen1 = ({ navigation }) => {
           </View>
           <View style={styles.viewContainer}>
             <View style={styles.searchContainer}>
-              {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
               <Text style={styles.searchText}>🌟 Life Philosophy: </Text>
             </View>
             <Text style={styles.text}>
@@ -207,7 +221,6 @@ const ProfileScreen1 = ({ navigation }) => {
           </View>
           <View style={styles.viewContainer}>
             <View style={styles.searchContainer}>
-              {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
               <Text style={styles.searchText}>🏞️ Ideal Weekend</Text>
             </View>
             <Text style={styles.text}>
@@ -215,14 +228,7 @@ const ProfileScreen1 = ({ navigation }) => {
               mountains, followed by a cozy afternoon painting in my studio.
             </Text>
           </View>
-          {/* <View style={styles.actionContainer2}> 
-          <TouchableOpacity style={styles.goBackButton} onPress={toggleHeart}>
-            <View style={[styles.buttonBackContainer]}>
-              <Text style={styles.backButtonText}>Go Back</Text>
-            </View>
-          </TouchableOpacity>
-      </View> */}
-        </View>
+        </View> */}
         <TouchableOpacity
           style={styles.goBackButton}
           onPress={goToProfileDetails}
@@ -426,6 +432,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 4.5,
     textAlign: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#454545",
   },
 });
 

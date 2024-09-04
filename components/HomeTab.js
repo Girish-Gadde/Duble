@@ -23,6 +23,7 @@ const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
   // const { mobileNumber } = route.params;
   const mobileNumber = "6305148607";
+  const [individualProfile, setIndividualProfile] = useState(null);
   const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
   useEffect(() => {
@@ -46,11 +47,12 @@ const HomeTab = ({ route, navigation }) => {
       }
 
       const responseData = await response.json();
+      setIndividualProfile(responseData);
       //  setUserId(responseData.userId);
-      console.log(responseData.userId, "User ID");
+      console.log(responseData._id, "User ID");
 
       // Once the user ID is fetched, get the associated teams
-      getYourTeam(responseData.userId);
+      getYourTeam(responseData._id);
     } catch (error) {
       console.error("Failed to fetch user ID:", error);
     }
@@ -275,31 +277,34 @@ const HomeTab = ({ route, navigation }) => {
             headerShown: false,
           }}
         />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileStack}
-          options={{
-            tabBarIcon: ({ focused, color, size }) => (
-              <Ionicons
-                name={focused ? "person" : "person-outline"}
-                size={size}
-                color={color}
-              />
-            ),
-            tabBarLabelStyle: {
-              marginBottom: 20, // Adjust as needed to decrease the gap
-              fontWeight: "bold",
-            },
-            headerTitle: () => (
-              <HeaderTitleWithIcon title="duble" iconName="menu" />
-            ),
-            // headerTitle: isEditVisible
-            //   ? () => <HeaderTitleWithIcon title="duble" iconName="menu" />
-            //   : null,
-            headerTitleAlign: "center",
-          }}
-          //initialParams={{ navigation }}
-        />
+        {individualProfile && (
+          <Tab.Screen
+            name="Profile"
+            component={ProfileStack}
+            initialParams={{ navigation, profile: individualProfile }}
+            options={{
+              tabBarIcon: ({ focused, color, size }) => (
+                <Ionicons
+                  name={focused ? "person" : "person-outline"}
+                  size={size}
+                  color={color}
+                />
+              ),
+              tabBarLabelStyle: {
+                marginBottom: 20, // Adjust as needed to decrease the gap
+                fontWeight: "bold",
+              },
+              headerTitle: () => (
+                <HeaderTitleWithIcon title="duble" iconName="menu" />
+              ),
+              // headerTitle: isEditVisible
+              //   ? () => <HeaderTitleWithIcon title="duble" iconName="menu" />
+              //   : null,
+              headerTitleAlign: "center",
+            }}
+            //initialParams={{ navigation }}
+          />
+        )}
       </Tab.Navigator>
     </NavigationContainer>
   );
