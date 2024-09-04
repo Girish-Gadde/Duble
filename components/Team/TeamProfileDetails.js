@@ -23,6 +23,7 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import Tags from "react-native-tags";
+import { serverIP } from "@/config";
 
 const profiles = [
   {
@@ -92,7 +93,9 @@ const TeamProfileDetails = ({ route, navigation }) => {
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const tagInputRef = useRef(null);
+  const [teamId, setTeamId] = useState(profile._id);
   const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState("");
   const [text, setText] = useState(
     "We met at a comedy show where Shruti was performing her stand-up routine, and Neha was in the audience"
   );
@@ -133,8 +136,43 @@ const TeamProfileDetails = ({ route, navigation }) => {
   ];
 
   //  const navigation = useNavigation();
-  const handleEdit = () => {
-    setIsEditing(true);
+  const handleEdit = (index, contentValue) => {
+    setIsEditing(index);
+    setEditText(contentValue);
+  };
+
+  const handleDone = async (index, contentId) => {
+    try {
+      // Update dynamicContent in the front-end
+      const updatedContent = {
+        ...profile.dynamicContent[index],
+        value: editText,
+      };
+      profile.dynamicContent[index] = updatedContent;
+      console.log("ID", contentId);
+
+      // Send updated content to the back-end
+      const response = await fetch(
+        `${serverIP}/edit/update-your-team?contentId=${contentId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedContent),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update content.");
+      }
+
+      setIsEditing(null); // Reset editing state
+      alert("Content updated successfully!");
+    } catch (error) {
+      console.error("Error updating content:", error);
+      alert("Error updating content");
+    }
   };
 
   const handleDateNightEdit = () => {
@@ -145,10 +183,11 @@ const TeamProfileDetails = ({ route, navigation }) => {
     setIsTalkEditing(true);
   };
 
-  const handleDone = () => {
-    setIsEditing(false);
-    // Perform any actions you need with the updated text
-  };
+  // const handleDone = () => {
+  //   setIsEditing(false);
+  //   // Perform any actions you need with the updated text
+  // };
+
   const handleDateNightDone = () => {
     setIsDateNightEditing(false);
     // Perform any actions you need with the updated text
@@ -193,9 +232,34 @@ const TeamProfileDetails = ({ route, navigation }) => {
     setIsDropdownVisible(false);
   };
 
-  const handlePromptDone = () => {
-    setPromptText(inputText);
-    setInputText("");
+  const handlePromptDone = async () => {
+    // Send the new prompt to the back-end
+    try {
+      const response = await fetch(
+        `${serverIP}/edit/add-new-prompts?teamId=${teamId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ label: selectedPrompt, value: inputText }),
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        // Update state with the new prompt
+        setPromptText(inputText);
+        setSelectedPrompt("");
+        setInputText("");
+        setIsPromptEditing(false);
+        // Optionally update the prompts array or handle new prompt data
+      } else {
+        console.error("Error adding prompt:", data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const handleDelete = () => {
@@ -546,8 +610,38 @@ const TeamProfileDetails = ({ route, navigation }) => {
             <View style={styles.searchContainer}>
               {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
               <Text style={styles.searchText}>{content.label}</Text>
+              {!isEditing && (
+                <TouchableOpacity
+                  onPress={() => handleEdit(index, content.value)}
+                >
+                  <FontAwesome6
+                    name="edit"
+                    size={16}
+                    color="#121212"
+                    style={styles.editIcon}
+                  />
+                </TouchableOpacity>
+              )}
             </View>
-            <Text style={styles.text}>{content.value}</Text>
+            {isEditing === index ? (
+              <View>
+                <TextInput
+                  style={styles.aboutInput}
+                  value={editText}
+                  onChangeText={setEditText}
+                  multiline
+                  autoFocus
+                />
+                <TouchableOpacity
+                  style={styles.doneButton}
+                  onPress={() => handleDone(index, content._id)}
+                >
+                  <Text style={styles.doneText}>Done</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <Text style={styles.text}>{content.value}</Text>
+            )}
           </View>
         ))
       ) : (
@@ -920,7 +1014,7 @@ const styles = StyleSheet.create({
     lineHeight: 23.96,
   },
   editIcon: {
-    marginLeft: 90,
+    marginLeft: "20%",
     marginBottom: 6,
   },
   editIcon1: {
