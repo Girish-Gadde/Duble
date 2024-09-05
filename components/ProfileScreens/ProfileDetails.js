@@ -23,6 +23,7 @@ import {
 } from "@expo/vector-icons";
 import Tags from "react-native-tags";
 import { useNavigation } from "@react-navigation/native";
+import { serverIP } from "@/config";
 
 const profiles = [
   {
@@ -82,11 +83,15 @@ const profiles = [
   // Add more profiles as needed
 ];
 
-const ProfileDetails = () => {
+const ProfileDetails = ({ route, navigation }) => {
+  const { profile } = route.params;
+  const [userId, setUserId] = useState(profile._id);
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const tagInputRef = useRef(null);
+  const [aboutMeEditing, setAboutMeEditing] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState("");
   const [text, setText] = useState(
     "Hi, I'm Neha, a marketing pro with a passion for travel and food. Let's swap stories and explore together!"
   );
@@ -120,9 +125,13 @@ const ProfileDetails = () => {
     "🌟 I love talking about",
   ];
 
-  const navigation = useNavigation();
-  const handleEdit = () => {
-    setIsEditing(true);
+  // const navigation = useNavigation();
+  const handleAboutMeEdit = () => {
+    setAboutMeEditing(true);
+  };
+  const handleEdit = (index, contentValue) => {
+    setIsEditing(index);
+    setEditText(contentValue);
   };
 
   const handleDateNightEdit = () => {
@@ -133,10 +142,70 @@ const ProfileDetails = () => {
     setIsTalkEditing(true);
   };
 
-  const handleDone = () => {
-    setIsEditing(false);
-    // Perform any actions you need with the updated text
+  const handleDone = async (index, contentId) => {
+    try {
+      // Update dynamicContent in the front-end
+      const updatedContent = {
+        ...profile.dynamicContent[index],
+        value: editText,
+      };
+      profile.dynamicContent[index] = updatedContent;
+      console.log("ID", contentId);
+
+      // Send updated content to the back-end
+      const response = await fetch(
+        `${serverIP}/edit/update-your-profile?contentId=${contentId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedContent),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update content.");
+      }
+
+      setIsEditing(null); // Reset editing state
+      alert("Content updated successfully!");
+    } catch (error) {
+      console.error("Error updating content:", error);
+      alert("Error updating content");
+    }
   };
+
+  const handlePromptDone = async () => {
+    // Send the new prompt to the back-end
+    try {
+      const response = await fetch(
+        `${serverIP}/edit/add-new-prompts-to-profile?userId=${userId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ label: selectedPrompt, value: inputText }),
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        // Update state with the new prompt
+        setPromptText(inputText);
+        setSelectedPrompt("");
+        setInputText("");
+        setIsPromptEditing(false);
+        // Optionally update the prompts array or handle new prompt data
+      } else {
+        console.error("Error adding prompt:", data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   const handleDateNightDone = () => {
     setIsDateNightEditing(false);
     // Perform any actions you need with the updated text
@@ -181,11 +250,11 @@ const ProfileDetails = () => {
     setIsDropdownVisible(false);
   };
 
-  const handlePromptDone = () => {
-    setPromptText(inputText);
-    setInputText("");
-    setPromptVisible(false);
-  };
+  // const handlePromptDone = () => {
+  //   setPromptText(inputText);
+  //   setInputText("");
+  //   setPromptVisible(false);
+  // };
 
   const handleDelete = () => {
     setPromptText(null);
@@ -242,8 +311,8 @@ const ProfileDetails = () => {
         <View style={styles.searchContainer}>
           {/* <Ionicons name="search" size={16} color="#454545" /> */}
           <Text style={styles.searchText}>🔍 About Me</Text>
-          {!isEditing && (
-            <TouchableOpacity onPress={handleEdit}>
+          {!aboutMeEditing && (
+            <TouchableOpacity onPress={handleAboutMeEdit}>
               <FontAwesome6
                 name="edit" // Right arrow icon
                 size={16}
@@ -254,7 +323,7 @@ const ProfileDetails = () => {
           )}
         </View>
 
-        {isEditing ? (
+        {aboutMeEditing ? (
           <View>
             <TextInput
               style={styles.aboutInput}
@@ -288,7 +357,7 @@ const ProfileDetails = () => {
               <Text style={styles.cell}>Location</Text>
             </View>
             <View style={styles.rowContainer2}>
-              <Text style={styles.cell}>Pitampura</Text>
+              <Text style={styles.cell}>{profile.address}</Text>
               <MaterialIcons
                 name="keyboard-arrow-right" // Right arrow icon
                 size={24}
@@ -307,7 +376,7 @@ const ProfileDetails = () => {
               <Text style={styles.cell1}>Height</Text>
             </View>
             <View style={styles.rowContainer2}>
-              <Text style={styles.cell}>155 cm</Text>
+              <Text style={styles.cell}>{profile.height}</Text>
               <MaterialIcons
                 name="keyboard-arrow-right" // Right arrow icon
                 size={24}
@@ -326,7 +395,7 @@ const ProfileDetails = () => {
               <Text style={styles.cell}>Work</Text>
             </View>
             <View style={styles.rowContainer2}>
-              <Text style={styles.cell}>PhD Student</Text>
+              <Text style={styles.cell}>{profile.occupation}</Text>
               <MaterialIcons
                 name="keyboard-arrow-right" // Right arrow icon
                 size={24}
@@ -345,7 +414,7 @@ const ProfileDetails = () => {
               <Text style={styles.cell}>Sexuality</Text>
             </View>
             <View style={styles.rowContainer2}>
-              <Text style={styles.cell}>Bisexual</Text>
+              <Text style={styles.cell}>{profile.gender}</Text>
               <MaterialIcons
                 name="keyboard-arrow-right" // Right arrow icon
                 size={24}
@@ -396,7 +465,7 @@ const ProfileDetails = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.viewContainer}>
+      {/* <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
           <Text style={styles.searchText}>🕯️ Ideal Date Night</Text>
           {!isDateNightEditing && (
@@ -440,7 +509,7 @@ const ProfileDetails = () => {
       </View>
       <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
-          {/* <Ionicons name="search" size={16} color="#454545" /> */}
+    
           <Text style={styles.searchText}>🗣️ I can talk for hours about</Text>
           {!talkEditing && (
             <TouchableOpacity onPress={handleTalkEdit}>
@@ -483,7 +552,7 @@ const ProfileDetails = () => {
       </View>
       <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
-          {/* <Ionicons name="search" size={16} color="#454545" /> */}
+       
           <Text style={styles.searchText}>🌟 I would like you if</Text>
           {!likeTextEditing && (
             <TouchableOpacity onPress={handlelikeEdit}>
@@ -523,7 +592,55 @@ const ProfileDetails = () => {
         ) : (
           <Text style={styles.text}>{likeText}</Text>
         )}
-      </View>
+      </View> */}
+
+      {profile.dynamicContent?.length > 0 ? (
+        profile.dynamicContent.map((content, index) => (
+          <View key={index} style={styles.viewContainer}>
+            <View style={styles.searchContainer}>
+              {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
+              <Text style={styles.searchText}>{content.label}</Text>
+              {!isEditing && (
+                <TouchableOpacity
+                  onPress={() => handleEdit(index, content.value)}
+                >
+                  <FontAwesome6
+                    name="edit"
+                    size={16}
+                    color="#121212"
+                    style={styles.editIcon}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+            {isEditing === index ? (
+              <View>
+                <TextInput
+                  style={styles.aboutInput}
+                  value={editText}
+                  onChangeText={setEditText}
+                  multiline
+                  autoFocus
+                />
+                <TouchableOpacity
+                  style={styles.doneButton}
+                  onPress={() => handleDone(index, content._id)}
+                >
+                  <Text style={styles.doneText}>Done</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <Text style={styles.text}>{content.value}</Text>
+            )}
+          </View>
+        ))
+      ) : (
+        // Show activity indicator while loading
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+          <Text style={styles.loadingText}>Loading content...</Text>
+        </View>
+      )}
 
       {promptText && (
         <View style={styles.viewContainer}>
@@ -576,7 +693,7 @@ const ProfileDetails = () => {
         </TouchableOpacity>
       </View>
 
-      {promptVisible && (
+      {selectedPrompt && (
         <View style={styles.selectedPromptContainer}>
           <TouchableOpacity
             onPress={toggleDropdown}
@@ -752,7 +869,7 @@ const styles = StyleSheet.create({
     lineHeight: 23.96,
   },
   editIcon: {
-    marginLeft: 90,
+    marginLeft: "20%",
     marginBottom: 6,
   },
   editIcon1: {

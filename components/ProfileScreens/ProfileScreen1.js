@@ -87,7 +87,7 @@ const ProfileScreen1 = ({ route, navigation }) => {
   };
 
   const goToProfileDetails = () => {
-    navigation.navigate("ProfileDetails", {});
+    navigation.navigate("ProfileDetails", { profile, navigation });
   };
 
   return (
