@@ -21,8 +21,8 @@ const Tab = createBottomTabNavigator();
 
 const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
-  // const { mobileNumber } = route.params;
-  const mobileNumber = "6305148607";
+  const { mobileNumber } = route.params;
+  // const mobileNumber = "6305148607";
   const [individualProfile, setIndividualProfile] = useState(null);
   const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);

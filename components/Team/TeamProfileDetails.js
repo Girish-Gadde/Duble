@@ -24,6 +24,7 @@ import {
 } from "@expo/vector-icons";
 import Tags from "react-native-tags";
 import { serverIP } from "@/config";
+import * as ImagePicker from "expo-image-picker";
 
 const profiles = [
   {
@@ -134,6 +135,73 @@ const TeamProfileDetails = ({ route, navigation }) => {
     "🌟 I would like you if",
     "🌟 I love talking about",
   ];
+
+  const formattedImagePics = (profile.selectedImages || []).map(
+    (imagePath) => ({
+      uri: `${serverIP}${imagePath}`,
+    })
+  );
+  const [formattedImages, setFormattedImages] = useState(formattedImagePics);
+
+  const handleUploadImage = async () => {
+    // Request permission to access the camera roll
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    // Launch image picker
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!pickerResult.canceled) {
+      const localUri = pickerResult.assets[0].uri;
+      console.log(localUri, "SPLIT");
+      const filename = localUri.split("/").pop();
+      const match = /\.(\w+)$/.exec(filename);
+      const fileType = match ? `image/${match[1]}` : `image`;
+
+      const formData = new FormData();
+      formData.append("image", {
+        uri: localUri,
+        name: filename,
+        type: fileType,
+      });
+
+      try {
+        const response = await fetch(
+          `${serverIP}/edit/add-images-to-your-team-profile?teamId=${teamId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            body: formData,
+          }
+        );
+
+        if (response.ok) {
+          const updatedImages = await response.json();
+          // Update the state with new images
+          setFormattedImages(
+            updatedImages.map((imagePath) => ({
+              uri: `${serverIP}${imagePath}`,
+            }))
+          );
+        } else {
+          console.error("Failed to upload image", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    }
+  };
 
   //  const navigation = useNavigation();
   const handleEdit = (index, contentValue) => {
@@ -250,7 +318,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
       if (response.ok) {
         // Update state with the new prompt
         setPromptText(inputText);
-        setSelectedPrompt("");
+        setSelectedPrompt(selectedPrompt);
         setInputText("");
         setIsPromptEditing(false);
         // Optionally update the prompts array or handle new prompt data
@@ -272,14 +340,15 @@ const TeamProfileDetails = ({ route, navigation }) => {
 
   // Function to render profile pictures
   const renderProfilePictures = () => {
-    const renderedImages = profiles.map((profile, index) => (
-      <TouchableOpacity key={index} onPress={() => handleImagePress(profile)}>
-        <Image source={profile.imageSource} style={styles.pictureBox} />
+    // Render the formatted images
+    const renderedImages = formattedImages.map((image, index) => (
+      <TouchableOpacity key={index} onPress={() => handleImagePress(image)}>
+        <Image source={image} style={styles.pictureBox} />
       </TouchableOpacity>
     ));
 
     // Check if the number of images is less than 5 to render the empty box with the '+' icon
-    if (profiles.length < 6) {
+    if (formattedImages.length < 16) {
       const emptyBox = (
         <TouchableOpacity onPress={() => handleUploadImage()}>
           <View style={[styles.pictureBox, styles.emptyBox]}>
@@ -291,11 +360,6 @@ const TeamProfileDetails = ({ route, navigation }) => {
     }
 
     return renderedImages;
-    // return profiles.map((profile, index) => (
-    //   <TouchableOpacity key={index} onPress={() => handleImagePress(profile)}>
-    //     <Image source={profile.imageSource} style={styles.pictureBox} />
-    //   </TouchableOpacity>
-    // ));
   };
 
   // Function to handle image press
@@ -751,15 +815,16 @@ const TeamProfileDetails = ({ route, navigation }) => {
       )}
 
       <View style={styles.singleBioContainer}>
-        <Image source={profiles[0].singleImage1} style={styles.singleImage} />
+        <Image
+          source={{
+            uri: `${serverIP}/uploads/1725360576670_71758caa-01b8-4d8b-8b8e-3b89049e1a30.jpeg`,
+          }}
+          style={styles.singleImage}
+        />
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>
-              {profiles[currentProfileIndex].name1},
-            </Text>
-            <Text style={styles.ageText1}>
-              {profiles[currentProfileIndex].age1}
-            </Text>
+            <Text style={styles.nameText1}>{profile.name1},</Text>
+            <Text style={styles.ageText1}>{profile.age1}</Text>
           </View>
           <View style={styles.rowContainer}>
             <View style={styles.iconContainer}>
@@ -769,7 +834,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>Pitampura</Text>
+              <Text style={styles.cell}>{profile.place}</Text>
             </View>
 
             <View style={styles.iconContainer}>
@@ -779,7 +844,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>PhD Student</Text>
+              <Text style={styles.cell}>{profile.occupation}</Text>
             </View>
           </View>
 
@@ -791,7 +856,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>155 cm</Text>
+              <Text style={styles.cell}>{profile.height}</Text>
             </View>
             <View style={styles.iconContainer}>
               <AntDesign
@@ -800,7 +865,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>Bisexual</Text>
+              <Text style={styles.cell}>{profile.gender}</Text>
             </View>
           </View>
           <Text style={styles.singleBioText}>
@@ -809,15 +874,16 @@ const TeamProfileDetails = ({ route, navigation }) => {
         </View>
       </View>
       <View style={styles.singleBioContainer}>
-        <Image source={profiles[0].singleImage2} style={styles.singleImage} />
+        <Image
+          source={{
+            uri: `${serverIP}/uploads/1725360574720_17b7af1c-879e-45e3-bade-61a165961056.png`,
+          }}
+          style={styles.singleImage}
+        />
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>
-              {profiles[currentProfileIndex].name2},
-            </Text>
-            <Text style={styles.ageText1}>
-              {profiles[currentProfileIndex].age2}
-            </Text>
+            <Text style={styles.nameText1}>{profile.name2},</Text>
+            <Text style={styles.ageText1}>{profile.age2}</Text>
           </View>
           <View style={styles.rowContainer}>
             <View style={styles.iconContainer}>
@@ -827,7 +893,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>Pitampura</Text>
+              <Text style={styles.cell}>{profile.place}</Text>
             </View>
 
             <View style={styles.iconContainer}>
@@ -837,7 +903,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>Analyst</Text>
+              <Text style={styles.cell}>{profile.occupation}</Text>
             </View>
           </View>
 
@@ -858,7 +924,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>Straight</Text>
+              <Text style={styles.cell}>{profile.gender}</Text>
             </View>
           </View>
           <Text style={styles.singleBioText}>

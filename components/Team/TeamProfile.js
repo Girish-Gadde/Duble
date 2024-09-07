@@ -230,7 +230,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>PhD Student</Text>
+                <Text style={styles.cell}>{profile.occupation}</Text>
               </View>
             </View>
 

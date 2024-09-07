@@ -24,6 +24,7 @@ import {
 import Tags from "react-native-tags";
 import { useNavigation } from "@react-navigation/native";
 import { serverIP } from "@/config";
+import * as ImagePicker from "expo-image-picker";
 
 const profiles = [
   {
@@ -85,6 +86,7 @@ const profiles = [
 
 const ProfileDetails = ({ route, navigation }) => {
   const { profile } = route.params;
+  console.log(profile, "INDIVIDUAL PROFILE");
   const [userId, setUserId] = useState(profile._id);
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
@@ -92,9 +94,7 @@ const ProfileDetails = ({ route, navigation }) => {
   const [aboutMeEditing, setAboutMeEditing] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState("");
-  const [text, setText] = useState(
-    "Hi, I'm Neha, a marketing pro with a passion for travel and food. Let's swap stories and explore together!"
-  );
+  const [text, setText] = useState(profile.aboutMe);
   const [isDateNightEditing, setIsDateNightEditing] = useState(false);
   const [dateNightText, setDateNightText] = useState(
     "My ideal date night would involve a cozy dinner at a candlelit restaurant followed by a leisurely stroll under the stars."
@@ -128,6 +128,31 @@ const ProfileDetails = ({ route, navigation }) => {
   // const navigation = useNavigation();
   const handleAboutMeEdit = () => {
     setAboutMeEditing(true);
+  };
+  const handleAboutDone = async () => {
+    console.log(text, "TEXT");
+    setAboutMeEditing(false);
+    try {
+      const response = await fetch(`${serverIP}/edit/about-me`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          aboutMe: text,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("About Me updated successfully!");
+        setText(text);
+      } else {
+        console.error("Failed to update About Me", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error updating About Me:", error);
+    }
   };
   const handleEdit = (index, contentValue) => {
     setIsEditing(index);
@@ -178,6 +203,7 @@ const ProfileDetails = ({ route, navigation }) => {
 
   const handlePromptDone = async () => {
     // Send the new prompt to the back-end
+    console.log(selectedPrompt, "DJK");
     try {
       const response = await fetch(
         `${serverIP}/edit/add-new-prompts-to-profile?userId=${userId}`,
@@ -194,7 +220,7 @@ const ProfileDetails = ({ route, navigation }) => {
       if (response.ok) {
         // Update state with the new prompt
         setPromptText(inputText);
-        setSelectedPrompt("");
+        setSelectedPrompt(selectedPrompt);
         setInputText("");
         setIsPromptEditing(false);
         // Optionally update the prompts array or handle new prompt data
@@ -221,21 +247,21 @@ const ProfileDetails = ({ route, navigation }) => {
   const handleLiking = () => {
     setIsLikeTextEditing(false);
   };
-  const handleAddTag = () => {
-    if (tagInput.trim() === "") return;
-    setTags([...tags, tagInput]);
-    setTagInput("");
-    tagInputRef.current.clear();
-  };
+  // const handleAddTag = () => {
+  //   if (tagInput.trim() === "") return;
+  //   setTags([...tags, tagInput]);
+  //   setTagInput("");
+  //   tagInputRef.current.clear();
+  // };
 
   const handleRemoveTag = (index) => {
     const newTags = tags.filter((_, i) => i !== index);
     setTags(newTags);
   };
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(toggleEditButtonAndBio());
-  }, []);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(toggleEditButtonAndBio());
+  // }, []);
 
   const navigateToPromptScreen = () => {
     navigation.navigate("PromptScreen");
@@ -269,16 +295,81 @@ const ProfileDetails = ({ route, navigation }) => {
     setSelectedPrompt(prompts[0]);
     setPromptVisible(true);
   };
-  // Function to render profile pictures
+  const formattedImagePics = (profile.images || []).map((imagePath) => ({
+    uri: `${serverIP}${imagePath}`,
+  }));
+  const [formattedImages, setFormattedImages] = useState(formattedImagePics);
+
+  const handleUploadImage = async () => {
+    // Request permission to access the camera roll
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    // Launch image picker
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!pickerResult.canceled) {
+      const localUri = pickerResult.assets[0].uri;
+      console.log(localUri, "SPLIT");
+      const filename = localUri.split("/").pop();
+      const match = /\.(\w+)$/.exec(filename);
+      const fileType = match ? `image/${match[1]}` : `image`;
+
+      const formData = new FormData();
+      formData.append("image", {
+        uri: localUri,
+        name: filename,
+        type: fileType,
+      });
+
+      try {
+        const response = await fetch(
+          `${serverIP}/edit/add-images-to-your-profile?userId=${userId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            body: formData,
+          }
+        );
+
+        if (response.ok) {
+          const updatedImages = await response.json();
+          // Update the state with new images
+          setFormattedImages(
+            updatedImages.map((imagePath) => ({
+              uri: `${serverIP}${imagePath}`,
+            }))
+          );
+        } else {
+          console.error("Failed to upload image", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    }
+  };
+
   const renderProfilePictures = () => {
-    const renderedImages = profiles.map((profile, index) => (
-      <TouchableOpacity key={index} onPress={() => handleImagePress(profile)}>
-        <Image source={profile.imageSource} style={styles.pictureBox} />
+    // Render the formatted images
+    const renderedImages = formattedImages.map((image, index) => (
+      <TouchableOpacity key={index} onPress={() => handleImagePress(image)}>
+        <Image source={image} style={styles.pictureBox} />
       </TouchableOpacity>
     ));
 
     // Check if the number of images is less than 5 to render the empty box with the '+' icon
-    if (profiles.length < 6) {
+    if (formattedImages.length < 16) {
       const emptyBox = (
         <TouchableOpacity onPress={() => handleUploadImage()}>
           <View style={[styles.pictureBox, styles.emptyBox]}>
@@ -290,16 +381,51 @@ const ProfileDetails = ({ route, navigation }) => {
     }
 
     return renderedImages;
-    // return profiles.map((profile, index) => (
-    //   <TouchableOpacity key={index} onPress={() => handleImagePress(profile)}>
-    //     <Image source={profile.imageSource} style={styles.pictureBox} />
-    //   </TouchableOpacity>
-    // ));
   };
 
   // Function to handle image press
   const handleImagePress = (profile) => {
     // Handle image press here
+  };
+
+  useEffect(() => {
+    fetchInterests();
+  }, []);
+
+  const fetchInterests = async () => {
+    try {
+      const response = await fetch(
+        `${serverIP}/edit/get-your-interests?userId=${userId}`
+      );
+      const data = await response.json();
+      console.log(data, "INT");
+      setTags(data.myInterests || []);
+    } catch (error) {
+      console.error("Error fetching interests:", error);
+    }
+  };
+
+  const handleAddTag = async () => {
+    if (!tagInput.trim()) return;
+    console.log(tagInput, "JK");
+    try {
+      // Send request to back-end to add interest
+      const response = await fetch(
+        `${serverIP}/edit/add-your-interests?userId=${userId}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ interest: tagInput }),
+        }
+      );
+
+      if (response.ok) {
+        setTags((prevTags) => [...prevTags, tagInput]); // Update front-end state
+        setTagInput(""); // Clear input
+      }
+    } catch (error) {
+      console.error("Error adding interest:", error);
+    }
   };
 
   const navigateToInitialProfile = () => {
@@ -332,7 +458,10 @@ const ProfileDetails = ({ route, navigation }) => {
               multiline
               autoFocus
             />
-            <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
+            <TouchableOpacity
+              style={styles.doneButton}
+              onPress={handleAboutDone}
+            >
               <Text style={styles.doneText}>Done</Text>
             </TouchableOpacity>
           </View>

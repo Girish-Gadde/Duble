@@ -62,7 +62,7 @@ const profiles = [
 
 const ProfileScreen1 = ({ route, navigation }) => {
   const { profile } = route.params;
-  console.log(profile, "INDIVIDUAL PROFILE");
+
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);

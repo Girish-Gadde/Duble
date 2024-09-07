@@ -6,15 +6,20 @@ import { useDispatch } from "react-redux";
 import { toggleEditButtonAndBio } from "../components/Redux/Actions";
 import { useNavigation } from "@react-navigation/native";
 
-const HeaderTitleWithIcon2 = ({ title, iconName, iconName1 }) => {
+const HeaderTitleWithIcon2 = ({
+  title,
+  iconName,
+  iconName1,
+  handleMenuClick,
+}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const handleMenuClick = () => {
-    // Dispatch action to toggle the state
-    navigation.goBack();
-    // dispatch(toggleEditButtonAndBio());
-  };
+  // const handleMenuClick = () => {
+  //   // Dispatch action to toggle the state
+  //   navigation.goBack();
+  //   // dispatch(toggleEditButtonAndBio());
+  // };
 
   return (
     <View

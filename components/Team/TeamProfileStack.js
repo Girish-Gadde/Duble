@@ -10,6 +10,11 @@ const Stack = createStackNavigator();
 
 export const TeamProfileStack = ({ route, navigation }) => {
   const { profile } = route.params;
+  const handleMenuClick = () => {
+    // Dispatch action to toggle the state
+    navigation.goBack();
+    // dispatch(toggleEditButtonAndBio());
+  };
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="TeamProfile">
@@ -23,6 +28,7 @@ export const TeamProfileStack = ({ route, navigation }) => {
                 title="duble"
                 iconName="swap-horiz"
                 iconName1="arrow-back"
+                handleMenuClick={handleMenuClick}
               /> // Use the HeaderTitleWithIcon component
             ),
             headerTitleAlign: "center",
