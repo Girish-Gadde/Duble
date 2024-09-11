@@ -98,7 +98,9 @@ const width = Dimensions.get("window").width;
 //   // Add more profiles as needed
 // ];
 
-const HomeScreen = () => {
+const HomeScreen = ({ route, navigation }) => {
+  const { individualProfile } = route.params;
+  console.log(individualProfile, "HOME");
   const [isHeartActive, setIsHeartActive] = useState(false);
   // const [showIcons, setShowIcons] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -106,7 +108,7 @@ const HomeScreen = () => {
   const [currentProfileIndex, setCurrentProfileIndex] = useState(
     profiles.length - 1
   );
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
   const [lastDirection, setLastDirection] = useState();
   const [images, setImages] = useState([]);
   const currentIndexRef = useRef(currentProfileIndex);
@@ -126,6 +128,24 @@ const HomeScreen = () => {
       currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
     );
     // getSavedData();
+    const likedTeamId = profiles[currentProfileIndex]._id; // The team being liked
+    const likingTeamId = individualProfile._id; // The user's team profile
+    console.log(likedTeamId, "IsD", likingTeamId);
+    try {
+      const response = await fetch(`${serverIP}/like/saving-like-id`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ likedTeamId, likingTeamId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update like status");
+      }
+    } catch (error) {
+      console.error("Error updating like status:", error);
+    }
   };
   // useEffect(() => {
   //   console.log("BD");

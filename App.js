@@ -35,11 +35,11 @@ export default function App() {
           component={Login}
           options={{ headerShown: false }}
         /> */}
-          {/* <Stack.Screen
+          <Stack.Screen
             name="HomeTab"
             component={HomeTab}
             options={{ headerShown: false }}
-          /> */}
+          />
           <Stack.Screen
             name="DubleStart"
             component={DubleStart}
@@ -95,11 +95,11 @@ export default function App() {
             component={SetUpScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="HomeTab"
             component={HomeTab}
             options={{ headerShown: false }}
-          />
+          /> */}
           <Stack.Screen
             name="TeamProfileStack"
             component={TeamProfileStack}

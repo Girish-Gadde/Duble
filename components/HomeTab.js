@@ -21,8 +21,8 @@ const Tab = createBottomTabNavigator();
 
 const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
-  const { mobileNumber } = route.params;
-  // const mobileNumber = "6305148607";
+  // const { mobileNumber } = route.params;
+  const mobileNumber = "9654573787";
   const [individualProfile, setIndividualProfile] = useState(null);
   const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
@@ -75,8 +75,8 @@ const HomeTab = ({ route, navigation }) => {
       }
 
       const responseData = await response.json();
-      setProfile(responseData[0]);
-      console.log(responseData, "Your Team");
+      setProfile(responseData[1]);
+      console.log(responseData[1], "Your Team");
     } catch (error) {
       console.error("Failed to fetch your team:", error);
     }
@@ -207,43 +207,46 @@ const HomeTab = ({ route, navigation }) => {
             headerShown: false,
           }}
         />
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            tabBarIcon: ({ focused, color, size }) => (
-              <Ionicons
-                name={focused ? "logo-twitter" : "logo-twitter"}
-                size={size}
-                color={color}
-              />
-              // <Image
-              //   source={require("../assets/Vector.jpg")} // Replace with your image source
-              //   style={{
-              //     width: 22,
-              //     height: 22,
-              //     borderRadius: 0,
-              //     marginLeft: 2,
-              //   }}
-              // />
-            ),
-            tabBarLabelStyle: {
-              marginBottom: 20, // Adjust as needed to decrease the gap
-              fontWeight: "bold",
-            },
-            headerTitle: () => (
-              <HeaderTitleWithIcon
-                title="duble"
-                iconName="swap-horiz"
-                navigateToTeamProfile={navigateToTeamProfile}
-              /> // Use the HeaderTitleWithIcon component
-            ),
-            headerTitleAlign: "center",
-          }}
-        />
+        {profile && (
+          <Tab.Screen
+            name="Home"
+            component={HomeScreen}
+            initialParams={{ navigation, individualProfile: profile }}
+            options={{
+              tabBarIcon: ({ focused, color, size }) => (
+                <Ionicons
+                  name={focused ? "logo-twitter" : "logo-twitter"}
+                  size={size}
+                  color={color}
+                />
+                // <Image
+                //   source={require("../assets/Vector.jpg")} // Replace with your image source
+                //   style={{
+                //     width: 22,
+                //     height: 22,
+                //     borderRadius: 0,
+                //     marginLeft: 2,
+                //   }}
+                // />
+              ),
+              tabBarLabelStyle: {
+                marginBottom: 20, // Adjust as needed to decrease the gap
+                fontWeight: "bold",
+              },
+              headerTitle: () => (
+                <HeaderTitleWithIcon
+                  title="duble"
+                  iconName="swap-horiz"
+                  navigateToTeamProfile={navigateToTeamProfile}
+                /> // Use the HeaderTitleWithIcon component
+              ),
+              headerTitleAlign: "center",
+            }}
+          />
+        )}
         <Tab.Screen
           name="Matches"
-          component={Chat}
+          component={Matches}
           initialParams={{ navigation }}
           options={{
             tabBarIcon: ({ focused, color, size }) => (
@@ -302,7 +305,6 @@ const HomeTab = ({ route, navigation }) => {
               //   : null,
               headerTitleAlign: "center",
             }}
-            //initialParams={{ navigation }}
           />
         )}
       </Tab.Navigator>
