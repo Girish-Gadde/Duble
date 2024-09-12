@@ -11,13 +11,15 @@ import HeaderTitleWithIcon2 from "../../Icon-functions/HeaderTitle2";
 
 const Stack = createStackNavigator();
 
-export const LikeStack = ({ navigation }) => {
+export const LikeStack = ({ route, navigation }) => {
+  const { yourTeamProfile } = route.params;
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="LikeScreen1">
         <Stack.Screen
           name="LikeScreen1"
           component={Likes}
+          initialParams={{ yourTeamProfile, navigation }}
           options={{
             headerTitle: () => (
               <HeaderTitleWithIcon1

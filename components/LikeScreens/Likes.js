@@ -1,5 +1,6 @@
+import { serverIP } from "@/config";
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -210,8 +211,41 @@ const profiles = [
   },
 ];
 
-const Likes = () => {
-  const navigation = useNavigation();
+const Likes = ({ route, navigation }) => {
+  //const navigation = useNavigation();
+  const { yourTeamProfile } = route.params;
+  const [teams, setTeams] = useState([]);
+  console.log(yourTeamProfile, "HOME_LIKE");
+  const likedByIDs = yourTeamProfile.likedByIDs;
+
+  useEffect(() => {
+    // Function to fetch teams from the back-end
+    const fetchTeams = async () => {
+      try {
+        const response = await fetch(`${serverIP}/like/get-liked-teams`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ likedByIDs }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch teams");
+        }
+
+        const data = await response.json();
+        console.log(data, "LIKED_TEAMS");
+        setTeams(data);
+      } catch (error) {
+        console.error("Error fetching teams:", error);
+      }
+    };
+
+    if (likedByIDs && likedByIDs.length > 0) {
+      fetchTeams();
+    }
+  }, [likedByIDs]);
 
   const navigateToLikedProfile = (item) => {
     navigation.navigate("LikedProfile", { profile: item });
@@ -221,21 +255,24 @@ const Likes = () => {
       <TextInput style={styles.searchBar} placeholder="Search..." />
       <Text style={styles.headerText}>People who liked you</Text>
       <FlatList
-        data={profiles}
+        data={teams}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.profileContainer}
             onPress={() => navigateToLikedProfile(item)}
           >
             {/* <View> */}
-            <Image source={item.imageSource} style={styles.profileImage} />
+            <Image
+              source={{ uri: `${serverIP}${item.selectedImages[0]}` }}
+              style={styles.profileImage}
+            />
             <Text
               style={styles.profileText}
             >{`${item.name1} & ${item.name2}`}</Text>
             {/* </View> */}
           </TouchableOpacity>
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item._id.toString()}
         numColumns={3}
         contentContainerStyle={styles.flatListContent}
       />

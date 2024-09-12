@@ -251,7 +251,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>Bisexual</Text>
+                <Text style={styles.cell}>{profile.gender}</Text>
               </View>
             </View>
             <Text style={styles.singleBioText}>
@@ -310,7 +310,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>Straight</Text>
+                <Text style={styles.cell}>{profile.gender}</Text>
               </View>
             </View>
             <Text style={styles.singleBioText}>

@@ -22,7 +22,7 @@ const Tab = createBottomTabNavigator();
 const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
   // const { mobileNumber } = route.params;
-  const mobileNumber = "9654573787";
+  const mobileNumber = "6305148607";
   const [individualProfile, setIndividualProfile] = useState(null);
   const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
@@ -175,43 +175,45 @@ const HomeTab = ({ route, navigation }) => {
             headerTitleAlign: "center",
           }}
         />
-        <Tab.Screen
-          name="Likes"
-          component={LikeStack}
-          initialParams={{ navigation }}
-          options={{
-            tabBarIcon: ({ focused, color, size }) => (
-              <View style={{ position: "relative" }}>
-                <Ionicons
-                  name={focused ? "heart" : "heart-outline"}
-                  size={size}
-                  color={color}
-                />
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    backgroundColor: "#FF3156",
-                    borderRadius: 6,
-                    width: 8,
-                    height: 8,
-                  }}
-                />
-              </View>
-            ),
-            tabBarLabelStyle: {
-              marginBottom: 20, // Adjust as needed to decrease the gap
-              fontWeight: "bold",
-            },
-            headerShown: false,
-          }}
-        />
+        {profile && (
+          <Tab.Screen
+            name="Likes"
+            component={LikeStack}
+            initialParams={{ navigation, yourTeamProfile: profile }}
+            options={{
+              tabBarIcon: ({ focused, color, size }) => (
+                <View style={{ position: "relative" }}>
+                  <Ionicons
+                    name={focused ? "heart" : "heart-outline"}
+                    size={size}
+                    color={color}
+                  />
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      backgroundColor: "#FF3156",
+                      borderRadius: 6,
+                      width: 8,
+                      height: 8,
+                    }}
+                  />
+                </View>
+              ),
+              tabBarLabelStyle: {
+                marginBottom: 20, // Adjust as needed to decrease the gap
+                fontWeight: "bold",
+              },
+              headerShown: false,
+            }}
+          />
+        )}
         {profile && (
           <Tab.Screen
             name="Home"
             component={HomeScreen}
-            initialParams={{ navigation, individualProfile: profile }}
+            initialParams={{ navigation, yourTeamProfile: profile }}
             options={{
               tabBarIcon: ({ focused, color, size }) => (
                 <Ionicons

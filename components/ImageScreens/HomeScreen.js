@@ -99,8 +99,8 @@ const width = Dimensions.get("window").width;
 // ];
 
 const HomeScreen = ({ route, navigation }) => {
-  const { individualProfile } = route.params;
-  console.log(individualProfile, "HOME");
+  const { yourTeamProfile } = route.params;
+  console.log(yourTeamProfile, "HOME");
   const [isHeartActive, setIsHeartActive] = useState(false);
   // const [showIcons, setShowIcons] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -129,7 +129,7 @@ const HomeScreen = ({ route, navigation }) => {
     );
     // getSavedData();
     const likedTeamId = profiles[currentProfileIndex]._id; // The team being liked
-    const likingTeamId = individualProfile._id; // The user's team profile
+    const likingTeamId = yourTeamProfile._id; // The user's team profile
     console.log(likedTeamId, "IsD", likingTeamId);
     try {
       const response = await fetch(`${serverIP}/like/saving-like-id`, {
@@ -147,10 +147,6 @@ const HomeScreen = ({ route, navigation }) => {
       console.error("Error updating like status:", error);
     }
   };
-  // useEffect(() => {
-  //   console.log("BD");
-
-  // }, [currentProfileIndex]);
 
   const handleScroll = (event) => {
     // const currentOffset = event.nativeEvent.contentOffset.y;
@@ -159,13 +155,6 @@ const HomeScreen = ({ route, navigation }) => {
     //   dispatch(toggleShowIcons());
     // }
   };
-
-  // const images = [
-  //   profiles[currentProfileIndex].imageSource,
-  //   profiles[currentProfileIndex].imageSource1,
-  //   profiles[currentProfileIndex].imageSource2,
-  //   profiles[currentProfileIndex].imageSource3,
-  // ];
 
   const renderCarouselItem = ({ item }) => {
     console.log(item, "PATH");
@@ -203,8 +192,14 @@ const HomeScreen = ({ route, navigation }) => {
       //  console.log(responseData, "RES0");
 
       if (responseData.length > 0) {
+        const filteredProfiles = responseData.filter(
+          (profile) =>
+            !yourTeamProfile.likingToIDs.includes(profile._id) &&
+            profile._id !== yourTeamProfile._id
+        );
+        console.log(filteredProfiles, "FILTERED PROFILES.");
         setCurrentProfileIndex(0); // Set to the first profile by default
-        setProfiles(responseData);
+        setProfiles(filteredProfiles);
       }
     } catch (error) {
       console.error("Fetching data failed:", error);
@@ -307,43 +302,6 @@ const HomeScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
       ) : null}
-
-      {/* <View style={styles.imageContainer}>
-        <Image
-          source={profiles[currentProfileIndex].imageSource1}
-          style={styles.image1}
-          resizeMode="cover"
-        />
-        <Image
-          source={profiles[currentProfileIndex].imageSource2}
-          style={styles.image1}
-          resizeMode="cover"
-        />
-        <Image
-          source={profiles[currentProfileIndex].imageSource3}
-          style={styles.image1}
-          resizeMode="cover"
-        />
-      </View> */}
-
-      {/* <View style={styles.viewContainer1}>
-        <View style={styles.searchContainer}>
-          <Ionicons name="search" size={16} color="#454545" />
-          <Text style={styles.searchText}>Our Story</Text>
-        </View>
-        <Text style={styles.text}>
-          {profiles[currentProfileIndex]?.ourStory}{" "}
-        </Text>
-      </View>
-      <View style={styles.viewContainer}>
-        <View style={styles.searchContainer}>
-          <Ionicons name="star" size={16} color="#FFFF66" />
-          <Text style={styles.searchText}>Our Idea of a Fun Date</Text>
-        </View>
-        <Text style={styles.text}>
-          {profiles[currentProfileIndex]?.funDate}{" "}
-        </Text>
-      </View> */}
 
       {profiles[currentProfileIndex]?.dynamicContent?.length > 0 ? (
         profiles[currentProfileIndex].dynamicContent.map((content, index) => (
