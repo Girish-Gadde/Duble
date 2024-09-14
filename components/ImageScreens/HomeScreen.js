@@ -148,6 +148,32 @@ const HomeScreen = ({ route, navigation }) => {
     }
   };
 
+  const toggleDislike = async () => {
+    // setIsDislikeActive(!isDislikeActive);
+    updateCurrentIndex(
+      currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
+    );
+
+    const dislikedTeamId = profiles[currentProfileIndex]._id; // The team being disliked
+    const dislikingTeamId = yourTeamProfile._id; // The user's team profile
+
+    try {
+      const response = await fetch(`${serverIP}/like/saving-dislike-id`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ dislikedTeamId, dislikingTeamId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update dislike status");
+      }
+    } catch (error) {
+      console.error("Error updating dislike status:", error);
+    }
+  };
+
   const handleScroll = (event) => {
     // const currentOffset = event.nativeEvent.contentOffset.y;
     // const show = currentOffset <= 0;
@@ -171,17 +197,15 @@ const HomeScreen = ({ route, navigation }) => {
 
   async function getSavedData() {
     try {
-      const response = await fetch(
-        `${serverIP}/auth/get-saved-data?teamName=${encodeURIComponent(
-          teamName
-        )}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${serverIP}/auth/get-saved-teams`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          yourTeamProfile, // Send your team profile in the request body
+        }),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch saved data");
@@ -192,14 +216,9 @@ const HomeScreen = ({ route, navigation }) => {
       //  console.log(responseData, "RES0");
 
       if (responseData.length > 0) {
-        const filteredProfiles = responseData.filter(
-          (profile) =>
-            !yourTeamProfile.likingToIDs.includes(profile._id) &&
-            profile._id !== yourTeamProfile._id
-        );
-        console.log(filteredProfiles, "FILTERED PROFILES.");
+        console.log(responseData, "FILTERED PROFILES FROM BACK-END");
         setCurrentProfileIndex(0); // Set to the first profile by default
-        setProfiles(filteredProfiles);
+        setProfiles(responseData); // Set the filtered profiles from the back-end
       }
     } catch (error) {
       console.error("Fetching data failed:", error);
@@ -274,7 +293,10 @@ const HomeScreen = ({ route, navigation }) => {
       </View>
       {showIcons ? (
         <View style={styles.actionContainer1}>
-          <TouchableOpacity style={styles.actionButton1}>
+          <TouchableOpacity
+            style={styles.actionButton1}
+            onPress={toggleDislike}
+          >
             <View
               style={{
                 backgroundColor: "#6420AA",
@@ -463,7 +485,7 @@ const HomeScreen = ({ route, navigation }) => {
       </View>
 
       <View style={styles.actionContainer2}>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity style={styles.actionButton} onPress={toggleDislike}>
           <View style={styles.buttonContainer}>
             <Text style={styles.buttonText}>Reject</Text>
           </View>

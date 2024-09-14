@@ -75,8 +75,8 @@ const HomeTab = ({ route, navigation }) => {
       }
 
       const responseData = await response.json();
-      setProfile(responseData[1]);
-      console.log(responseData[1], "Your Team");
+      setProfile(responseData[0]);
+      console.log(responseData[0], "Your Team");
     } catch (error) {
       console.error("Failed to fetch your team:", error);
     }
