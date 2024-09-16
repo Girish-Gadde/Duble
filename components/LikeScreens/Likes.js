@@ -248,7 +248,7 @@ const Likes = ({ route, navigation }) => {
   }, [likedByIDs]);
 
   const navigateToLikedProfile = (item) => {
-    navigation.navigate("LikedProfile", { profile: item });
+    navigation.navigate("LikedProfile", { profile: item, yourTeamProfile });
   };
   return (
     <View style={styles.container}>

@@ -246,42 +246,44 @@ const HomeTab = ({ route, navigation }) => {
             }}
           />
         )}
-        <Tab.Screen
-          name="Matches"
-          component={Matches}
-          initialParams={{ navigation }}
-          options={{
-            tabBarIcon: ({ focused, color, size }) => (
-              <View style={{ position: "relative" }}>
-                <Ionicons
-                  name={
-                    focused
-                      ? "chatbubble-ellipses-outline"
-                      : "chatbubble-ellipses-outline"
-                  }
-                  size={size}
-                  color={color}
-                />
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    backgroundColor: "#FF3156",
-                    borderRadius: 6,
-                    width: 8,
-                    height: 8,
-                  }}
-                />
-              </View>
-            ),
-            tabBarLabelStyle: {
-              marginBottom: 20, // Adjust as needed to decrease the gap
-              fontWeight: "bold",
-            },
-            headerShown: false,
-          }}
-        />
+        {profile && (
+          <Tab.Screen
+            name="Matches"
+            component={Matches}
+            initialParams={{ navigation, yourTeamProfile: profile }}
+            options={{
+              tabBarIcon: ({ focused, color, size }) => (
+                <View style={{ position: "relative" }}>
+                  <Ionicons
+                    name={
+                      focused
+                        ? "chatbubble-ellipses-outline"
+                        : "chatbubble-ellipses-outline"
+                    }
+                    size={size}
+                    color={color}
+                  />
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      backgroundColor: "#FF3156",
+                      borderRadius: 6,
+                      width: 8,
+                      height: 8,
+                    }}
+                  />
+                </View>
+              ),
+              tabBarLabelStyle: {
+                marginBottom: 20, // Adjust as needed to decrease the gap
+                fontWeight: "bold",
+              },
+              headerShown: false,
+            }}
+          />
+        )}
         {individualProfile && (
           <Tab.Screen
             name="Profile"

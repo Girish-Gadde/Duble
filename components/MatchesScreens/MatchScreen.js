@@ -1,5 +1,6 @@
+import { serverIP } from "@/config";
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Image,
@@ -209,8 +210,42 @@ const profiles = [
   },
 ];
 
-const MatchScreen = ({ navigation }) => {
+const MatchScreen = ({ route, navigation }) => {
   //const navigation = useNavigation();
+  const { yourTeamProfile } = route.params;
+  const [teams, setTeams] = useState([]);
+  console.log(yourTeamProfile, "MATCH_");
+  const matchIDs = yourTeamProfile.matchIDs;
+
+  useEffect(() => {
+    // Function to fetch teams from the back-end
+    const fetchTeams = async () => {
+      try {
+        const response = await fetch(`${serverIP}/match/get-matched-teams`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ matchIDs }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch teams");
+        }
+
+        const data = await response.json();
+        console.log(data, "MATCHED_TEAMS");
+        setTeams(data);
+      } catch (error) {
+        console.error("Error fetching teams:", error);
+      }
+    };
+
+    if (matchIDs && matchIDs.length > 0) {
+      fetchTeams();
+    }
+  }, [matchIDs]);
+
   return (
     <View style={styles.container}>
       <TextInput style={styles.searchBar} placeholder="Search matches" />
@@ -221,12 +256,15 @@ const MatchScreen = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.scrollView}
         >
-          {profiles.map((profile, index) => (
+          {teams.map((profile, index) => (
             <TouchableOpacity
               onPress={() => navigation.navigate("TeamProfile", { profile })}
             >
               <View key={index} style={styles.imageContainer}>
-                <Image source={profile.imageSource} style={styles.image} />
+                <Image
+                  source={{ uri: `${serverIP}${profile.selectedImages[0]}` }}
+                  style={styles.image}
+                />
                 <Text style={styles.imageText}>
                   {profile.name1} & {profile.name2}
                 </Text>

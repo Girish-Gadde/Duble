@@ -23,8 +23,8 @@ import { serverIP } from "@/config";
 const width = Dimensions.get("window").width;
 
 const LikedProfile = ({ route, navigation }) => {
-  const { profile } = route.params;
-  console.log(profile, "NAME");
+  const { profile, yourTeamProfile } = route.params;
+  console.log(profile, yourTeamProfile, "NAME");
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [images, setImages] = useState([]);
@@ -38,12 +38,33 @@ const LikedProfile = ({ route, navigation }) => {
     setImages(formattedImages);
   }, []);
 
-  const toggleHeart = () => {
+  const toggleHeart = async () => {
     setIsHeartActive(!isHeartActive);
-    navigation.navigate("LikedMatch", { profile });
-    // setCurrentProfileIndex(
-    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-    // );
+    try {
+      // Make the request to the backend to update matchIDs
+      const response = await fetch(`${serverIP}/match/natch-to-team`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          likedTeamId: profile._id, // The team that has liked you
+          likingTeamId: yourTeamProfile._id, // Your team profile
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("Match updated successfully:", result);
+        // Optionally, navigate to the "LikedMatch" screen with the profile data
+        navigation.navigate("LikedMatch", { profile });
+      } else {
+        console.error("Failed to update match:", result.message);
+      }
+    } catch (error) {
+      console.error("Error making request:", error);
+    }
   };
 
   const handleScroll = (event) => {

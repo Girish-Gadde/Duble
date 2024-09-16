@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -18,6 +18,7 @@ import {
 } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Carousel from "react-native-reanimated-carousel";
+import { serverIP } from "@/config";
 
 const width = Dimensions.get("window").width;
 
@@ -26,8 +27,16 @@ const MatchedTeamProfile = ({ route, navigation }) => {
   console.log("NAME", profile);
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
+  const [images, setImages] = useState([]);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
   //const navigation = useNavigation();
+
+  useEffect(() => {
+    const formattedImages = (profile.selectedImages || []).map((imagePath) => ({
+      uri: `${serverIP}${imagePath}`,
+    }));
+    setImages(formattedImages);
+  }, []);
 
   const toggleHeart = () => {
     setIsHeartActive(!isHeartActive);
@@ -54,12 +63,12 @@ const MatchedTeamProfile = ({ route, navigation }) => {
     return <Image source={item} style={styles.image} resizeMode="cover" />;
   };
 
-  const images = [
-    profile.imageSource,
-    profile.imageSource1,
-    profile.imageSource2,
-    profile.imageSource3,
-  ];
+  // const images = [
+  //   profile.imageSource,
+  //   profile.imageSource1,
+  //   profile.imageSource2,
+  //   profile.imageSource3,
+  // ];
 
   return (
     <ScrollView
@@ -155,22 +164,30 @@ const MatchedTeamProfile = ({ route, navigation }) => {
           //   </TouchableOpacity>
           // </View>
         }
-        <View style={styles.viewContainer1}>
-          <View style={styles.searchContainer}>
-            {/* <Ionicons name="search" size={16} color="#454545" /> */}
-            <Text style={styles.searchText}>🔍 Our Story</Text>
+        {profile.dynamicContent?.length > 0 ? (
+          profile.dynamicContent.map((content, index) => (
+            <View key={index} style={styles.viewContainer}>
+              <View style={styles.searchContainer}>
+                {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
+                <Text style={styles.searchText}>{content.label}</Text>
+              </View>
+              <Text style={styles.text}>{content.value}</Text>
+            </View>
+          ))
+        ) : (
+          // Show activity indicator while loading
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#0000ff" />
+            <Text style={styles.loadingText}>Loading content...</Text>
           </View>
-          <Text style={styles.text}>{profile.ourStory}</Text>
-        </View>
-        <View style={styles.viewContainer}>
-          <View style={styles.searchContainer}>
-            {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
-            <Text style={styles.searchText}>🌟 Our Idea of a Fun Date</Text>
-          </View>
-          <Text style={styles.text}>{profile.funDate}</Text>
-        </View>
+        )}
         <View style={styles.singleBioContainer}>
-          <Image source={profile.singleImage1} style={styles.singleImage} />
+          <Image
+            source={{
+              uri: `${serverIP}/uploads/1724755758498_a4d3817e-fde1-4f45-8800-40d09942d5ca.jpeg`,
+            }}
+            style={styles.singleImage}
+          />
           <View style={styles.bioDataContainer}>
             <View style={styles.singleNameContainer}>
               <Text style={styles.nameText1}>{profile.name1},</Text>
@@ -184,7 +201,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>Pitampura</Text>
+                <Text style={styles.cell}>{profile.place}</Text>
               </View>
 
               <View style={styles.iconContainer}>
@@ -194,7 +211,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>PhD Student</Text>
+                <Text style={styles.cell}>{profile.occupation}</Text>
               </View>
             </View>
 
@@ -206,7 +223,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>155 cm</Text>
+                <Text style={styles.cell}>{profile.height}</Text>
               </View>
               <View style={styles.iconContainer}>
                 <AntDesign
@@ -215,7 +232,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>Bisexual</Text>
+                <Text style={styles.cell}>{profile.gender}</Text>
               </View>
             </View>
             <Text style={styles.singleBioText}>
@@ -224,7 +241,12 @@ const MatchedTeamProfile = ({ route, navigation }) => {
           </View>
         </View>
         <View style={styles.singleBioContainer}>
-          <Image source={profile.singleImage2} style={styles.singleImage} />
+          <Image
+            source={{
+              uri: `${serverIP}/uploads/1724755758531_200a964c-9120-475c-8287-97b17aa8d72b.jpeg`,
+            }}
+            style={styles.singleImage}
+          />
           <View style={styles.bioDataContainer}>
             <View style={styles.singleNameContainer}>
               <Text style={styles.nameText1}>{profile.name2},</Text>
@@ -238,7 +260,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>Pitampura</Text>
+                <Text style={styles.cell}>{profile.place}</Text>
               </View>
 
               <View style={styles.iconContainer}>
@@ -248,7 +270,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>Analyst</Text>
+                <Text style={styles.cell}>{profile.occupation}</Text>
               </View>
             </View>
 
@@ -269,7 +291,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>Straight</Text>
+                <Text style={styles.cell}>{profile.gender}</Text>
               </View>
             </View>
             <Text style={styles.singleBioText}>

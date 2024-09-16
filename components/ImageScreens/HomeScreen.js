@@ -101,6 +101,7 @@ const width = Dimensions.get("window").width;
 const HomeScreen = ({ route, navigation }) => {
   const { yourTeamProfile } = route.params;
   console.log(yourTeamProfile, "HOME");
+  const [yourTeam, setYourTeam] = useState(yourTeamProfile);
   const [isHeartActive, setIsHeartActive] = useState(false);
   // const [showIcons, setShowIcons] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -118,15 +119,30 @@ const HomeScreen = ({ route, navigation }) => {
   const showIcons = useSelector((state) => state.showIcons);
 
   const updateCurrentIndex = (val) => {
-    setCurrentProfileIndex(val);
-    currentIndexRef.current = val;
+    if (val < profiles.length) {
+      setCurrentProfileIndex(val);
+      currentIndexRef.current = val;
+    } else {
+      // Optional: You could handle stopping behavior here, like disabling buttons or showing a "No more profiles" message.
+      console.log("Reached the last profile");
+    }
+  };
+  // Function to remove profile from the array once liked or disliked
+  const removeProfile = () => {
+    const updatedProfiles = profiles.filter(
+      (_, index) => index !== currentProfileIndex
+    );
+    setProfiles(updatedProfiles);
+    if (updatedProfiles.length > 0) {
+      updateCurrentIndex(currentProfileIndex); // Keep current index within bounds
+    }
   };
 
   const toggleHeart = async () => {
     setIsHeartActive(!isHeartActive);
-    updateCurrentIndex(
-      currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-    );
+    // updateCurrentIndex(
+    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
+    // );
     // getSavedData();
     const likedTeamId = profiles[currentProfileIndex]._id; // The team being liked
     const likingTeamId = yourTeamProfile._id; // The user's team profile
@@ -143,6 +159,7 @@ const HomeScreen = ({ route, navigation }) => {
       if (!response.ok) {
         throw new Error("Failed to update like status");
       }
+      removeProfile();
     } catch (error) {
       console.error("Error updating like status:", error);
     }
@@ -150,9 +167,9 @@ const HomeScreen = ({ route, navigation }) => {
 
   const toggleDislike = async () => {
     // setIsDislikeActive(!isDislikeActive);
-    updateCurrentIndex(
-      currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-    );
+    // updateCurrentIndex(
+    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
+    // );
 
     const dislikedTeamId = profiles[currentProfileIndex]._id; // The team being disliked
     const dislikingTeamId = yourTeamProfile._id; // The user's team profile
@@ -169,6 +186,7 @@ const HomeScreen = ({ route, navigation }) => {
       if (!response.ok) {
         throw new Error("Failed to update dislike status");
       }
+      removeProfile();
     } catch (error) {
       console.error("Error updating dislike status:", error);
     }

@@ -9,13 +9,15 @@ import MatchedTeamProfile from "./MatchesScreens/MatchedTeamProfile";
 import HeaderTitleWithIcon2 from "../Icon-functions/HeaderTitle2";
 const Stack = createStackNavigator();
 
-const Matches = ({ navigation }) => {
+const Matches = ({ route, navigation }) => {
+  const { yourTeamProfile } = route.params;
   return (
     <NavigationContainer independent="true">
       <Stack.Navigator initialRouteName="MatchScreen">
         <Stack.Screen
           name="MatchScreen"
           component={MatchScreen}
+          initialParams={{ yourTeamProfile, navigation }}
           options={{
             headerTitle: () => (
               <HeaderTitleWithIcon1
