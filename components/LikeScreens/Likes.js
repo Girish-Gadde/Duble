@@ -11,6 +11,8 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { menuClickAction } from "../Redux/Actions";
 //import LinearGradient from "react-native-linear-gradient";
 
 const profiles = [
@@ -215,6 +217,7 @@ const Likes = ({ route, navigation }) => {
   //const navigation = useNavigation();
   const { yourTeamProfile } = route.params;
   const [teams, setTeams] = useState([]);
+  const dispatch = useDispatch();
   console.log(yourTeamProfile, "HOME_LIKE");
   const likedByIDs = yourTeamProfile.likedByIDs;
 
@@ -248,6 +251,7 @@ const Likes = ({ route, navigation }) => {
   }, [likedByIDs]);
 
   const navigateToLikedProfile = (item) => {
+    dispatch(menuClickAction());
     navigation.navigate("LikedProfile", { profile: item, yourTeamProfile });
   };
   return (

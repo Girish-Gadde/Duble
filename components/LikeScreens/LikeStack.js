@@ -8,11 +8,18 @@ import LikedChat from "./LikedChat";
 import MatchedTeamProfile from "../MatchesScreens/MatchedTeamProfile";
 import HeaderTitleWithIcon1 from "../../Icon-functions/HeaderTitle1";
 import HeaderTitleWithIcon2 from "../../Icon-functions/HeaderTitle2";
+import { useDispatch } from "react-redux";
+import { menuClickAction } from "../Redux/Actions";
 
 const Stack = createStackNavigator();
 
 export const LikeStack = ({ route, navigation }) => {
   const { yourTeamProfile } = route.params;
+  const dispatch = useDispatch();
+  const handleMenuClick = () => {
+    dispatch(menuClickAction());
+    //navigation.navigate("LikeScreen1");
+  };
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="LikeScreen1">
@@ -35,12 +42,14 @@ export const LikeStack = ({ route, navigation }) => {
         <Stack.Screen
           name="LikedProfile"
           component={LikedProfile}
+          initialParams={{ handleMenuClick }}
           options={{
             headerTitle: () => (
               <HeaderTitleWithIcon2
                 title="duble"
                 iconName="swap-horiz"
                 iconName1="arrow-back"
+                handleMenuClick={handleMenuClick}
               /> // Use the HeaderTitleWithIcon component
             ),
             headerTitleAlign: "center",

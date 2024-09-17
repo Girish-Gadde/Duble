@@ -19,17 +19,24 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import Carousel from "react-native-reanimated-carousel";
 import { serverIP } from "@/config";
+import { useSelector } from "react-redux";
 
 const width = Dimensions.get("window").width;
 
 const LikedProfile = ({ route, navigation }) => {
-  const { profile, yourTeamProfile } = route.params;
+  const { profile, yourTeamProfile, handleMenuClick } = route.params;
   console.log(profile, yourTeamProfile, "NAME");
+  const menuClicked = useSelector((state) => state.menuClicked);
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [images, setImages] = useState([]);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
   //const navigation = useNavigation();
+  useEffect(() => {
+    if (menuClicked) {
+      navigation.goBack(); // Go back when menuClicked is true
+    }
+  }, [menuClicked, navigation]);
 
   useEffect(() => {
     const formattedImages = (profile.selectedImages || []).map((imagePath) => ({
