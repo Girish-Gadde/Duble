@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Text,
   View,
@@ -9,144 +9,78 @@ import {
   Dimensions,
   Image,
   TextInput,
-  FlatList
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Icon1 from "react-native-vector-icons/Feather";
 import Icon2 from "react-native-vector-icons/Octicons";
-import { UserContext } from "./Team Switch/UserContext";
 
 const { height } = Dimensions.get("window");
 
-
-
-// const profiles = [
-//   {
-//     id: 1,
-//     imageSource: require("../assets/profile-1.jpg"),
-//     name1: "Neha",
-//     age1: 25,
-//     name2: "Shruthi",
-//     age2: 24,
-//     location: "2 km away",
-//     description:
-//       "Your go to adventure enthusiast and amateur stand-up comedian",
-//     ourStory:
-//       "We met at a comedy show where shruthi was performing her stand-up routine and Neha was in the audience",
-//     funDate:
-//       "Hiking in the mountains, laughing, roasting marshmallows and sharing stories",
-//     singleImage1: require("../assets/image20.jpg"),
-//     singleImage2: require("../assets/image21.jpg"),
-//   },
-//   {
-//     id: 2,
-//     imageSource: require("../assets/profile-2.png"),
-//     name1: "Anusha",
-//     age1: 24,
-//     name2: "Nikitha",
-//     age2: 26,
-//     location: "3 km away",
-//     description: "Crazy cat lady who is as crazy as a cat who loves to explore",
-//     ourStory: "We met at a coffee shop and bonded over our love for cats",
-//     funDate: "Visiting a cat café and having a cat-themed movie marathon",
-//   },
-//   {
-//     id: 3,
-//     imageSource: require("../assets/profile-3.png"),
-//     name1: "Julia",
-//     age1: 27,
-//     name2: "Jenny",
-//     age2: 24,
-//     location: "4 km away",
-//     description:
-//       "Your go to adventure enthusiast and amateur stand-up comedian",
-//     ourStory:
-//       "We met at a hiking event and instantly clicked while exploring nature",
-//     funDate: "Going on a spontaneous road trip to explore new hiking trails",
-//   },
-//   // {
-//   //   id: 4,
-//   //   imageSource: require("../assets/profile-4.png"),
-//   //   name1: "Shivani",
-//   //   age1: 23,
-//   //   name2: "Chandini",
-//   //   age2: 25,
-//   //   location: "10 km away",
-//   //   description:
-//   //     "We love to travel and experience new places, cultures, animals etc",
-//   //   ourStory:
-//   //     "We met while traveling solo in Europe and decided to explore the rest of the trip together",
-//   //   funDate:
-//   //     "Attending a cultural festival in a foreign country and trying out exotic foods",
-//   // },
-//   // Add more profiles as needed
-// ];
+const profiles = [
+  {
+    id: 1,
+    imageSource: require("../assets/profile-1.jpg"),
+    name1: "Neha",
+    age1: 25,
+    name2: "Shruthi",
+    age2: 24,
+    location: "2 km away",
+    description:
+      "Your go to adventure enthusiast and amateur stand-up comedian",
+    ourStory:
+      "We met at a comedy show where shruthi was performing her stand-up routine and Neha was in the audience",
+    funDate:
+      "Hiking in the mountains, laughing, roasting marshmallows and sharing stories",
+    singleImage1: require("../assets/image20.jpg"),
+    singleImage2: require("../assets/image21.jpg"),
+  },
+  {
+    id: 2,
+    imageSource: require("../assets/profile-2.png"),
+    name1: "Anusha",
+    age1: 24,
+    name2: "Nikitha",
+    age2: 26,
+    location: "3 km away",
+    description: "Crazy cat lady who is as crazy as a cat who loves to explore",
+    ourStory: "We met at a coffee shop and bonded over our love for cats",
+    funDate: "Visiting a cat café and having a cat-themed movie marathon",
+  },
+  {
+    id: 3,
+    imageSource: require("../assets/profile-3.png"),
+    name1: "Julia",
+    age1: 27,
+    name2: "Jenny",
+    age2: 24,
+    location: "4 km away",
+    description:
+      "Your go to adventure enthusiast and amateur stand-up comedian",
+    ourStory:
+      "We met at a hiking event and instantly clicked while exploring nature",
+    funDate: "Going on a spontaneous road trip to explore new hiking trails",
+  },
+  // {
+  //   id: 4,
+  //   imageSource: require("../assets/profile-4.png"),
+  //   name1: "Shivani",
+  //   age1: 23,
+  //   name2: "Chandini",
+  //   age2: 25,
+  //   location: "10 km away",
+  //   description:
+  //     "We love to travel and experience new places, cultures, animals etc",
+  //   ourStory:
+  //     "We met while traveling solo in Europe and decided to explore the rest of the trip together",
+  //   funDate:
+  //     "Attending a cultural festival in a foreign country and trying out exotic foods",
+  // },
+  // Add more profiles as needed
+];
 
 const Teams = () => {
-  //Dynamic data from database
-  const [teams, setTeams] = useState([]);
-  const serverIP = "http://192.168.1.23:4002";
-  const userId = '66d6e8e49b889ada7a2c9fcf'
-
- // const { selectedTeamIndex } = useContext(UserContext);
-//console.log(selectedTeamIndex, 'Indexxxxxxxxxxxxxxxx')
-  
-  
-//const [teams, setTeams] = useState([]);
-const [error, setError] = useState("");
-
-const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
-
-useEffect(() => {
-  fetchTeams();
-}, []);
-
-useEffect(() => {
-  console.log("Global Selected Team Index:", selectedTeamIndex);
-}, [selectedTeamIndex]);
-
-const fetchTeams = async () => {
-  try {
-    const response = await fetch(
-      `${serverIP}/auth/get-your-team?userId=${userId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch your team");
-    }
-
-    const responseData = await response.json();
-    setTeams(responseData);
-    setError("");  // Clear error on success
-  } catch (err) {
-    console.error("Error fetching team data:", err);
-    setError("Failed to fetch your team. Please try again later.");
-  }
-};
-
-const handleTeamClick = (team, index) => {
-  setSelectedTeamIndex(index); // Update the selected team index globally
-  console.log(`Selected Team Index: ${index}`);  // Log the selected index
-  console.log(team, "Selected Team");
-};
-
-const RadioButton = ({ selected }) => (
-  <View style={[styles.radioButton, selected && styles.radioButtonSelected]} />
-);
-
-
-
-  //Dynamic data from database
-
-
   // const [isModalVisible, setModalVisible] = useState(true);
   const translateY = useRef(new Animated.Value(height)).current;
   const navigation = useNavigation();
@@ -213,34 +147,7 @@ const RadioButton = ({ selected }) => (
                 <Text style={styles.createTeamBtnText}>Create New Team</Text>
               </TouchableOpacity>
 
-              <View style={styles.containerTeam}>
-      {error ? (
-        <Text style={styles.errorText}>{error}</Text>
-      ) : teams.length > 0 ? (
-        teams.map((team, index) => (
-          <TouchableOpacity
-            key={index.toString()}
-            style={styles.teamItemWrapper}
-            onPress={() => handleTeamClick(team, index)}
-          >
-            <View style={styles.teamItemTeam}>
-            <View>
-              <Text style={styles.teamTextTeam}>
-                {team.name1} and {team.name2}
-              </Text>
-              </View>
-              <View>
-              <RadioButton selected={selectedTeamIndex === index} />
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))
-      ) : (
-        <Text style={styles.noTeamsTextTeam}>No teams available.</Text>
-      )}
-    </View>
-
-              {/* {profiles.map((profile) => (
+              {profiles.map((profile) => (
                 <View key={profile.id} style={styles.profileContainer}>
                   <Image
                     source={profile.imageSource}
@@ -279,7 +186,7 @@ const RadioButton = ({ selected }) => (
                     </View>
                   </TouchableOpacity>
                 </View>
-              ))} */}
+              ))}
             </View>
           ) : (
             <View style={styles.newTeamContainer}>
@@ -308,7 +215,7 @@ const RadioButton = ({ selected }) => (
               </View>
             </TouchableOpacity>
             {showView ? (
-              <TouchableOpacity onPress={() => navigation.navigate('Home', { selectedTeamIndex })} style={styles.actionButton}>
+              <TouchableOpacity style={styles.actionButton}>
                 <View style={styles.buttonContainer2}>
                   <Text style={styles.buttonText}>Switch</Text>
                 </View>
@@ -494,19 +401,20 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   radioButton: {
-    height: 20,
-    width: 20,
+    height: 18,
+    width: 18,
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: "#444",
+    borderWidth: 1,
+    borderColor: "#45474B",
     alignItems: "center",
     justifyContent: "center",
   },
   radioButtonSelected: {
+    height: 12,
+    width: 12,
+    borderRadius: 5,
     backgroundColor: "#FF3156",
   },
-
-  
   newTeamContainer: {
     flexDirection: "column",
     //  alignItems: "center",
@@ -535,43 +443,6 @@ const styles = StyleSheet.create({
     marginVertical: 25,
     color: "#0000FF",
   },
-
-
-// Teams Style
-  containerTeam: {
-    flex: 1,
-    width:'100%'
-  },
-  headingTeam: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  teamItemTeam: {
-    padding: 15,
-    flexDirection:'row',
-    gap:40,
-    marginBottom: 10,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 5 },
-    elevation: 3,
-  },
-  teamTextTeam: {
-    fontSize: 18,
-    fontWeight: "500",
-  },
-  noTeamsTextTeam: {
-    fontSize: 16,
-    textAlign: "center",
-    marginTop: 20,
-    color: "#888",
-  },
-
-
 });
 
 export default Teams;

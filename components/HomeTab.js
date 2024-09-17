@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -15,13 +15,40 @@ import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
 import { ProfileStack } from "./ProfileScreens/ProfileStack";
 import HomeScreen from "./ImageScreens/HomeScreen";
 import Chat from "../Chat";
-import { serverIP } from "@/config";
+import { serverIP } from "../config";
+import { UserContext } from "./Team Switch/UserContext";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+//import { getFromAsyncStorage } from './Team Switch/storageUtils';
+import { useUserContext } from './Team Switch/UserContext';
+import Notification from './Team/TeamUpRequest/NotificationScreen'
 
 const Tab = createBottomTabNavigator();
 
 const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
   // const { mobileNumber } = route.params;
+  var index
+
+  const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
+ // const [selectedTeamIndex, setSelectedTeamIndex] = useState(null);
+  console.log(selectedTeamIndex, 'Indexxxxxxxxxxxxxxxx')
+  //index = selectedTeamIndex
+
+  const [indexNo, setIndexNo] = useState(null);
+  var index
+
+  const { indexRef } = useUserContext();
+  const displayIndex = useRef(indexRef.current); // Use ref to hold the current index value
+
+  useEffect(() => {
+    // Update the displayIndex whenever indexRef changes
+    displayIndex.current = indexRef.current;
+  }, [indexRef.current]);
+
+  
+
+
+  //const { activeIndex } = route.params;
   const mobileNumber = "6305148607";
   const [individualProfile, setIndividualProfile] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -29,6 +56,26 @@ const HomeTab = ({ route, navigation }) => {
   useEffect(() => {
     getUserId();
   }, []);
+
+  //Load Team Index from async storage
+  
+
+  // useEffect(() => {
+  //   const loadSelectedIndex = async () => {
+  //     try {
+  //       const savedIndex = await AsyncStorage.getItem('selectedTeamIndex');
+  //       if (savedIndex !== null) {
+  //         setSelectedTeamIndex(parseInt(savedIndex, 10));
+  //         console.log("Loaded Selected Team Index from AsyncStorage:", savedIndex);
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to load selected team index:", error);
+  //     }
+  //   };
+
+  //   loadSelectedIndex();
+  // }, []);
+  //Load Team Index from async storage
 
   async function getUserId() {
     try {
@@ -75,8 +122,8 @@ const HomeTab = ({ route, navigation }) => {
       }
 
       const responseData = await response.json();
-      setProfile(responseData[1]);
-      console.log(responseData[1], "Your Team");
+      setProfile(responseData[displayIndex.current])
+      console.log(responseData[displayIndex.current], "Your Team");
     } catch (error) {
       console.error("Failed to fetch your team:", error);
     }
@@ -128,7 +175,7 @@ const HomeTab = ({ route, navigation }) => {
               display: "flex",
               paddingHorizontal: 12,
               paddingVertical: 20,
-              height: "10%",
+              height: "12%",
               justifyContent: "center",
               //marginBottom: 10,
             },
@@ -178,7 +225,7 @@ const HomeTab = ({ route, navigation }) => {
         {profile && (
           <Tab.Screen
             name="Likes"
-            component={LikeStack}
+            component={Notification}
             initialParams={{ navigation, yourTeamProfile: profile }}
             options={{
               tabBarIcon: ({ focused, color, size }) => (

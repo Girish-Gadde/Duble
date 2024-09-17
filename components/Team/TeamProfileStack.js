@@ -15,6 +15,13 @@ export const TeamProfileStack = ({ route, navigation }) => {
     navigation.goBack();
     // dispatch(toggleEditButtonAndBio());
   };
+
+
+  const navigateToHomeScreen = () => {
+    // setModalVisible(true);
+    navigation.navigate("Notification");
+  
+  };
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="TeamProfile">

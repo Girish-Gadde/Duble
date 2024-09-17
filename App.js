@@ -21,12 +21,18 @@ import SetUpScreen from "./Login Screens/SetUpScreen";
 import { TeamProfileStack } from "./components/Team/TeamProfileStack";
 import PhoneLogin1 from "./Login Screens/PhoneLogin1";
 import Chat from "./Chat";
+import Point from './PointingOutData'
+import Teams from "./components/Teams";
+import { UserProvider } from './components/Team Switch/UserContext';
+import Notification from './components/Team/TeamUpRequest/NotificationScreen'
+import ChatNavigation from './components/ChatScreens/ChatNavigation'
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <Provider store={store}>
+    <UserProvider>
       <NavigationContainer independent={true}>
         <Stack.Navigator>
           {/* You can add your screens here */}
@@ -37,12 +43,12 @@ export default function App() {
         /> */}
           <Stack.Screen
             name="HomeTab"
-            component={HomeTab}
+            component={ChatNavigation}
             options={{ headerShown: false }}
           />
           <Stack.Screen
             name="DubleStart"
-            component={DubleStart}
+            component={ChatNavigation}
             options={{ headerShown: false }}
           />
           <Stack.Screen
@@ -105,9 +111,15 @@ export default function App() {
             component={TeamProfileStack}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Notification"
+            component={TeamProfileStack}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
         </Stack.Navigator>
       </NavigationContainer>
+      </UserProvider>
     </Provider>
   );
 }
