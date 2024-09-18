@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -23,8 +24,8 @@ import { serverIP } from "@/config";
 const width = Dimensions.get("window").width;
 
 const MatchedTeamProfile = ({ route, navigation }) => {
-  const { profile } = route.params;
-  console.log("NAME", profile);
+  const { profile, yourTeamProfile } = route.params;
+  console.log("NAME", profile, "UR", yourTeamProfile);
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [images, setImages] = useState([]);
@@ -46,6 +47,34 @@ const MatchedTeamProfile = ({ route, navigation }) => {
     // );
   };
 
+  const toggleDislike = async () => {
+    // setIsDislikeActive(!isDislikeActive);
+    // updateCurrentIndex(
+    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
+    // );
+
+    const dislikedTeamId = profile._id; // The team being disliked
+    const dislikingTeamId = yourTeamProfile._id; // The user's team profile
+
+    try {
+      const response = await fetch(`${serverIP}/match/saving-dislike-id`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ dislikedTeamId, dislikingTeamId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update dislike status");
+      }
+      navigation.goBack();
+      //removeProfile();
+    } catch (error) {
+      console.error("Error updating dislike status:", error);
+    }
+  };
+
   const handleScroll = (event) => {
     const currentOffset = event.nativeEvent.contentOffset.y;
     const show = currentOffset <= 0;
@@ -56,7 +85,24 @@ const MatchedTeamProfile = ({ route, navigation }) => {
   };
 
   const navigateBack = () => {
-    navigation.goBack();
+    Alert.alert(
+      "Unmatch Confirmation", // Title of the alert
+      `Are you sure you want to unmatch with ${profile.name1} and ${profile.name2}?`, // Alert message
+      [
+        {
+          text: "Cancel",
+          style: "cancel", // Adds a "Cancel" button
+        },
+        {
+          text: "Yes", // Adds a "Yes" button
+          onPress: () => {
+            // If "Yes" is pressed, execute the toggleDislike function
+            toggleDislike();
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const renderCarouselItem = ({ item }) => {
@@ -111,59 +157,27 @@ const MatchedTeamProfile = ({ route, navigation }) => {
           </View>
           <Text style={styles.descriptionText}>"{profile.description}""</Text>
         </View>
-        {
-          showIcons ? (
-            <View style={styles.actionContainer1}>
-              <TouchableOpacity
-                style={styles.actionButton1}
-                onPress={navigateBack}
+        {showIcons ? (
+          <View style={styles.actionContainer1}>
+            <TouchableOpacity
+              style={styles.actionButton1}
+              onPress={navigateBack}
+            >
+              <View
+                style={{
+                  backgroundColor: "#6420AA",
+                  borderRadius: 999,
+                  width: 60,
+                  height: 60,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                <View
-                  style={{
-                    backgroundColor: "#6420AA",
-                    borderRadius: 999,
-                    width: 60,
-                    height: 60,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <AntDesign name="close" size={30} color="white" />
-                </View>
-              </TouchableOpacity>
-              {/* <TouchableOpacity
-                style={styles.actionButton2}
-                onPress={toggleHeart}
-              >
-                <View
-                  style={[
-                    styles.heartButton,
-                    { backgroundColor: isHeartActive ? "#FF3156" : "#FF3156" },
-                  ]}
-                >
-                  <AntDesign name="heart" size={30} color="white" />
-                </View>
-              </TouchableOpacity> */}
-            </View>
-          ) : null
-          // <View style={styles.actionContainer2}>
-          //   <TouchableOpacity style={styles.actionButton}>
-          //     <View style={styles.buttonContainer}>
-          //       <Text style={styles.buttonText}>Reject</Text>
-          //     </View>
-          //   </TouchableOpacity>
-          //   <TouchableOpacity style={styles.actionButton} onPress={toggleHeart}>
-          //     <View
-          //       style={[
-          //         styles.buttonContainer,
-          //         { backgroundColor: isHeartActive ? "#00b300" : "#F75394" },
-          //       ]}
-          //     >
-          //       <Text style={styles.buttonText}>Like</Text>
-          //     </View>
-          //   </TouchableOpacity>
-          // </View>
-        }
+                <AntDesign name="close" size={30} color="white" />
+              </View>
+            </TouchableOpacity>
+          </View>
+        ) : null}
         {profile.dynamicContent?.length > 0 ? (
           profile.dynamicContent.map((content, index) => (
             <View key={index} style={styles.viewContainer}>

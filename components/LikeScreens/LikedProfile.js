@@ -83,8 +83,31 @@ const LikedProfile = ({ route, navigation }) => {
     }
   };
 
-  const navigateBack = () => {
-    navigation.goBack();
+  const toggleDislike = async () => {
+    // setIsDislikeActive(!isDislikeActive);
+    // updateCurrentIndex(
+    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
+    // );
+
+    const dislikedTeamId = profile._id; // The team being disliked
+    const dislikingTeamId = yourTeamProfile._id; // The user's team profile
+
+    try {
+      const response = await fetch(`${serverIP}/like/saving-dislike-id`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ dislikedTeamId, dislikingTeamId }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update dislike status");
+      }
+      //removeProfile();
+    } catch (error) {
+      console.error("Error updating dislike status:", error);
+    }
   };
 
   const renderCarouselItem = ({ item }) => {
@@ -144,7 +167,7 @@ const LikedProfile = ({ route, navigation }) => {
             <View style={styles.actionContainer1}>
               <TouchableOpacity
                 style={styles.actionButton1}
-                onPress={navigateBack}
+                onPress={toggleDislike}
               >
                 <View
                   style={{

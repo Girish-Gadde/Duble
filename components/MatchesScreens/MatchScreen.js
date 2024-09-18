@@ -246,6 +246,10 @@ const MatchScreen = ({ route, navigation }) => {
     }
   }, [matchIDs]);
 
+  const navigateToMatchedTeam = (profile) => {
+    navigation.navigate("TeamProfile", { profile, yourTeamProfile });
+  };
+
   return (
     <View style={styles.container}>
       <TextInput style={styles.searchBar} placeholder="Search matches" />
@@ -257,9 +261,7 @@ const MatchScreen = ({ route, navigation }) => {
           contentContainerStyle={styles.scrollView}
         >
           {teams.map((profile, index) => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("TeamProfile", { profile })}
-            >
+            <TouchableOpacity onPress={() => navigateToMatchedTeam(profile)}>
               <View key={index} style={styles.imageContainer}>
                 <Image
                   source={{ uri: `${serverIP}${profile.selectedImages[0]}` }}
