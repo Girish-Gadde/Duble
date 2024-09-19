@@ -97,6 +97,16 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
           }} // Adjust width, height, and border-radius as needed
         />
       </TouchableOpacity>
+
+      {/* Notification Icon */}
+      <TouchableOpacity
+        style={{
+          position: "absolute",
+          right: -80, // Adjust the position as needed
+        }}
+      >
+        <MaterialIcons name="notifications" size={24} color="black" />
+      </TouchableOpacity>
     </View>
   );
 };
