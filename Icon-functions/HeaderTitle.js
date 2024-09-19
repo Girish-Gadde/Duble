@@ -104,6 +104,7 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
           position: "absolute",
           right: -80, // Adjust the position as needed
         }}
+        onPress={ () => navigation.navigate("HiddenScreen")}
       >
         <MaterialIcons name="notifications" size={24} color="black" />
       </TouchableOpacity>

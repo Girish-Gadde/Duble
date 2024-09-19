@@ -2,11 +2,12 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MatchScreen from "./MatchesScreens/MatchScreen";
-import ChatScreen from "./MatchesScreens/ChatScreen";
+//import ChatScreen from "./MatchesScreens/ChatScreen";
 import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
 import UnlikedMatch from "./MatchesScreens/UnlikedMatch";
 import MatchedTeamProfile from "./MatchesScreens/MatchedTeamProfile";
 import HeaderTitleWithIcon2 from "../Icon-functions/HeaderTitle2";
+import ChatScreen from '../components/ChatScreens/ChatScreen'
 const Stack = createStackNavigator();
 
 const Matches = ({ route, navigation }) => {
@@ -30,6 +31,7 @@ const Matches = ({ route, navigation }) => {
             headerLeft: () => null,
           }}
         />
+        
         <Stack.Screen
           name="UnlikedMatch"
           component={UnlikedMatch}
@@ -40,7 +42,7 @@ const Matches = ({ route, navigation }) => {
           component={ChatScreen}
           options={{
             headerTitle: () => (
-              <HeaderTitleWithIcon1
+              <HeaderTitleWithIcon2
                 title="duble"
                 iconName="swap-horiz"
                 iconName1="menu"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -16,11 +16,35 @@ import { ProfileStack } from "./ProfileScreens/ProfileStack";
 import HomeScreen from "./ImageScreens/HomeScreen";
 import Chat from "../Chat";
 import { serverIP } from "@/config";
+import { UserContext } from "./Team Switch/UserContext";
+import { useUserContext } from "./Team Switch/UserContext";
+import ChatNavigation from '../components/ChatScreens/ChatNavigation'
+import Notification from '../components/Team/TeamUpRequest/NotificationScreen'
 
 const Tab = createBottomTabNavigator();
 
 const HomeTab = ({ route, navigation }) => {
+
+
+  const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
+ // const [selectedTeamIndex, setSelectedTeamIndex] = useState(null);
+  console.log(selectedTeamIndex, 'Indexxxxxxxxxxxxxxxx')
+  //index = selectedTeamIndex
+
+  const [indexNo, setIndexNo] = useState(null);
+  var index
+
+  const { indexRef } = useUserContext();
+  const displayIndex = useRef(indexRef.current); // Use ref to hold the current index value
+
+  useEffect(() => {
+    // Update the displayIndex whenever indexRef changes
+    displayIndex.current = indexRef.current;
+  }, [indexRef.current]);
+
+
   //const navigation = useNavigation();
+
   // const { mobileNumber } = route.params;
   const mobileNumber = "6305148607";
   const [individualProfile, setIndividualProfile] = useState(null);
@@ -75,8 +99,8 @@ const HomeTab = ({ route, navigation }) => {
       }
 
       const responseData = await response.json();
-      setProfile(responseData[0]);
-      console.log(responseData[0], "Your Team");
+      setProfile(responseData[displayIndex.current]);
+      console.log(responseData[displayIndex.current], "Your Team");
     } catch (error) {
       console.error("Failed to fetch your team:", error);
     }
@@ -109,6 +133,8 @@ const HomeTab = ({ route, navigation }) => {
   const navigateToTeamProfile = () => {
     navigation.navigate("TeamProfileStack", { navigation, profile });
   };
+
+
   return (
     <NavigationContainer independent={true}>
       <Tab.Navigator
@@ -128,7 +154,7 @@ const HomeTab = ({ route, navigation }) => {
               display: "flex",
               paddingHorizontal: 12,
               paddingVertical: 20,
-              height: "10%",
+              height: "12%",
               justifyContent: "center",
               //marginBottom: 10,
             },
@@ -311,6 +337,12 @@ const HomeTab = ({ route, navigation }) => {
             }}
           />
         )}
+        <Tab.Screen 
+        
+        name="HiddenScreen" 
+        component={Notification} 
+        options={{ tabBarButton: () => null,headerShown: false   }} // This hides the tab from the tab bar
+      />
       </Tab.Navigator>
     </NavigationContainer>
   );

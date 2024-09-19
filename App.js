@@ -21,12 +21,16 @@ import SetUpScreen from "./Login Screens/SetUpScreen";
 import { TeamProfileStack } from "./components/Team/TeamProfileStack";
 import PhoneLogin1 from "./Login Screens/PhoneLogin1";
 import Chat from "./Chat";
+import { UserProvider } from './components/Team Switch/UserContext';
+import Notification from './components/Team/TeamUpRequest/NotificationScreen'
+
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <Provider store={store}>
+    <UserProvider>
       <NavigationContainer independent={true}>
         <Stack.Navigator>
           {/* You can add your screens here */}
@@ -106,8 +110,14 @@ export default function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
+          <Stack.Screen
+            name="NotificationScreen"
+            component={Notification}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
+      </UserProvider>
     </Provider>
   );
 }
