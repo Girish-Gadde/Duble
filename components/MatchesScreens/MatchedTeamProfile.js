@@ -24,7 +24,7 @@ import { serverIP } from "@/config";
 const width = Dimensions.get("window").width;
 
 const MatchedTeamProfile = ({ route, navigation }) => {
-  const { profile, yourTeamProfile } = route.params;
+  const { profile, yourTeamProfile, refreshYourTeam } = route.params;
   console.log("NAME", profile, "UR", yourTeamProfile);
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
@@ -68,6 +68,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
       if (!response.ok) {
         throw new Error("Failed to update dislike status");
       }
+      await refreshYourTeam();
       navigation.goBack();
       //removeProfile();
     } catch (error) {
@@ -315,7 +316,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
         </View>
       </View>
       <View style={styles.actionContainer2}>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity style={styles.actionButton} onPress={navigateBack}>
           <View style={styles.buttonContainer}>
             <Text style={styles.buttonText}>Reject</Text>
           </View>

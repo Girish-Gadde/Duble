@@ -15,13 +15,14 @@ import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Icon1 from "react-native-vector-icons/Feather";
 import Icon2 from "react-native-vector-icons/Octicons";
-import CreateTeam from './Team/TeamCreateManually/TeamInvite'
-import JoinTeam from './Team/TeamCreateManually/JoinTeam'
+import CreateTeam from "./Team/TeamCreateManually/TeamInvite";
+import JoinTeam from "./Team/TeamCreateManually/JoinTeam";
 
 import { UserContext } from "./Team Switch/UserContext";
+import { serverIP } from "@/config";
 
-const serverIP = "http://192.168.1.10:4002";
-const userId = '66d6e8e49b889ada7a2c9fcf';
+//const serverIP = "http://192.168.1.10:4002";
+const userId = "66d6e8e49b889ada7a2c9fcf";
 
 const { height } = Dimensions.get("window");
 
@@ -88,7 +89,6 @@ const profiles = [
 ];
 
 const Teams = () => {
-
   // Pop up modal code
 
   const [isPopup1Visible, setPopup1Visible] = useState(false);
@@ -112,81 +112,87 @@ const Teams = () => {
 
   // Pop up modal code
 
-    //Team Selection Code
-    const [teams, setTeams] = useState([]);
-    const [error, setError] = useState("");
-    const [tempSelections, setTempSelections] = useState([]); // Store temporary selections
-  
-    const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
-  
-    useEffect(() => {
-      fetchTeams();
-    }, []);
-  
-    useEffect(() => {
-      console.log("Global Selected Team Index:", selectedTeamIndex);
-    }, [selectedTeamIndex]);
-  
-    const fetchTeams = async () => {
-      try {
-        const response = await fetch(
-          `${serverIP}/auth/get-your-team?userId=${userId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-  
-        if (!response.ok) {
-          throw new Error("Failed to fetch your team");
+  //Team Selection Code
+  const [teams, setTeams] = useState([]);
+  const [error, setError] = useState("");
+  const [tempSelections, setTempSelections] = useState([]); // Store temporary selections
+
+  const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
+
+  useEffect(() => {
+    fetchTeams();
+  }, []);
+
+  useEffect(() => {
+    console.log("Global Selected Team Index:", selectedTeamIndex);
+  }, [selectedTeamIndex]);
+
+  const fetchTeams = async () => {
+    try {
+      const response = await fetch(
+        `${serverIP}/auth/get-your-team?userId=${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-  
-        const responseData = await response.json();
-        setTeams(responseData);
-        setError("");  // Clear error on success
-      } catch (err) {
-        console.error("Error fetching team data:", err);
-        setError("Failed to fetch your team. Please try again later.");
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch your team");
       }
-    };
-  
-    const handleTeamClick = (index) => {
-      setTempSelections(prev => {
-        // If index is already in tempSelections, remove it
-        if (prev.includes(index)) {
-          return prev.filter(item => item !== index);
-        }
-        // Add index to tempSelections, ensuring it has at most two items
-        const updatedSelections = [...prev, index];
-        if (updatedSelections.length > 2) {
-          updatedSelections.shift(); // Remove the oldest selection
-        }
-        return updatedSelections;
-      });
-    };
-  
-    const handleConfirmSelection = () => {
-      if (tempSelections.length > 0) {
-        // Confirm the last temporary selection
-        setSelectedTeamIndex(tempSelections[tempSelections.length - 1]);
-        console.log(`Confirmed Team Index: ${tempSelections[tempSelections.length - 1]}`);
-        setTempSelections([]); // Clear temporary selections after confirming
-        navigation.navigate("Home")
+
+      const responseData = await response.json();
+      setTeams(responseData);
+      setError(""); // Clear error on success
+    } catch (err) {
+      console.error("Error fetching team data:", err);
+      setError("Failed to fetch your team. Please try again later.");
+    }
+  };
+
+  const handleTeamClick = (index) => {
+    setTempSelections((prev) => {
+      // If index is already in tempSelections, remove it
+      if (prev.includes(index)) {
+        return prev.filter((item) => item !== index);
       }
-    };
-  
-    const RadioButton = ({ selected, temporary }) => (
-      <View style={[
-        styles.radioButton, 
-        selected ? styles.radioButtonSelected : temporary ? styles.radioButtonTemporary : styles.radioButtonDefault
-      ]} />
-    );
+      // Add index to tempSelections, ensuring it has at most two items
+      const updatedSelections = [...prev, index];
+      if (updatedSelections.length > 2) {
+        updatedSelections.shift(); // Remove the oldest selection
+      }
+      return updatedSelections;
+    });
+  };
 
-    //Team Selection Code
+  const handleConfirmSelection = () => {
+    if (tempSelections.length > 0) {
+      // Confirm the last temporary selection
+      setSelectedTeamIndex(tempSelections[tempSelections.length - 1]);
+      console.log(
+        `Confirmed Team Index: ${tempSelections[tempSelections.length - 1]}`
+      );
+      setTempSelections([]); // Clear temporary selections after confirming
+      navigation.navigate("Home");
+    }
+  };
 
+  const RadioButton = ({ selected, temporary }) => (
+    <View
+      style={[
+        styles.radioButton,
+        selected
+          ? styles.radioButtonSelected
+          : temporary
+          ? styles.radioButtonTemporary
+          : styles.radioButtonDefault,
+      ]}
+    />
+  );
 
+  //Team Selection Code
 
   // const [isModalVisible, setModalVisible] = useState(true);
   const translateY = useRef(new Animated.Value(height)).current;
@@ -242,114 +248,124 @@ const Teams = () => {
           {showView ? (
             <View style={styles.profileView}>
               <TouchableOpacity
-                style={{justifyContent:'center',flexDirection:'row',gap:50,marginBottom:'5%'}}
-                
+                style={{
+                  justifyContent: "center",
+                  flexDirection: "row",
+                  gap: 50,
+                  marginBottom: "5%",
+                }}
               >
-              <TouchableOpacity onPress={openPopup1}>
-                  <View style={{flexDirection:'row'}}>
+                <TouchableOpacity onPress={openPopup1}>
+                  <View style={{ flexDirection: "row" }}>
                     <Ionicons
                       name="add"
                       size={20}
                       color="#FF3156"
                       // style={{ position: "relative", top: -118, right: 18 }}
                     />
-                    <Text style={styles.createTeamBtnText}>Create New Team</Text>
-                    </View>
+                    <Text style={styles.createTeamBtnText}>
+                      Create New Team
+                    </Text>
+                  </View>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={openPopup2}>
-                      <View style={{flexDirection:'row'}}>
-                      <Ionicons
-                        name="add"
-                        size={20}
-                        color="#FF3156"
-                        // style={{ position: "relative", top: -118, right: 18 }}
-                      />
-                      <Text style={styles.createTeamBtnText}>Join Team</Text>
-                      </View>
+                  <View style={{ flexDirection: "row" }}>
+                    <Ionicons
+                      name="add"
+                      size={20}
+                      color="#FF3156"
+                      // style={{ position: "relative", top: -118, right: 18 }}
+                    />
+                    <Text style={styles.createTeamBtnText}>Join Team</Text>
+                  </View>
                 </TouchableOpacity>
               </TouchableOpacity>
 
               <View style={styles.containerPopup}>
-      {/* Button to open first popup */}
+                {/* Button to open first popup */}
 
+                {/* First Popup */}
+                <Modal
+                  transparent={true}
+                  visible={isPopup1Visible}
+                  animationType="slide"
+                  onRequestClose={closePopup1}
+                >
+                  <View style={styles.popupContainer}>
+                    <View style={styles.popup}>
+                      <TouchableOpacity
+                        style={styles.closeButton}
+                        onPress={closePopup1}
+                      >
+                        <Text style={styles.closeButtonText}>X</Text>
+                      </TouchableOpacity>
+                      <View>
+                        <CreateTeam />
+                      </View>
+                    </View>
+                  </View>
+                </Modal>
 
-      {/* First Popup */}
-      <Modal
-        transparent={true}
-        visible={isPopup1Visible}
-        animationType="slide"
-        onRequestClose={closePopup1}
-      >
-        <View style={styles.popupContainer}>
-          <View style={styles.popup}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={closePopup1}
-            >
-              <Text style={styles.closeButtonText}>X</Text>
-            </TouchableOpacity>
-            <View><CreateTeam/></View>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Second Popup */}
-      <Modal
-        transparent={true}
-        visible={isPopup2Visible}
-        animationType="slide"
-        onRequestClose={closePopup2}
-      >
-        <View style={styles.popupContainer}>
-          <View style={styles.popup}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={closePopup2}
-            >
-              <Text style={styles.closeButtonText}>X</Text>
-            </TouchableOpacity>
-            <JoinTeam/>
-          </View>
-        </View>
-      </Modal>
-    </View>
+                {/* Second Popup */}
+                <Modal
+                  transparent={true}
+                  visible={isPopup2Visible}
+                  animationType="slide"
+                  onRequestClose={closePopup2}
+                >
+                  <View style={styles.popupContainer}>
+                    <View style={styles.popup}>
+                      <TouchableOpacity
+                        style={styles.closeButton}
+                        onPress={closePopup2}
+                      >
+                        <Text style={styles.closeButtonText}>X</Text>
+                      </TouchableOpacity>
+                      <JoinTeam />
+                    </View>
+                  </View>
+                </Modal>
+              </View>
 
               <View style={styles.containerTeam}>
-              {error ? (
-        <Text style={styles.errorText}>{error}</Text>
-      ) : teams.length > 0 ? (
-        teams.map((team, index) => (
-          <TouchableOpacity
-            key={index.toString()}
-            style={styles.teamItemWrapper}
-            onPress={() => handleTeamClick(index)}
-          >
-            <View style={styles.teamItemTeam}>
-            <View>
-              <Image
-                              source={{ uri: 'https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2' }} // Replace with your image URL or local file
-                              style={styles.itemImage}
-                            />
-                            </View>
-                            <View>
-              <Text style={styles.teamTextTeam}>
-                {team.name1} and {team.name2}
-              </Text>
+                {error ? (
+                  <Text style={styles.errorText}>{error}</Text>
+                ) : teams.length > 0 ? (
+                  teams.map((team, index) => (
+                    <TouchableOpacity
+                      key={index.toString()}
+                      style={styles.teamItemWrapper}
+                      onPress={() => handleTeamClick(index)}
+                    >
+                      <View style={styles.teamItemTeam}>
+                        <View>
+                          <Image
+                            source={{
+                              uri: "https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                            }} // Replace with your image URL or local file
+                            style={styles.itemImage}
+                          />
+                        </View>
+                        <View>
+                          <Text style={styles.teamTextTeam}>
+                            {team.name1} and {team.name2}
+                          </Text>
+                        </View>
+                        <View style={{ marginLeft: "20%" }}>
+                          <RadioButton
+                            selected={selectedTeamIndex === index}
+                            temporary={tempSelections.includes(index)}
+                          />
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  ))
+                ) : (
+                  <Text style={styles.noTeamsTextTeam}>
+                    No teams available.
+                  </Text>
+                )}
               </View>
-              <View style={{marginLeft:'20%'}}>
-              <RadioButton 
-                selected={selectedTeamIndex === index}
-                temporary={tempSelections.includes(index)}
-              />
-              </View>
-            </View>
-          </TouchableOpacity>
-        ))
-      ) : (
-        <Text style={styles.noTeamsTextTeam}>No teams available.</Text>
-      )}
-    </View>
-    
 
               {/* {profiles.map((profile) => (
                 <View key={profile.id} style={styles.profileContainer}>
@@ -419,7 +435,10 @@ const Teams = () => {
               </View>
             </TouchableOpacity>
             {showView ? (
-              <TouchableOpacity onPress={handleConfirmSelection} style={styles.actionButton}>
+              <TouchableOpacity
+                onPress={handleConfirmSelection}
+                style={styles.actionButton}
+              >
                 <View style={styles.buttonContainer2}>
                   <Text style={styles.buttonText}>Switch</Text>
                 </View>
@@ -435,7 +454,7 @@ const Teams = () => {
         </Animated.View>
       </View>
       {/* </Modal> */}
-      
+
       {/* </Modal> */}
     </View>
   );
@@ -598,7 +617,7 @@ const styles = StyleSheet.create({
   profileView: {
     // backgroundColor: "#ccc",
     position: "absolute",
-    top: '20%',
+    top: "20%",
   },
   notifView: {
     flexDirection: "row",
@@ -650,11 +669,10 @@ const styles = StyleSheet.create({
     color: "#0000FF",
   },
 
-
   // Team Styling
   containerTeam: {
     flex: 1,
-    
+
     //backgroundColor: "#f5f5f5",
   },
   headingTeam: {
@@ -666,17 +684,17 @@ const styles = StyleSheet.create({
   teamItemWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: '2%',
+    marginBottom: "2%",
   },
   teamItemTeam: {
     flexDirection: "row",
     alignItems: "center",
     padding: 15,
-    gap:10,
+    gap: 10,
     //backgroundColor: "#fff",
     borderRadius: 8,
-    borderWidth:1,
-    borderColor:'grey',
+    borderWidth: 1,
+    borderColor: "grey",
     borderColor: "#FF3156",
     shadowColor: "#000",
     shadowOpacity: 0.1,
@@ -716,69 +734,68 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF3156",
   },
   radioButtonTemporary: {
-    backgroundColor: "green",  // Temporary selection color
+    backgroundColor: "green", // Temporary selection color
   },
   radioButtonDefault: {
     backgroundColor: "transparent", // Default color for unselected state
   },
 
-
   // Pop up styling
 
   containerPopup: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   openButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: "#007bff",
     padding: 15,
     margin: 10,
     borderRadius: 10,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
   popupContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   popup: {
     height: height * 0.6,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20,
     elevation: 10,
   },
   closeButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 10,
     right: 10,
-   // backgroundColor: '#ff0000',
+    // backgroundColor: '#ff0000',
     borderRadius: 15,
     padding: 5,
   },
   closeButtonText: {
-    color: 'black',
-    fontWeight: 'bold',
+    color: "black",
+    fontWeight: "bold",
   },
   popupText: {
     fontSize: 18,
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 40,
   },
   itemImage: {
     width: 30, // Adjust size as needed
     height: 30,
     borderRadius: 25, // Makes the image round
-   // Space between image and text
+    // Space between image and text
   },
 
   itemContainer: {
-    flexDirection: 'row', // Align items horizontally
-    alignItems: 'center', // Center items vertically
+    flexDirection: "row", // Align items horizontally
+    alignItems: "center", // Center items vertically
     padding: 10,
   },
 });

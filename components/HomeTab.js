@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext, useRef } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -9,7 +9,7 @@ import Home from "./Home";
 import Matches from "./Matches";
 import Profile from "./Profile";
 import HeaderTitleWithIcon from "../Icon-functions/HeaderTitle";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LikeStack } from "./LikeScreens/LikeStack";
 import HeaderTitleWithIcon1 from "../Icon-functions/HeaderTitle1";
 import { ProfileStack } from "./ProfileScreens/ProfileStack";
@@ -18,21 +18,22 @@ import Chat from "../Chat";
 import { serverIP } from "@/config";
 import { UserContext } from "./Team Switch/UserContext";
 import { useUserContext } from "./Team Switch/UserContext";
-import ChatNavigation from '../components/ChatScreens/ChatNavigation'
-import Notification from '../components/Team/TeamUpRequest/NotificationScreen'
+import ChatNavigation from "../components/ChatScreens/ChatNavigation";
+import Notification from "../components/Team/TeamUpRequest/NotificationScreen";
+import { setIndividualProfile, setProfile } from "./Redux/Actions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 
 const HomeTab = ({ route, navigation }) => {
-
-
+  const dispatch = useDispatch();
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
- // const [selectedTeamIndex, setSelectedTeamIndex] = useState(null);
-  console.log(selectedTeamIndex, 'Indexxxxxxxxxxxxxxxx')
+  // const [selectedTeamIndex, setSelectedTeamIndex] = useState(null);
+  console.log(selectedTeamIndex, "Indexxxxxxxxxxxxxxxx");
   //index = selectedTeamIndex
 
   const [indexNo, setIndexNo] = useState(null);
-  var index
+  var index;
 
   const { indexRef } = useUserContext();
   const displayIndex = useRef(indexRef.current); // Use ref to hold the current index value
@@ -42,13 +43,14 @@ const HomeTab = ({ route, navigation }) => {
     displayIndex.current = indexRef.current;
   }, [indexRef.current]);
 
-
   //const navigation = useNavigation();
 
   // const { mobileNumber } = route.params;
   const mobileNumber = "6305148607";
-  const [individualProfile, setIndividualProfile] = useState(null);
-  const [profile, setProfile] = useState(null);
+  const individualProfile = useSelector((state) => state.individualProfile);
+  const profile = useSelector((state) => state.profile);
+  //const [individualProfile, setIndividualProfile] = useState(null);
+  //const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
   useEffect(() => {
     getUserId();
@@ -71,10 +73,12 @@ const HomeTab = ({ route, navigation }) => {
       }
 
       const responseData = await response.json();
-      setIndividualProfile(responseData);
+      // setIndividualProfile(responseData);
+      dispatch(setIndividualProfile(responseData));
       //  setUserId(responseData.userId);
       console.log(responseData._id, "User ID");
-
+      // const userId = responseData._id;
+      await AsyncStorage.setItem("userId", responseData._id);
       // Once the user ID is fetched, get the associated teams
       getYourTeam(responseData._id);
     } catch (error) {
@@ -99,12 +103,22 @@ const HomeTab = ({ route, navigation }) => {
       }
 
       const responseData = await response.json();
-      setProfile(responseData[displayIndex.current]);
-      console.log(responseData[displayIndex.current], "Your Team");
+      //setProfile(responseData[displayIndex.current]);
+      dispatch(setProfile(responseData[displayIndex.current]));
+      console.log(
+        responseData[displayIndex.current],
+        "Your Team-099",
+        displayIndex.current
+      );
     } catch (error) {
       console.error("Failed to fetch your team:", error);
     }
   }
+
+  const refreshYourTeam = async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    await getYourTeam(userId);
+  };
 
   // async function getYourTeam() {
   //   try {
@@ -133,7 +147,6 @@ const HomeTab = ({ route, navigation }) => {
   const navigateToTeamProfile = () => {
     navigation.navigate("TeamProfileStack", { navigation, profile });
   };
-
 
   return (
     <NavigationContainer independent={true}>
@@ -205,7 +218,11 @@ const HomeTab = ({ route, navigation }) => {
           <Tab.Screen
             name="Likes"
             component={LikeStack}
-            initialParams={{ navigation, yourTeamProfile: profile }}
+            initialParams={{
+              navigation,
+              yourTeamProfile: profile,
+              refreshYourTeam,
+            }}
             options={{
               tabBarIcon: ({ focused, color, size }) => (
                 <View style={{ position: "relative" }}>
@@ -276,7 +293,11 @@ const HomeTab = ({ route, navigation }) => {
           <Tab.Screen
             name="Matches"
             component={Matches}
-            initialParams={{ navigation, yourTeamProfile: profile }}
+            initialParams={{
+              navigation,
+              yourTeamProfile: profile,
+              refreshYourTeam,
+            }}
             options={{
               tabBarIcon: ({ focused, color, size }) => (
                 <View style={{ position: "relative" }}>
@@ -337,12 +358,11 @@ const HomeTab = ({ route, navigation }) => {
             }}
           />
         )}
-        <Tab.Screen 
-        
-        name="HiddenScreen" 
-        component={Notification} 
-        options={{ tabBarButton: () => null,headerShown: false   }} // This hides the tab from the tab bar
-      />
+        <Tab.Screen
+          name="HiddenScreen"
+          component={Notification}
+          options={{ tabBarButton: () => null, headerShown: false }} // This hides the tab from the tab bar
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

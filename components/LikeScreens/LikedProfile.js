@@ -24,7 +24,8 @@ import { useSelector } from "react-redux";
 const width = Dimensions.get("window").width;
 
 const LikedProfile = ({ route, navigation }) => {
-  const { profile, yourTeamProfile, handleMenuClick } = route.params;
+  const { profile, yourTeamProfile, refreshYourTeam, handleMenuClick } =
+    route.params;
   console.log(profile, yourTeamProfile, "NAME");
   const menuClicked = useSelector((state) => state.menuClicked);
   const [isHeartActive, setIsHeartActive] = useState(false);
@@ -65,6 +66,7 @@ const LikedProfile = ({ route, navigation }) => {
       if (response.ok) {
         console.log("Match updated successfully:", result);
         // Optionally, navigate to the "LikedMatch" screen with the profile data
+        await refreshYourTeam();
         navigation.navigate("LikedMatch", { profile });
       } else {
         console.error("Failed to update match:", result.message);

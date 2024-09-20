@@ -13,19 +13,21 @@ import {
   View,
 } from "react-native";
 import axios from "axios"; // Make sure to import axios if you're using it
+import { useSelector } from "react-redux";
 // import { useUserContext } from 'path-to-your-context'; // Uncomment and adjust the path if you have a UserContext
 
 const MatchScreen = ({ route, navigation }) => {
   // **HOOKS AND STATE DECLARATIONS**
   // Make sure all hooks are declared at the top level
-  const { yourTeamProfile } = route.params;
+  // const { yourTeamProfile } = route.params;
+  const yourTeamProfile = useSelector((state) => state.profile);
   const [teams, setTeams] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // **TEAM ID**
   // You can get teamId from yourTeamProfile or route.params
-  const teamId = '66d6ee9e92e63ffe7c44f9ef' // Adjust this based on your data structure
+  const teamId = "66d6ee9e92e63ffe7c44f9ef"; // Adjust this based on your data structure
 
   // **CONTEXT (If used)**
   // If you're using useUserContext, make sure it's properly set up
@@ -61,7 +63,7 @@ const MatchScreen = ({ route, navigation }) => {
     if (matchIDs && matchIDs.length > 0) {
       fetchTeams();
     }
-  }, [yourTeamProfile.matchIDs]);
+  }, [yourTeamProfile]);
 
   // **EFFECT TO FETCH CHAT ROOMS**
   useEffect(() => {
@@ -76,7 +78,9 @@ const MatchScreen = ({ route, navigation }) => {
       console.log("Fetching rooms for team ID:", teamId);
 
       try {
-        const response = await axios.get(`${serverIP}/chat-room/api/rooms/${teamId}`);
+        const response = await axios.get(
+          `${serverIP}/chat-room/api/rooms/${teamId}`
+        );
         console.log("Fetched rooms data:", response.data);
 
         if (!response.data || response.data.length === 0) {
@@ -107,7 +111,9 @@ const MatchScreen = ({ route, navigation }) => {
     // Find the team that matches the teamId and get its members
     const team = teams.find((t) => t.teamId === teamId);
     const memberName =
-      team && team.members && team.members.length > 0 ? team.members[0] : "No member";
+      team && team.members && team.members.length > 0
+        ? team.members[0]
+        : "No member";
     console.log("Room selected:", roomId);
     console.log("Members:", team ? team.members : "No members");
     navigation.navigate("Chat", { roomId, username: memberName });
@@ -126,10 +132,15 @@ const MatchScreen = ({ route, navigation }) => {
       <TouchableOpacity onPress={() => handleRoomPress(item)}>
         <View style={styles.chatContainer}>
           {/* Placeholder image, replace with actual image if available */}
-          <Image source={require("../../assets/profile-1.jpg")} style={styles.chatImage} />
+          <Image
+            source={require("../../assets/profile-1.jpg")}
+            style={styles.chatImage}
+          />
           <View style={styles.chatTextContainer}>
             <Text style={styles.chatText}>{allMembers}</Text>
-            <Text style={styles.chatMessage}>Chat description or last message</Text>
+            <Text style={styles.chatMessage}>
+              Chat description or last message
+            </Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -138,7 +149,13 @@ const MatchScreen = ({ route, navigation }) => {
 
   // **LOADING STATE**
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.loadingIndicator} />;
+    return (
+      <ActivityIndicator
+        size="large"
+        color="#0000ff"
+        style={styles.loadingIndicator}
+      />
+    );
   }
 
   // **MAIN RETURN**
@@ -173,7 +190,9 @@ const MatchScreen = ({ route, navigation }) => {
       <Text style={styles.headerText}>Chats</Text>
       <FlatList
         data={rooms}
-        keyExtractor={(item) => (item.roomId ? item.roomId.toString() : "undefined")}
+        keyExtractor={(item) =>
+          item.roomId ? item.roomId.toString() : "undefined"
+        }
         renderItem={renderChatItem}
       />
     </View>

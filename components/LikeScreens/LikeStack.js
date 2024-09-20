@@ -14,7 +14,7 @@ import { menuClickAction } from "../Redux/Actions";
 const Stack = createStackNavigator();
 
 export const LikeStack = ({ route, navigation }) => {
-  const { yourTeamProfile } = route.params;
+  const { yourTeamProfile, refreshYourTeam } = route.params;
   const dispatch = useDispatch();
   const handleMenuClick = () => {
     dispatch(menuClickAction());
@@ -42,7 +42,7 @@ export const LikeStack = ({ route, navigation }) => {
         <Stack.Screen
           name="LikedProfile"
           component={LikedProfile}
-          initialParams={{ handleMenuClick }}
+          initialParams={{ handleMenuClick, refreshYourTeam }}
           options={{
             headerTitle: () => (
               <HeaderTitleWithIcon2
