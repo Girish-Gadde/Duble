@@ -104,7 +104,7 @@ const HomeTab = ({ route, navigation }) => {
 
       const responseData = await response.json();
       //setProfile(responseData[displayIndex.current]);
-      dispatch(setProfile(responseData[displayIndex.current]));
+      dispatch(setProfile(responseData[selectedTeamIndex]));
       console.log(
         responseData[displayIndex.current],
         "Your Team-099",
@@ -115,9 +115,43 @@ const HomeTab = ({ route, navigation }) => {
     }
   }
 
+  async function getYourIndividualTeam(userId) {
+    try {
+      const response = await fetch(
+        `${serverIP}/auth/get-your-individual-team?userId=${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch your team");
+      }
+
+      const responseData = await response.json();
+      //setProfile(responseData[displayIndex.current]);
+      console.log(responseData, "INIDIVIDUAL_TEAM");
+      dispatch(setIndividualProfile(responseData));
+    } catch (error) {
+      console.error("Failed to fetch your team:", error);
+    }
+  }
+
+  useEffect(() => {
+    refreshYourTeam();
+  }, [selectedTeamIndex]);
+
   const refreshYourTeam = async () => {
     const userId = await AsyncStorage.getItem("userId");
     await getYourTeam(userId);
+  };
+
+  const refreshYourInidividualTeam = async () => {
+    const userId = await AsyncStorage.getItem("userId");
+    await getYourIndividualTeam(userId);
   };
 
   // async function getYourTeam() {
@@ -335,7 +369,11 @@ const HomeTab = ({ route, navigation }) => {
           <Tab.Screen
             name="Profile"
             component={ProfileStack}
-            initialParams={{ navigation, profile: individualProfile }}
+            initialParams={{
+              navigation,
+              profile: individualProfile,
+              dispatch,
+            }}
             options={{
               tabBarIcon: ({ focused, color, size }) => (
                 <Ionicons

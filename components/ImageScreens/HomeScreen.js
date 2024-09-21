@@ -100,7 +100,7 @@ const width = Dimensions.get("window").width;
 
 const HomeScreen = ({ route, navigation }) => {
   const { yourTeamProfile } = route.params;
-  console.log(yourTeamProfile, "HOME");
+  // console.log(yourTeamProfile, "HOME");
   const [yourTeam, setYourTeam] = useState(yourTeamProfile);
   const [isHeartActive, setIsHeartActive] = useState(false);
   // const [showIcons, setShowIcons] = useState(true);

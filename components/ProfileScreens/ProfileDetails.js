@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   Modal,
@@ -11,8 +12,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useDispatch } from "react-redux";
-import { toggleEditButtonAndBio } from "../Redux/Actions";
+import { useDispatch, useSelector } from "react-redux";
+import { setIndividualProfile, toggleEditButtonAndBio } from "../Redux/Actions";
 import {
   MaterialIcons,
   Ionicons,
@@ -85,7 +86,8 @@ const profiles = [
 ];
 
 const ProfileDetails = ({ route, navigation }) => {
-  const { profile } = route.params;
+  const { dispatch } = route.params;
+  const profile = useSelector((state) => state.individualProfile);
   console.log(profile, "INDIVIDUAL PROFILE");
   const [userId, setUserId] = useState(profile._id);
   const [tags, setTags] = useState([]);
@@ -219,8 +221,11 @@ const ProfileDetails = ({ route, navigation }) => {
       const data = await response.json();
       if (response.ok) {
         // Update state with the new prompt
-        setPromptText(inputText);
-        setSelectedPrompt(selectedPrompt);
+        console.log(data, "DATA");
+        dispatch(setIndividualProfile(data.user));
+        // setPromptText(inputText);
+        // setSelectedPrompt(selectedPrompt);
+        setSelectedPrompt(null);
         setInputText("");
         setIsPromptEditing(false);
         // Optionally update the prompts array or handle new prompt data
@@ -286,6 +291,7 @@ const ProfileDetails = ({ route, navigation }) => {
     setPromptText(null);
     setInputText("");
     setPromptVisible(false);
+    setSelectedPrompt(null);
   };
   const handlePromptEdit = () => {
     setIsPromptEditing(false);
@@ -771,10 +777,10 @@ const ProfileDetails = ({ route, navigation }) => {
         </View>
       )}
 
-      {promptText && (
+      {/* {promptText && (
         <View style={styles.viewContainer}>
           <View style={styles.searchContainer}>
-            {/* <Ionicons name="search" size={16} color="#454545" /> */}
+       
             <Text style={styles.searchText}>{selectedPrompt}</Text>
             {!isPromptEditing && (
               <TouchableOpacity onPress={handlePromptEdit}>
@@ -815,7 +821,7 @@ const ProfileDetails = ({ route, navigation }) => {
             <Text style={styles.text}>{promptText}</Text>
           )}
         </View>
-      )}
+      )} */}
       <View style={styles.promptContainer}>
         <TouchableOpacity onPress={addSelectedPrompt}>
           <Text style={styles.searchText1}>💡 Add a prompt +</Text>
@@ -1315,6 +1321,17 @@ const styles = StyleSheet.create({
   },
   renderedText: {
     fontSize: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#454545",
   },
 });
 
