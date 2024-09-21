@@ -20,7 +20,7 @@ import JoinTeam from './Team/TeamCreateManually/JoinTeam'
 
 import { UserContext } from "./Team Switch/UserContext";
 
-const serverIP = "http://192.168.1.10:4002";
+const serverIP = "http://192.168.1.14:4002";
 const userId = '66d6e8e49b889ada7a2c9fcf';
 
 const { height } = Dimensions.get("window");

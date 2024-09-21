@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
+import { serverIP } from '@/config';
 
 // Replace 'YourHardcodedName' with your hardcoded value
 const HARD_CODED_NAME = 'Prashik';
@@ -27,7 +28,7 @@ export default function JoinTeam({ navigation }) {
     }
 
     try {
-      const response = await axios.post('http://192.168.1.10:4002/team/join-team', {
+      const response = await axios.post(`${serverIP}/team/join-team`, {
         teamName,
         otp,
         newMemberName: HARD_CODED_NAME, // Use the hardcoded value here
@@ -35,7 +36,7 @@ export default function JoinTeam({ navigation }) {
 
       if (response.data.message) {
         Alert.alert('Success', response.data.message);
-        navigation.navigate('CreateTeam'); // Navigate back to Create Team screen
+        //navigation.navigate('CreateTeam'); // Navigate back to Create Team screen
       } else if (response.data.error) {
         if (response.data.error === 'Team already has two members') {
           Alert.alert('Team Full', 'This team is already full. Please try joining another team.');

@@ -23,6 +23,13 @@ import PhoneLogin1 from "./Login Screens/PhoneLogin1";
 import Chat from "./Chat";
 import { UserProvider } from './components/Team Switch/UserContext';
 import Notification from './components/Team/TeamUpRequest/NotificationScreen'
+import * as Linking from 'expo-linking';
+import CreateTeam from "./components/Team/TeamCreateManually/TeamInvite";
+import TeamDetails from './components/Team/TeamCreateManually/TeamDetails'
+import TeamUpRequest from './components/Team/TeamUpRequest/TeamUpRequest'
+import JoinTeam from "./components/Team/TeamCreateManually/JoinTeam";
+
+const prefix = Linking.createURL('/');
 
 
 const Stack = createNativeStackNavigator();
@@ -115,9 +122,34 @@ export default function App() {
             component={Notification}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="CreateTeam"
+            component={CreateTeam}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="JoinTeam"
+            component={JoinTeam}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TeamUp"
+            component={TeamUpRequest}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
       </UserProvider>
     </Provider>
   );
+
+  // Handle deep linking
+Linking.addEventListener('url', (event) => {
+  const data = Linking.parse(event.url);
+  if (data.path === 'join-team') {
+    const { teamName, otp } = data.queryParams; // Extract teamName and otp
+    navigation.navigate('JoinTeam', { teamName, otp }); // Navigate to JoinTeam
+  }
+});
+
 }

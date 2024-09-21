@@ -3,7 +3,7 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import axios from 'axios';
-import { UserContext } from '../TeamSwitch/UserContext';
+import { UserContext } from '@/components/Team Switch/UserContext';
 
 const CreateTeamScreen = () => {
   const [teamName, setTeamName] = useState('');
@@ -15,7 +15,7 @@ const CreateTeamScreen = () => {
 
   const createTeam = async () => {
     try {
-      const response = await axios.post('http://172.20.10.5:3000/create-team', {
+      const response = await axios.post('http://192.168.1.21:4002/create-team', {
         teamName,
         inviter,
         invitee

@@ -2,18 +2,16 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import * as Sharing from 'expo-sharing';
-import { serverIP } from '@/config';
+import * as Linking from 'expo-linking'; // Import Linking
 
 export default function CreateTeam({ navigation }) {
   const [teamName, setTeamName] = useState('');
   const [inviteLink, setInviteLink] = useState('');
-  const [otp, setOtp] = useState(''); // State to store OTP
+  const [otp, setOtp] = useState('');
 
-  // Hardcoded creator's name
-  const creatorName = '66d6ee9e92e63ffe7c44f9ef'; // Replace with the actual hardcoded name
+  const creatorName = '66d6ee9e92e63ffe7c44f9ef';
 
   const generateOtp = () => {
-    // Generate a random 6-digit OTP
     const otpValue = Math.floor(100000 + Math.random() * 900000).toString();
     setOtp(otpValue);
   };
@@ -25,14 +23,14 @@ export default function CreateTeam({ navigation }) {
     }
 
     try {
-      const response = await axios.post(`${serverIP}/team/create-team`, {
+      const response = await axios.post('http://192.168.1.21:4002/team/create-team', {
         teamName,
-        creatorName, // Use the hardcoded creator name
+        creatorName,
       });
 
       const { inviteLink } = response.data;
       setInviteLink(inviteLink);
-      generateOtp(); // Generate OTP when the team is created
+      generateOtp();
       Alert.alert('Team Created', `Invite Link: ${inviteLink}`);
     } catch (error) {
       console.error('Error creating team:', error);
@@ -46,16 +44,14 @@ export default function CreateTeam({ navigation }) {
       return;
     }
 
-    // Custom message with separate OTP and team name
-    const message = `Your OTP is ${otp} for team Name ${teamName}. Join the team using this link: ${inviteLink}`;
+    const message = `Your OTP is ${otp} for team ${teamName}. Join the team using this link: ${inviteLink}`;
 
     try {
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(inviteLink, {
           title: 'Invite Link',
-          message: message, // Include team name and OTP in the message
+          message,
         });
-        console.log('Shared successfully');
       } else {
         Alert.alert('Error', 'Sharing not available on this platform');
       }
@@ -67,7 +63,6 @@ export default function CreateTeam({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Create a Team</Text>
-
       <Text style={styles.label}>Team Name</Text>
       <TextInput
         style={styles.input}
@@ -75,11 +70,9 @@ export default function CreateTeam({ navigation }) {
         value={teamName}
         onChangeText={setTeamName}
       />
-
       <TouchableOpacity style={styles.button} onPress={createTeam}>
         <Text style={styles.buttonText}>Create Team</Text>
       </TouchableOpacity>
-
       {inviteLink ? (
         <View>
           <Text style={styles.inviteLink}>Invite Link: {inviteLink}</Text>
@@ -88,51 +81,51 @@ export default function CreateTeam({ navigation }) {
           </TouchableOpacity>
         </View>
       ) : null}
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    padding: '10%',
-    marginTop:'5%',
-    
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: '20%',
-    textAlign: 'center',
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  input: {
-    height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    marginBottom: 20,
-    borderRadius: 5,
-    backgroundColor: '#fff',
-  },
-  button: {
-    backgroundColor: '#FF3156',
-    padding: 15,
-    borderRadius: 5,
-    alignItems: 'center',
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  inviteLink: {
-    textAlign: 'center',
-    marginVertical: 10,
-    fontSize: 14,
-  },
-});
+    container: {
+      justifyContent: 'center',
+      padding: '10%',
+      marginTop:'5%',
+      
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: '20%',
+      textAlign: 'center',
+    },
+    label: {
+      fontSize: 16,
+      marginBottom: 10,
+    },
+    input: {
+      height: 50,
+      borderColor: '#ccc',
+      borderWidth: 1,
+      paddingHorizontal: 10,
+      marginBottom: 20,
+      borderRadius: 5,
+      backgroundColor: '#fff',
+    },
+    button: {
+      backgroundColor: '#FF3156',
+      padding: 15,
+      borderRadius: 5,
+      alignItems: 'center',
+      marginVertical: 10,
+    },
+    buttonText: {
+      color: '#fff',
+      fontSize: 16,
+    },
+    inviteLink: {
+      textAlign: 'center',
+      marginVertical: 10,
+      fontSize: 14,
+    },
+  });
+  
