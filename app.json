@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "scheme": "myapp",
+    "scheme": "Duble",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
@@ -20,7 +20,17 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.girishgadde.Duble1"
+      "package": "com.girishgadde.Duble1",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": {
+            "scheme": "Duble", 
+            "host": "*"
+          },
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "bundler": "metro",

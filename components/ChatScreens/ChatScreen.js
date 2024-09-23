@@ -9,12 +9,12 @@ import { serverIP } from '../../config';
 const socket = io(`${serverIP}/chat-room`);
 
 const ChatScreen = ({ route }) => {
-  const { roomId, username } = route.params;  // Correctly destructure roomId and username
+  const { roomId } = route.params;
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [participants, setParticipants] = useState([]);
   const flatListRef = useRef(null);
-  const inputRef = useRef(null);
+  const username = "Shivani";
 
   useEffect(() => {
     console.log(`Joining room: ${roomId} as ${username}`);
@@ -23,12 +23,6 @@ const ChatScreen = ({ route }) => {
 
     const fetchChatHistory = async () => {
       try {
-        if (!roomId || typeof roomId !== 'string') {
-          console.error('Invalid room ID:', roomId);
-          return;
-        }
-
-        console.log(`Fetching chat history for room: ${roomId}`);
         const storedMessages = await AsyncStorage.getItem(roomId);
         if (storedMessages) {
           setMessages(JSON.parse(storedMessages));
@@ -37,7 +31,7 @@ const ChatScreen = ({ route }) => {
           const response = await axios.get(`${serverIP}/chat-room/chat-history/${roomId}`);
           if (response.data && response.data.messages) {
             setMessages(response.data.messages);
-            await AsyncStorage.setItem(roomId, JSON.stringify(response.data.messages));  // Save to AsyncStorage
+            await AsyncStorage.setItem(roomId, JSON.stringify(response.data.messages));
             console.log(`Fetched and stored messages from server for room: ${roomId}`);
           }
         }
@@ -63,20 +57,10 @@ const ChatScreen = ({ route }) => {
       setParticipants(participants);
     });
 
-    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-      scrollToBottom();
-    });
-
-    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-      scrollToBottom();
-    });
-
     return () => {
       console.log(`Leaving room: ${roomId}`);
       socket.off('receiveMessage');
       socket.off('updateParticipants');
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
     };
   }, [roomId, username]);
 
@@ -93,7 +77,7 @@ const ChatScreen = ({ route }) => {
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       socket.emit('sendMessage', { room: roomId, message });
       saveMessageToStorage(roomId, newMessage);
-      await saveMessageToDatabase(roomId, newMessage);  // Save message to MongoDB
+      await saveMessageToDatabase(roomId, newMessage);
       setMessage('');
       Keyboard.dismiss();
     } else {
@@ -103,11 +87,6 @@ const ChatScreen = ({ route }) => {
 
   const saveMessageToStorage = async (roomId, message) => {
     try {
-      if (!roomId || typeof roomId !== 'string') {
-        console.error('Invalid room ID:', roomId);
-        return;
-      }
-
       const existingMessages = await AsyncStorage.getItem(roomId);
       const messagesArray = existingMessages ? JSON.parse(existingMessages) : [];
       messagesArray.push(message);
@@ -120,7 +99,6 @@ const ChatScreen = ({ route }) => {
 
   const saveMessageToDatabase = async (roomId, message) => {
     try {
-      console.log(`Saving message to room: ${roomId}`);
       await axios.post(`${serverIP}/chat-room/save-message`, { roomId, message });
       console.log('Message successfully saved to MongoDB:', message);
     } catch (error) {
@@ -138,8 +116,8 @@ const ChatScreen = ({ route }) => {
           isMyMessage ? styles.myMessageContainer : styles.theirMessageContainer,
         ]}
       >
-        {!isMyMessage && <Text style={styles.senderName}>{item.sender}</Text>}
         <View style={[styles.messageBubble, isMyMessage ? styles.myMessageBubble : styles.theirMessageBubble]}>
+          <Text style={styles.senderName}>{isMyMessage ? 'You' : item.sender}</Text>
           <Text style={styles.messageText}>{item.message}</Text>
         </View>
       </View>
@@ -167,7 +145,6 @@ const ChatScreen = ({ route }) => {
           />
           <View style={styles.inputContainer}>
             <TextInput
-              ref={inputRef}
               style={styles.input}
               value={message}
               onChangeText={setMessage}
@@ -221,11 +198,11 @@ const styles = StyleSheet.create({
     maxWidth: '80%',
   },
   myMessageBubble: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#FF3156', // Green for sender
     alignSelf: 'flex-end',
   },
   theirMessageBubble: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#d3d3d3', // Gray for receiver
     alignSelf: 'flex-start',
   },
   messageText: {
@@ -233,6 +210,8 @@ const styles = StyleSheet.create({
   },
   senderName: {
     fontWeight: 'bold',
+    fontSize: 12, // Adjusted font size for the username
+    color: '#ffffff', // Color for the username
     marginBottom: 5,
   },
   inputContainer: {

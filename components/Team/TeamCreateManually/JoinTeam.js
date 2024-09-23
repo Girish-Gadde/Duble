@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
-import { serverIP } from '@/config';
+import { serverIP } from '../../../config';
 
 // Replace 'YourHardcodedName' with your hardcoded value
 const HARD_CODED_NAME = 'Prashik';

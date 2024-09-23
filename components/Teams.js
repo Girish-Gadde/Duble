@@ -17,10 +17,11 @@ import Icon1 from "react-native-vector-icons/Feather";
 import Icon2 from "react-native-vector-icons/Octicons";
 import CreateTeam from './Team/TeamCreateManually/TeamInvite'
 import JoinTeam from './Team/TeamCreateManually/JoinTeam'
+import { serverIP } from "@/config";
 
 import { UserContext } from "./Team Switch/UserContext";
 
-const serverIP = "http://192.168.1.14:4002";
+
 const userId = '66d6e8e49b889ada7a2c9fcf';
 
 const { height } = Dimensions.get("window");
