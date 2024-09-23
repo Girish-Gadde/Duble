@@ -12,8 +12,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useDispatch } from "react-redux";
-import { toggleEditButtonAndBio } from "../Redux/Actions";
+import { useDispatch, useSelector } from "react-redux";
+import { setProfile, toggleEditButtonAndBio } from "../Redux/Actions";
 import {
   MaterialIcons,
   Ionicons,
@@ -89,7 +89,8 @@ const profiles = [
 ];
 
 const TeamProfileDetails = ({ route, navigation }) => {
-  const { profile } = route.params;
+  const { dispatch } = route.params;
+  const profile = useSelector((state) => state.profile);
   console.log(profile, "DF");
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
@@ -134,11 +135,12 @@ const TeamProfileDetails = ({ route, navigation }) => {
     "🕯️ Ideal Date Night",
     "🌟 I would like you if",
     "🌟 I love talking about",
+    "🏞️ Ideal Weekend",
   ];
 
   const formattedImagePics = (profile.selectedImages || []).map(
     (imagePath) => ({
-      uri: `${serverIP}${imagePath}`,
+      uri: `${imagePath}`,
     })
   );
   const [formattedImages, setFormattedImages] = useState(formattedImagePics);
@@ -191,7 +193,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
           // Update the state with new images
           setFormattedImages(
             updatedImages.map((imagePath) => ({
-              uri: `${serverIP}${imagePath}`,
+              uri: `${imagePath}`,
             }))
           );
         } else {
@@ -282,7 +284,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
     const newTags = tags.filter((_, i) => i !== index);
     setTags(newTags);
   };
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   useEffect(() => {
     dispatch(toggleEditButtonAndBio());
   }, []);
@@ -316,9 +318,10 @@ const TeamProfileDetails = ({ route, navigation }) => {
 
       const data = await response.json();
       if (response.ok) {
+        dispatch(setProfile(data.team));
         // Update state with the new prompt
-        setPromptText(inputText);
-        setSelectedPrompt(selectedPrompt);
+        //setPromptText(inputText);
+        setSelectedPrompt(null);
         setInputText("");
         setIsPromptEditing(false);
         // Optionally update the prompts array or handle new prompt data

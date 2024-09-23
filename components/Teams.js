@@ -22,7 +22,7 @@ import { UserContext } from "./Team Switch/UserContext";
 import { serverIP } from "@/config";
 
 //const serverIP = "http://192.168.1.10:4002";
-const userId = "66d6e8e49b889ada7a2c9fcf";
+//const userId = "66d6e8e49b889ada7a2c9fcf";
 
 const { height } = Dimensions.get("window");
 
@@ -88,9 +88,9 @@ const profiles = [
   // Add more profiles as needed
 ];
 
-const Teams = () => {
+const Teams = ({ route, navigation }) => {
   // Pop up modal code
-
+  const { userId } = route.params;
   const [isPopup1Visible, setPopup1Visible] = useState(false);
   const [isPopup2Visible, setPopup2Visible] = useState(false);
 
@@ -196,7 +196,7 @@ const Teams = () => {
 
   // const [isModalVisible, setModalVisible] = useState(true);
   const translateY = useRef(new Animated.Value(height)).current;
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
   const [selectedProfileId, setSelectedProfileId] = useState(null);
   const [showView, setShowView] = useState(true);
 

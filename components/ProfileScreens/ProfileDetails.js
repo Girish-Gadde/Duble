@@ -125,6 +125,7 @@ const ProfileDetails = ({ route, navigation }) => {
     "🕯️ Ideal Date Night",
     "🌟 I would like you if",
     "🌟 I love talking about",
+    "🔍 Our Story ",
   ];
 
   // const navigation = useNavigation();
@@ -302,7 +303,7 @@ const ProfileDetails = ({ route, navigation }) => {
     setPromptVisible(true);
   };
   const formattedImagePics = (profile.images || []).map((imagePath) => ({
-    uri: `${serverIP}${imagePath}`,
+    uri: `${imagePath}`,
   }));
   const [formattedImages, setFormattedImages] = useState(formattedImagePics);
 
@@ -354,7 +355,7 @@ const ProfileDetails = ({ route, navigation }) => {
           // Update the state with new images
           setFormattedImages(
             updatedImages.map((imagePath) => ({
-              uri: `${serverIP}${imagePath}`,
+              uri: `${imagePath}`,
             }))
           );
         } else {

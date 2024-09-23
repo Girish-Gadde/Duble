@@ -42,8 +42,9 @@ const TeamProfile = ({ route, navigation }) => {
 
   useEffect(() => {
     const formattedImages = (profile.selectedImages || []).map((imagePath) => ({
-      uri: `${serverIP}${imagePath}`,
+      uri: `${imagePath}`,
     }));
+    console.log(formattedImages, "IMAGE-7777777");
     setImages(formattedImages);
   }, []);
 

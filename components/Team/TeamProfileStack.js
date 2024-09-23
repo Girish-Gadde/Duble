@@ -9,7 +9,7 @@ import HeaderTitleWithIcon1 from "@/Icon-functions/HeaderTitle1";
 const Stack = createStackNavigator();
 
 export const TeamProfileStack = ({ route, navigation }) => {
-  const { profile } = route.params;
+  const { profile, dispatch } = route.params;
   const handleMenuClick = () => {
     // Dispatch action to toggle the state
     navigation.goBack();
@@ -38,7 +38,7 @@ export const TeamProfileStack = ({ route, navigation }) => {
         <Stack.Screen
           name="TeamProfileDetails"
           component={TeamProfileDetails}
-          initialParams={{ navigation }}
+          initialParams={{ navigation, dispatch }}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

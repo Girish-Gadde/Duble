@@ -7,7 +7,7 @@ export const UserContext = createContext();
 
 // Create a provider component
 export const UserProvider = ({ children }) => {
-  const [selectedTeamIndex, setSelectedTeamIndex] = useState(null);
+  const [selectedTeamIndex, setSelectedTeamIndex] = useState(0);
   const indexRef = useRef(selectedTeamIndex);
 
   useEffect(() => {

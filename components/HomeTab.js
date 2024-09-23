@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Image, View } from "react-native";
+import { ActivityIndicator, Image, Text, View } from "react-native";
 import Teams from "./Teams";
 import Likes from "./LikeScreens/Likes";
 import Home from "./Home";
@@ -28,6 +28,8 @@ const Tab = createBottomTabNavigator();
 const HomeTab = ({ route, navigation }) => {
   const dispatch = useDispatch();
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
+  const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(true);
   // const [selectedTeamIndex, setSelectedTeamIndex] = useState(null);
   console.log(selectedTeamIndex, "Indexxxxxxxxxxxxxxxx");
   //index = selectedTeamIndex
@@ -46,14 +48,14 @@ const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
 
   // const { mobileNumber } = route.params;
-  const mobileNumber = "6305148607";
+  const mobileNumber = "6305148605";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
   //const [individualProfile, setIndividualProfile] = useState(null);
   //const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
-  useEffect(() => {
-    getUserId();
+  useEffect(async () => {
+    await getUserId();
   }, []);
 
   async function getUserId() {
@@ -77,10 +79,15 @@ const HomeTab = ({ route, navigation }) => {
       dispatch(setIndividualProfile(responseData));
       //  setUserId(responseData.userId);
       console.log(responseData._id, "User ID");
+      setUserId(responseData._id);
       // const userId = responseData._id;
       await AsyncStorage.setItem("userId", responseData._id);
       // Once the user ID is fetched, get the associated teams
+      const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
+      console.log(savedIndex, "SAVED");
+      setSelectedTeamIndex(savedIndex);
       getYourTeam(responseData._id);
+      setLoading(false);
     } catch (error) {
       console.error("Failed to fetch user ID:", error);
     }
@@ -179,8 +186,18 @@ const HomeTab = ({ route, navigation }) => {
   //   }
   // }
   const navigateToTeamProfile = () => {
-    navigation.navigate("TeamProfileStack", { navigation, profile });
+    navigation.navigate("TeamProfileStack", { navigation, profile, dispatch });
   };
+
+  if (loading) {
+    // Show loading indicator while data is being fetched
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#FF3156" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer independent={true}>
@@ -209,45 +226,48 @@ const HomeTab = ({ route, navigation }) => {
           ],
         }}
       >
-        <Tab.Screen
-          name="Teams"
-          component={Teams}
-          options={{
-            tabBarIcon: ({ focused, color, size }) => (
-              <View style={{ position: "relative" }}>
-                <Ionicons
-                  name={focused ? "shuffle" : "shuffle"}
-                  size={size}
-                  color={color}
-                />
+        {userId && (
+          <Tab.Screen
+            name="Teams"
+            component={Teams}
+            initialParams={{ navigation, userId }}
+            options={{
+              tabBarIcon: ({ focused, color, size }) => (
+                <View style={{ position: "relative" }}>
+                  <Ionicons
+                    name={focused ? "shuffle" : "shuffle"}
+                    size={size}
+                    color={color}
+                  />
 
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    backgroundColor: "#FF3156",
-                    borderRadius: 6,
-                    width: 8,
-                    height: 8,
-                  }}
-                />
-              </View>
-            ),
-            tabBarLabelStyle: {
-              marginBottom: 20, // Adjust as needed to decrease the gap
-              fontWeight: "bold",
-            },
-            headerTitle: () => (
-              <HeaderTitleWithIcon1
-                title="duble"
-                iconName="swap-horiz"
-                iconName1="menu"
-              /> // Use the HeaderTitleWithIcon component
-            ),
-            headerTitleAlign: "center",
-          }}
-        />
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      backgroundColor: "#FF3156",
+                      borderRadius: 6,
+                      width: 8,
+                      height: 8,
+                    }}
+                  />
+                </View>
+              ),
+              tabBarLabelStyle: {
+                marginBottom: 20, // Adjust as needed to decrease the gap
+                fontWeight: "bold",
+              },
+              headerTitle: () => (
+                <HeaderTitleWithIcon1
+                  title="duble"
+                  iconName="swap-horiz"
+                  iconName1="menu"
+                /> // Use the HeaderTitleWithIcon component
+              ),
+              headerTitleAlign: "center",
+            }}
+          />
+        )}
         {profile && (
           <Tab.Screen
             name="Likes"
@@ -396,11 +416,13 @@ const HomeTab = ({ route, navigation }) => {
             }}
           />
         )}
-        <Tab.Screen
-          name="HiddenScreen"
-          component={Notification}
-          options={{ tabBarButton: () => null, headerShown: false }} // This hides the tab from the tab bar
-        />
+        {profile && (
+          <Tab.Screen
+            name="HiddenScreen"
+            component={Notification}
+            options={{ tabBarButton: () => null, headerShown: false }} // This hides the tab from the tab bar
+          />
+        )}
       </Tab.Navigator>
     </NavigationContainer>
   );
