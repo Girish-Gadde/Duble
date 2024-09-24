@@ -176,7 +176,7 @@ const MatchScreen = ({ route, navigation }) => {
             >
               <View style={styles.imageContainer}>
                 <Image
-                  source={{ uri: `${serverIP}${profile.selectedImages[0]}` }}
+                  source={{ uri: `${profile.selectedImages[0]}` }}
                   style={styles.image}
                 />
                 <Text style={styles.imageText}>

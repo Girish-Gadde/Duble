@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
+  Alert,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import {
@@ -99,7 +100,7 @@ const width = Dimensions.get("window").width;
 // ];
 
 const HomeScreen = ({ route, navigation }) => {
-  const { yourTeamProfile } = route.params;
+  const { yourTeamProfile, refreshYourTeam } = route.params;
   // console.log(yourTeamProfile, "HOME");
   const [yourTeam, setYourTeam] = useState(yourTeamProfile);
   const [isHeartActive, setIsHeartActive] = useState(false);
@@ -156,10 +157,32 @@ const HomeScreen = ({ route, navigation }) => {
         body: JSON.stringify({ likedTeamId, likingTeamId }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update like status");
+      const responseData = await response.json();
+
+      // if (!response.ok) {
+      //   throw new Error("Failed to update like status");
+      // }
+      console.log(responseData.message, "MSG");
+      if (responseData.message === "Teams are Matched") {
+        Alert.alert(
+          "Teams Matched",
+          "Teams are Matched",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                // Call refreshYourTeam when "OK" is pressed
+                removeProfile();
+                refreshYourTeam();
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+      } else {
+        // If teams are not matched, continue with the usual logic
+        removeProfile(); // Proceed with removing profile
       }
-      removeProfile();
     } catch (error) {
       console.error("Error updating like status:", error);
     }
@@ -250,7 +273,7 @@ const HomeScreen = ({ route, navigation }) => {
       console.log(currentProfile, "VG");
       // setImages(currentProfile.selectedImages || []);
       const formattedImages = (currentProfile.selectedImages || []).map(
-        (imagePath) => ({ uri: `${serverIP}${imagePath}` })
+        (imagePath) => ({ uri: `${imagePath}` })
       );
       setImages(formattedImages);
     }
@@ -364,7 +387,7 @@ const HomeScreen = ({ route, navigation }) => {
       <View style={styles.singleBioContainer}>
         <Image
           source={{
-            uri: `${serverIP}/uploads/1724755758498_a4d3817e-fde1-4f45-8800-40d09942d5ca.jpeg`,
+            uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1727100502759_8eead210-d44d-4f38-b5ed-83870624e598.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20240923%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240923T140824Z&X-Amz-Expires=360000&X-Amz-Signature=3b0597a36daa210bf81201e6abf44f3bc9a2548167ef261fee830af31ccf1977&X-Amz-SignedHeaders=host&x-id=GetObject`,
           }}
           style={styles.singleImage}
         />
@@ -435,7 +458,7 @@ const HomeScreen = ({ route, navigation }) => {
       <View style={styles.singleBioContainer}>
         <Image
           source={{
-            uri: `${serverIP}/uploads/1724755758531_200a964c-9120-475c-8287-97b17aa8d72b.jpeg`,
+            uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1727100500887_7d9450ac-7075-4026-a09e-d2794c099707.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20240923%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240923T140824Z&X-Amz-Expires=360000&X-Amz-Signature=e2c5261ecb1407e39156316432d69271cff3325455f61ea1ce8e7c0d25e6fad8&X-Amz-SignedHeaders=host&x-id=GetObject`,
           }}
           style={styles.singleImage}
         />

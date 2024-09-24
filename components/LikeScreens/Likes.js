@@ -267,7 +267,7 @@ const Likes = ({ route, navigation }) => {
           >
             {/* <View> */}
             <Image
-              source={{ uri: `${serverIP}${item.selectedImages[0]}` }}
+              source={{ uri: `${item.selectedImages[0]}` }}
               style={styles.profileImage}
             />
             <Text

@@ -34,7 +34,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
 
   useEffect(() => {
     const formattedImages = (profile.selectedImages || []).map((imagePath) => ({
-      uri: `${serverIP}${imagePath}`,
+      uri: `${imagePath}`,
     }));
     setImages(formattedImages);
   }, []);
@@ -92,7 +92,10 @@ const MatchedTeamProfile = ({ route, navigation }) => {
       [
         {
           text: "Cancel",
-          style: "cancel", // Adds a "Cancel" button
+          onPress: () => {
+            // If "Yes" is pressed, execute the toggleDislike function
+            navigation.goBack();
+          }, // Adds a "Cancel" button
         },
         {
           text: "Yes", // Adds a "Yes" button

@@ -41,7 +41,7 @@ const LikedProfile = ({ route, navigation }) => {
 
   useEffect(() => {
     const formattedImages = (profile.selectedImages || []).map((imagePath) => ({
-      uri: `${serverIP}${imagePath}`,
+      uri: `${imagePath}`,
     }));
     setImages(formattedImages);
   }, []);

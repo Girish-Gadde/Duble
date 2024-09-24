@@ -48,14 +48,14 @@ const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
 
   // const { mobileNumber } = route.params;
-  const mobileNumber = "6305148605";
+  const mobileNumber = "6305148600";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
   //const [individualProfile, setIndividualProfile] = useState(null);
   //const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
-  useEffect(async () => {
-    await getUserId();
+  useEffect(() => {
+    getUserId();
   }, []);
 
   async function getUserId() {
@@ -310,7 +310,11 @@ const HomeTab = ({ route, navigation }) => {
           <Tab.Screen
             name="Home"
             component={HomeScreen}
-            initialParams={{ navigation, yourTeamProfile: profile }}
+            initialParams={{
+              navigation,
+              yourTeamProfile: profile,
+              refreshYourTeam,
+            }}
             options={{
               tabBarIcon: ({ focused, color, size }) => (
                 <Ionicons
