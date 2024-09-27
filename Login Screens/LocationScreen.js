@@ -24,6 +24,7 @@ const LocationScreen = ({ route, navigation }) => {
 
     let locationData = await Location.getCurrentPositionAsync({});
     const { latitude, longitude } = locationData.coords;
+    console.log(locationData.coords, "LOKJHS");
     setLocation({ latitude, longitude });
     setMapRegion({
       latitude,
@@ -79,7 +80,7 @@ const LocationScreen = ({ route, navigation }) => {
         </View>
       )}
 
-      {mapRegion && (
+      {/* {mapRegion && (
         <MapView
           style={styles.map}
           region={mapRegion}
@@ -88,7 +89,7 @@ const LocationScreen = ({ route, navigation }) => {
         >
           <Marker coordinate={mapRegion} />
         </MapView>
-      )}
+      )} */}
 
       {!location && (
         <TouchableOpacity

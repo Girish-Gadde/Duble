@@ -100,7 +100,7 @@ const width = Dimensions.get("window").width;
 // ];
 
 const HomeScreen = ({ route, navigation }) => {
-  const { yourTeamProfile, refreshYourTeam } = route.params;
+  const { yourTeamProfile, refreshYourTeam, dispatch } = route.params;
   // console.log(yourTeamProfile, "HOME");
   const [yourTeam, setYourTeam] = useState(yourTeamProfile);
   const [isHeartActive, setIsHeartActive] = useState(false);
@@ -116,8 +116,18 @@ const HomeScreen = ({ route, navigation }) => {
   const currentIndexRef = useRef(currentProfileIndex);
   const scrollViewRef = useRef(null);
 
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const showIcons = useSelector((state) => state.showIcons);
+
+  // useEffect(() => {
+  //   if (profiles.length <= 0) {
+  //     Alert.alert(
+  //       "No new profiles to show",
+  //       "Please re-load the app to get new profiles.",
+  //       [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+  //     );
+  //   }
+  // }, [profiles]);
 
   const updateCurrentIndex = (val) => {
     if (val < profiles.length) {
@@ -134,8 +144,12 @@ const HomeScreen = ({ route, navigation }) => {
       (_, index) => index !== currentProfileIndex
     );
     setProfiles(updatedProfiles);
+    console.log(updatedProfiles, "UPDATED");
     if (updatedProfiles.length > 0) {
       updateCurrentIndex(currentProfileIndex); // Keep current index within bounds
+    } else {
+      setImages([]);
+      dispatch(toggleShowIcons(false));
     }
   };
 

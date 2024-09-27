@@ -13,14 +13,22 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyAFTtQ9taTiY-CM-NBnVV96yMnkZr3TmM4"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.girishgadde.Duble1"
+      "package": "com.girishgadde.Duble1",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAFTtQ9taTiY-CM-NBnVV96yMnkZr3TmM4"
+        }
+      }
     },
     "web": {
       "bundler": "metro",

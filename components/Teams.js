@@ -9,6 +9,7 @@ import {
   Dimensions,
   Image,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -91,6 +92,7 @@ const profiles = [
 const Teams = ({ route, navigation }) => {
   // Pop up modal code
   const { userId } = route.params;
+  console.log("USER ID ---->", userId);
   const [isPopup1Visible, setPopup1Visible] = useState(false);
   const [isPopup2Visible, setPopup2Visible] = useState(false);
 
@@ -115,17 +117,12 @@ const Teams = ({ route, navigation }) => {
   //Team Selection Code
   const [teams, setTeams] = useState([]);
   const [error, setError] = useState("");
-  const [tempSelections, setTempSelections] = useState([]); // Store temporary selections
-
+  const [tempSelection, setTempSelection] = useState(null);
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
 
   useEffect(() => {
     fetchTeams();
   }, []);
-
-  useEffect(() => {
-    console.log("Global Selected Team Index:", selectedTeamIndex);
-  }, [selectedTeamIndex]);
 
   const fetchTeams = async () => {
     try {
@@ -145,7 +142,7 @@ const Teams = ({ route, navigation }) => {
 
       const responseData = await response.json();
       setTeams(responseData);
-      setError(""); // Clear error on success
+      setError("");
     } catch (err) {
       console.error("Error fetching team data:", err);
       setError("Failed to fetch your team. Please try again later.");
@@ -153,29 +150,13 @@ const Teams = ({ route, navigation }) => {
   };
 
   const handleTeamClick = (index) => {
-    setTempSelections((prev) => {
-      // If index is already in tempSelections, remove it
-      if (prev.includes(index)) {
-        return prev.filter((item) => item !== index);
-      }
-      // Add index to tempSelections, ensuring it has at most two items
-      const updatedSelections = [...prev, index];
-      if (updatedSelections.length > 2) {
-        updatedSelections.shift(); // Remove the oldest selection
-      }
-      return updatedSelections;
-    });
+    setTempSelection(index);
   };
 
   const handleConfirmSelection = () => {
-    if (tempSelections.length > 0) {
-      // Confirm the last temporary selection
-      setSelectedTeamIndex(tempSelections[tempSelections.length - 1]);
-      console.log(
-        `Confirmed Team Index: ${tempSelections[tempSelections.length - 1]}`
-      );
-      setTempSelections([]); // Clear temporary selections after confirming
-      navigation.navigate("Home");
+    if (tempSelection !== null) {
+      setSelectedTeamIndex(tempSelection);
+      setTempSelection(null);
     }
   };
 
@@ -191,6 +172,10 @@ const Teams = ({ route, navigation }) => {
       ]}
     />
   );
+
+  // Calculate 20% of screen height
+  const screenHeight = Dimensions.get("window").height;
+  const scrollContainerHeight = screenHeight * 0.3;
 
   //Team Selection Code
 
@@ -330,40 +315,50 @@ const Teams = ({ route, navigation }) => {
               <View style={styles.containerTeam}>
                 {error ? (
                   <Text style={styles.errorText}>{error}</Text>
-                ) : teams.length > 0 ? (
-                  teams.map((team, index) => (
-                    <TouchableOpacity
-                      key={index.toString()}
-                      style={styles.teamItemWrapper}
-                      onPress={() => handleTeamClick(index)}
-                    >
-                      <View style={styles.teamItemTeam}>
-                        <View>
-                          <Image
-                            source={{
-                              uri: "https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-                            }} // Replace with your image URL or local file
-                            style={styles.itemImage}
-                          />
-                        </View>
-                        <View>
-                          <Text style={styles.teamTextTeam}>
-                            {team.name1} and {team.name2}
-                          </Text>
-                        </View>
-                        <View style={{ marginLeft: "20%" }}>
-                          <RadioButton
-                            selected={selectedTeamIndex === index}
-                            temporary={tempSelections.includes(index)}
-                          />
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  ))
                 ) : (
-                  <Text style={styles.noTeamsTextTeam}>
-                    No teams available.
-                  </Text>
+                  <View
+                    style={[
+                      styles.scrollContainer,
+                      { height: scrollContainerHeight },
+                    ]}
+                  >
+                    <ScrollView
+                      showsVerticalScrollIndicator={true}
+                      contentContainerStyle={styles.scrollContent} // Keep contents aligned at top
+                    >
+                      <View style={styles.itemsContainer}>
+                        {teams.length > 0 ? (
+                          teams.map((team, index) => (
+                            <TouchableOpacity
+                              key={index.toString()}
+                              style={styles.teamItemWrapper}
+                              onPress={() => handleTeamClick(index)}
+                            >
+                              <Image
+                                source={{
+                                  uri: "https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                                }} // Add the image to the item
+                                style={styles.itemImage}
+                              />
+                              <View style={styles.teamItemTeam}>
+                                <Text style={styles.teamTextTeam}>
+                                  {team.name1} and {team.name2}
+                                </Text>
+                                <RadioButton
+                                  selected={selectedTeamIndex === index}
+                                  temporary={tempSelection === index}
+                                />
+                              </View>
+                            </TouchableOpacity>
+                          ))
+                        ) : (
+                          <Text style={styles.noTeamsTextTeam}>
+                            No teams available.
+                          </Text>
+                        )}
+                      </View>
+                    </ScrollView>
+                  </View>
                 )}
               </View>
 
@@ -515,7 +510,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 8,
     position: "absolute",
-    bottom: 20,
+    bottom: "2%",
     // left: 0,
     // right: 0,
     marginTop: 40,
@@ -672,8 +667,16 @@ const styles = StyleSheet.create({
   // Team Styling
   containerTeam: {
     flex: 1,
-
-    //backgroundColor: "#f5f5f5",
+  },
+  scrollContainer: {
+    // Constrains the height to 20% of screen height
+    overflow: "hidden",
+  },
+  scrollContent: {
+    justifyContent: "flex-start", // Align items to the top
+  },
+  itemsContainer: {
+    paddingBottom: 20, // Add space at the bottom
   },
   headingTeam: {
     fontSize: 22,
@@ -684,18 +687,16 @@ const styles = StyleSheet.create({
   teamItemWrapper: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: "2%",
+    gap: 10,
+    marginBottom: "4%",
   },
   teamItemTeam: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     padding: 15,
-    gap: 10,
-    //backgroundColor: "#fff",
+    backgroundColor: "#fff",
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "grey",
-    borderColor: "#FF3156",
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 10,
@@ -703,10 +704,16 @@ const styles = StyleSheet.create({
     elevation: 3,
     flex: 1,
   },
+  itemImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
   teamTextTeam: {
     fontSize: 18,
     fontWeight: "500",
-    marginLeft: 10,
+    flexShrink: 1,
   },
   noTeamsTextTeam: {
     fontSize: 16,
@@ -725,7 +732,6 @@ const styles = StyleSheet.create({
     width: 20,
     borderRadius: 10,
     borderWidth: 2,
-    backgroundColor: "#FF3156",
     borderColor: "#444",
     alignItems: "center",
     justifyContent: "center",
@@ -734,12 +740,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF3156",
   },
   radioButtonTemporary: {
-    backgroundColor: "green", // Temporary selection color
+    backgroundColor: "green",
   },
   radioButtonDefault: {
-    backgroundColor: "transparent", // Default color for unselected state
+    backgroundColor: "transparent",
   },
-
   // Pop up styling
 
   containerPopup: {

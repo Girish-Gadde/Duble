@@ -48,7 +48,7 @@ const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
 
   // const { mobileNumber } = route.params;
-  const mobileNumber = "6305148600";
+  const mobileNumber = "6305148605";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
   //const [individualProfile, setIndividualProfile] = useState(null);
@@ -314,6 +314,7 @@ const HomeTab = ({ route, navigation }) => {
               navigation,
               yourTeamProfile: profile,
               refreshYourTeam,
+              dispatch,
             }}
             options={{
               tabBarIcon: ({ focused, color, size }) => (
