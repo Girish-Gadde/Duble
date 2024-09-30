@@ -11,7 +11,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { menuClickAction } from "../Redux/Actions";
 //import LinearGradient from "react-native-linear-gradient";
 
@@ -215,13 +215,14 @@ const profiles = [
 
 const Likes = ({ route, navigation }) => {
   //const navigation = useNavigation();
-  const { yourTeamProfile } = route.params;
+  //const { yourTeamProfile } = route.params;
+  const yourTeamProfile = useSelector((state) => state.profile);
   const [teams, setTeams] = useState([]);
   const dispatch = useDispatch();
   console.log(yourTeamProfile, "HOME_LIKE");
-  const likedByIDs = yourTeamProfile.likedByIDs;
 
   useEffect(() => {
+    const likedByIDs = yourTeamProfile.likedByIDs;
     // Function to fetch teams from the back-end
     const fetchTeams = async () => {
       try {
@@ -248,7 +249,7 @@ const Likes = ({ route, navigation }) => {
     if (likedByIDs && likedByIDs.length > 0) {
       fetchTeams();
     }
-  }, [likedByIDs]);
+  }, [yourTeamProfile]);
 
   const navigateToLikedProfile = (item) => {
     dispatch(menuClickAction());

@@ -40,10 +40,10 @@ const HomeTab = ({ route, navigation }) => {
   const { indexRef } = useUserContext();
   const displayIndex = useRef(indexRef.current); // Use ref to hold the current index value
 
-  useEffect(() => {
-    // Update the displayIndex whenever indexRef changes
-    displayIndex.current = indexRef.current;
-  }, [indexRef.current]);
+  // useEffect(() => {
+  //   // Update the displayIndex whenever indexRef changes
+  //   displayIndex.current = indexRef.current;
+  // }, [indexRef.current]);
 
   //const navigation = useNavigation();
 
@@ -83,9 +83,6 @@ const HomeTab = ({ route, navigation }) => {
       // const userId = responseData._id;
       await AsyncStorage.setItem("userId", responseData._id);
       // Once the user ID is fetched, get the associated teams
-      const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
-      console.log(savedIndex, "SAVED");
-      setSelectedTeamIndex(savedIndex);
       getYourTeam(responseData._id);
       setLoading(false);
     } catch (error) {
@@ -110,13 +107,10 @@ const HomeTab = ({ route, navigation }) => {
       }
 
       const responseData = await response.json();
+      const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
+      console.log(savedIndex, "SAVED");
       //setProfile(responseData[displayIndex.current]);
-      dispatch(setProfile(responseData[selectedTeamIndex]));
-      console.log(
-        responseData[displayIndex.current],
-        "Your Team-099",
-        displayIndex.current
-      );
+      dispatch(setProfile(responseData[savedIndex]));
     } catch (error) {
       console.error("Failed to fetch your team:", error);
     }
@@ -141,6 +135,9 @@ const HomeTab = ({ route, navigation }) => {
       const responseData = await response.json();
       //setProfile(responseData[displayIndex.current]);
       console.log(responseData, "INIDIVIDUAL_TEAM");
+      const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
+      console.log(savedIndex, "SAVED");
+      setSelectedTeamIndex(savedIndex);
       dispatch(setIndividualProfile(responseData));
     } catch (error) {
       console.error("Failed to fetch your team:", error);
@@ -230,7 +227,7 @@ const HomeTab = ({ route, navigation }) => {
           <Tab.Screen
             name="Teams"
             component={Teams}
-            initialParams={{ navigation, userId }}
+            initialParams={{ navigation, userId, refreshYourTeam }}
             options={{
               tabBarIcon: ({ focused, color, size }) => (
                 <View style={{ position: "relative" }}>

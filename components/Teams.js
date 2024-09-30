@@ -21,6 +21,7 @@ import JoinTeam from "./Team/TeamCreateManually/JoinTeam";
 
 import { UserContext } from "./Team Switch/UserContext";
 import { serverIP } from "@/config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //const serverIP = "http://192.168.1.10:4002";
 //const userId = "66d6e8e49b889ada7a2c9fcf";
@@ -91,7 +92,7 @@ const profiles = [
 
 const Teams = ({ route, navigation }) => {
   // Pop up modal code
-  const { userId } = route.params;
+  const { userId, refreshYourTeam } = route.params;
   console.log("USER ID ---->", userId);
   const [isPopup1Visible, setPopup1Visible] = useState(false);
   const [isPopup2Visible, setPopup2Visible] = useState(false);
@@ -153,10 +154,16 @@ const Teams = ({ route, navigation }) => {
     setTempSelection(index);
   };
 
-  const handleConfirmSelection = () => {
+  const handleConfirmSelection = async () => {
     if (tempSelection !== null) {
       setSelectedTeamIndex(tempSelection);
+      await AsyncStorage.setItem(
+        "selectedTeamIndex",
+        selectedTeamIndex.toString()
+      );
       setTempSelection(null);
+      refreshYourTeam();
+      navigation.navigate("Home");
     }
   };
 
