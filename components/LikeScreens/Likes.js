@@ -239,16 +239,14 @@ const Likes = ({ route, navigation }) => {
         }
 
         const data = await response.json();
-        console.log(data, "LIKED_TEAMS");
+        console.log(data, "LIKED_TEAMS-0887");
         setTeams(data);
       } catch (error) {
         console.error("Error fetching teams:", error);
       }
     };
 
-    if (likedByIDs && likedByIDs.length > 0) {
-      fetchTeams();
-    }
+    fetchTeams();
   }, [yourTeamProfile]);
 
   const navigateToLikedProfile = (item) => {
