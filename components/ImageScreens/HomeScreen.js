@@ -100,7 +100,8 @@ const width = Dimensions.get("window").width;
 // ];
 
 const HomeScreen = ({ route, navigation }) => {
-  const { yourTeamProfile, refreshYourTeam, dispatch } = route.params;
+  const { refreshYourTeam, dispatch } = route.params;
+  const yourTeamProfile = useSelector((state) => state.profile);
   // console.log(yourTeamProfile, "HOME");
   const [yourTeam, setYourTeam] = useState(yourTeamProfile);
   const [isHeartActive, setIsHeartActive] = useState(false);
@@ -247,6 +248,10 @@ const HomeScreen = ({ route, navigation }) => {
     const currentProfile = profiles[currentProfileIndex];
     console.log(currentProfile, "VG");
   }, []);
+
+  useEffect(() => {
+    getSavedData();
+  }, [yourTeamProfile]);
 
   const teamName = "Dream Team";
 
