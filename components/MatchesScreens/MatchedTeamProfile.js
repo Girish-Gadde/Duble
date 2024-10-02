@@ -20,6 +20,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import Carousel from "react-native-reanimated-carousel";
 import { serverIP } from "@/config";
+import { useSelector } from "react-redux";
 
 const width = Dimensions.get("window").width;
 
@@ -29,6 +30,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [images, setImages] = useState([]);
+  const menuClicked = useSelector((state) => state.menuClicked);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
   //const navigation = useNavigation();
 
@@ -38,6 +40,12 @@ const MatchedTeamProfile = ({ route, navigation }) => {
     }));
     setImages(formattedImages);
   }, []);
+
+  useEffect(() => {
+    if (menuClicked) {
+      navigation.goBack(); // Go back when menuClicked is true
+    }
+  }, [menuClicked, navigation]);
 
   const toggleHeart = () => {
     setIsHeartActive(!isHeartActive);

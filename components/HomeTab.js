@@ -353,6 +353,7 @@ const HomeTab = ({ route, navigation }) => {
               navigation,
               yourTeamProfile: profile,
               refreshYourTeam,
+              dispatch,
             }}
             options={{
               tabBarIcon: ({ focused, color, size }) => (

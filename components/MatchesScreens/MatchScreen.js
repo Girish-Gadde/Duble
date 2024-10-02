@@ -14,12 +14,13 @@ import {
 } from "react-native";
 import axios from "axios"; // Make sure to import axios if you're using it
 import { useSelector } from "react-redux";
+import { menuClickAction } from "../Redux/Actions";
 // import { useUserContext } from 'path-to-your-context'; // Uncomment and adjust the path if you have a UserContext
 
 const MatchScreen = ({ route, navigation }) => {
   // **HOOKS AND STATE DECLARATIONS**
   // Make sure all hooks are declared at the top level
-  // const { yourTeamProfile } = route.params;
+  const { dispatch } = route.params;
   const yourTeamProfile = useSelector((state) => state.profile);
   const [teams, setTeams] = useState([]);
   const [rooms, setRooms] = useState([]);
@@ -103,6 +104,7 @@ const MatchScreen = ({ route, navigation }) => {
 
   // **NAVIGATION FUNCTIONS**
   const navigateToMatchedTeam = (profile) => {
+    dispatch(menuClickAction());
     navigation.navigate("TeamProfile", { profile, yourTeamProfile });
   };
 

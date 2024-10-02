@@ -8,17 +8,22 @@ import UnlikedMatch from "./MatchesScreens/UnlikedMatch";
 import MatchedTeamProfile from "./MatchesScreens/MatchedTeamProfile";
 import HeaderTitleWithIcon2 from "../Icon-functions/HeaderTitle2";
 import ChatScreen from "../components/ChatScreens/ChatScreen";
+import { menuClickAction } from "./Redux/Actions";
 const Stack = createStackNavigator();
 
 const Matches = ({ route, navigation }) => {
-  const { yourTeamProfile, refreshYourTeam } = route.params;
+  const { yourTeamProfile, refreshYourTeam, dispatch } = route.params;
+  const handleMenuClick = () => {
+    dispatch(menuClickAction());
+    //navigation.navigate("LikeScreen1");
+  };
   return (
     <NavigationContainer independent="true">
       <Stack.Navigator initialRouteName="MatchScreen">
         <Stack.Screen
           name="MatchScreen"
           component={MatchScreen}
-          initialParams={{ yourTeamProfile, navigation }}
+          initialParams={{ yourTeamProfile, navigation, dispatch }}
           options={{
             headerTitle: () => (
               <HeaderTitleWithIcon1
@@ -61,6 +66,7 @@ const Matches = ({ route, navigation }) => {
                 title="duble"
                 iconName="swap-horiz"
                 iconName1="arrow-back"
+                handleMenuClick={handleMenuClick}
               /> // Use the HeaderTitleWithIcon component
             ),
             headerTitleAlign: "center",
