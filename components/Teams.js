@@ -9,7 +9,7 @@ import {
   Dimensions,
   Image,
   TextInput,
-  ScrollView,
+  ScrollView
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -21,7 +21,6 @@ import JoinTeam from "./Team/TeamCreateManually/JoinTeam";
 
 import { UserContext } from "./Team Switch/UserContext";
 import { serverIP } from "@/config";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //const serverIP = "http://192.168.1.10:4002";
 //const userId = "66d6e8e49b889ada7a2c9fcf";
@@ -92,8 +91,8 @@ const profiles = [
 
 const Teams = ({ route, navigation }) => {
   // Pop up modal code
-  const { userId, refreshYourTeam } = route.params;
-  console.log("USER ID ---->", userId);
+  const { userId } = route.params;
+  console.log('USER ID ---->', userId)
   const [isPopup1Visible, setPopup1Visible] = useState(false);
   const [isPopup2Visible, setPopup2Visible] = useState(false);
 
@@ -143,7 +142,7 @@ const Teams = ({ route, navigation }) => {
 
       const responseData = await response.json();
       setTeams(responseData);
-      setError("");
+      setError("");  
     } catch (err) {
       console.error("Error fetching team data:", err);
       setError("Failed to fetch your team. Please try again later.");
@@ -154,30 +153,19 @@ const Teams = ({ route, navigation }) => {
     setTempSelection(index);
   };
 
-  const handleConfirmSelection = async () => {
+  const handleConfirmSelection = () => {
     if (tempSelection !== null) {
       setSelectedTeamIndex(tempSelection);
-      await AsyncStorage.setItem(
-        "selectedTeamIndex",
-        selectedTeamIndex.toString()
-      );
       setTempSelection(null);
-      refreshYourTeam();
-      navigation.navigate("Home");
+      navigation.navigate("Home")
     }
   };
 
   const RadioButton = ({ selected, temporary }) => (
-    <View
-      style={[
-        styles.radioButton,
-        selected
-          ? styles.radioButtonSelected
-          : temporary
-          ? styles.radioButtonTemporary
-          : styles.radioButtonDefault,
-      ]}
-    />
+    <View style={[
+      styles.radioButton, 
+      selected ? styles.radioButtonSelected : temporary ? styles.radioButtonTemporary : styles.radioButtonDefault
+    ]} />
   );
 
   // Calculate 20% of screen height
@@ -320,54 +308,50 @@ const Teams = ({ route, navigation }) => {
               </View>
 
               <View style={styles.containerTeam}>
-                {error ? (
-                  <Text style={styles.errorText}>{error}</Text>
-                ) : (
-                  <View
-                    style={[
-                      styles.scrollContainer,
-                      { height: scrollContainerHeight },
-                    ]}
+      {error ? (
+        <Text style={styles.errorText}>{error}</Text>
+      ) : (
+        <View style={[styles.scrollContainer, { height: '53%' }]}>
+          <ScrollView
+             showsVerticalScrollIndicator={false}  
+             showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.scrollContent} // Keep contents aligned at top
+          >
+            <View style={styles.itemsContainer}>
+              {teams.length > 0 ? (
+                teams.map((team, index) => (
+                  <TouchableOpacity
+                    key={index.toString()}
+                    style={styles.teamItemWrapper}
+                    onPress={() => handleTeamClick(index)}
                   >
-                    <ScrollView
-                      showsVerticalScrollIndicator={true}
-                      contentContainerStyle={styles.scrollContent} // Keep contents aligned at top
-                    >
-                      <View style={styles.itemsContainer}>
-                        {teams.length > 0 ? (
-                          teams.map((team, index) => (
-                            <TouchableOpacity
-                              key={index.toString()}
-                              style={styles.teamItemWrapper}
-                              onPress={() => handleTeamClick(index)}
-                            >
-                              <Image
-                                source={{
-                                  uri: "https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-                                }} // Add the image to the item
-                                style={styles.itemImage}
-                              />
-                              <View style={styles.teamItemTeam}>
-                                <Text style={styles.teamTextTeam}>
-                                  {team.name1} and {team.name2}
-                                </Text>
-                                <RadioButton
-                                  selected={selectedTeamIndex === index}
-                                  temporary={tempSelection === index}
-                                />
-                              </View>
-                            </TouchableOpacity>
-                          ))
-                        ) : (
-                          <Text style={styles.noTeamsTextTeam}>
-                            No teams available.
-                          </Text>
-                        )}
-                      </View>
-                    </ScrollView>
-                  </View>
-                )}
-              </View>
+                    <Image
+                      source={{
+                        uri: "https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                      }} // Add the image to the item
+                      style={styles.itemImage}
+                    />
+                    <View style={styles.teamItemTeam}>
+                      <Text style={styles.teamTextTeam}>
+                        {team.name1} and {team.name2}
+                      </Text>
+                      <RadioButton
+                        selected={selectedTeamIndex === index}
+                        temporary={tempSelection === index}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                ))
+                
+              ) : (
+                <Text style={styles.noTeamsTextTeam}>No teams available.</Text>
+              )}
+            </View>
+          </ScrollView>
+        </View>
+      )}
+
+    </View>
 
               {/* {profiles.map((profile) => (
                 <View key={profile.id} style={styles.profileContainer}>
@@ -517,11 +501,11 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 8,
     position: "absolute",
-    bottom: "2%",
+    bottom: '2%',
     // left: 0,
     // right: 0,
-    marginTop: 40,
-    marginBottom: 5,
+    marginTop: '10%',
+    marginBottom: '7.5%',
     //backgroundColor: "#ccc",
   },
   actionButton: {
@@ -674,16 +658,17 @@ const styles = StyleSheet.create({
   // Team Styling
   containerTeam: {
     flex: 1,
+
   },
   scrollContainer: {
     // Constrains the height to 20% of screen height
     overflow: "hidden",
   },
   scrollContent: {
-    justifyContent: "flex-start", // Align items to the top
+    justifyContent: 'flex-start', // Align items to the top
   },
   itemsContainer: {
-    paddingBottom: 20, // Add space at the bottom
+    paddingBottom: '0%', // Add space at the bottom
   },
   headingTeam: {
     fontSize: 22,
@@ -695,12 +680,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    marginBottom: "4%",
+    marginBottom: '4%',
   },
   teamItemTeam: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "space-between", 
     padding: 15,
     backgroundColor: "#fff",
     borderRadius: 8,

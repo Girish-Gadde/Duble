@@ -33,7 +33,7 @@ const HomeTab = ({ route, navigation }) => {
   // const [selectedTeamIndex, setSelectedTeamIndex] = useState(null);
   console.log(selectedTeamIndex, "Indexxxxxxxxxxxxxxxx");
   //index = selectedTeamIndex
-
+  ``
   const [indexNo, setIndexNo] = useState(null);
   var index;
 
@@ -215,7 +215,7 @@ const HomeTab = ({ route, navigation }) => {
               display: "flex",
               paddingHorizontal: 12,
               paddingVertical: 20,
-              height: "12%",
+              height: "13%",
               justifyContent: "center",
               //marginBottom: 10,
             },

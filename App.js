@@ -23,6 +23,7 @@ import PhoneLogin1 from "./Login Screens/PhoneLogin1";
 import Chat from "./Chat";
 import { UserProvider } from "./components/Team Switch/UserContext";
 import Notification from "./components/Team/TeamUpRequest/NotificationScreen";
+import CreateRoom from './CreateRoom'
 
 const Stack = createNativeStackNavigator();
 

@@ -25,79 +25,6 @@ import { serverIP } from "@/config";
 
 const width = Dimensions.get("window").width;
 
-// const profiles = [
-//   {
-//     id: 1,
-//     imageSource: require("../../assets/profile-1.jpg"),
-//     imageSource1: require("../../assets/profile-6.jpg"),
-//     imageSource2: require("../../assets/profile-7.jpg"),
-//     imageSource3: require("../../assets/profile-8.jpg"),
-//     name1: "Neha",
-//     age1: 25,
-//     name2: "Shruthi",
-//     age2: 24,
-//     location: "2 km away",
-//     description:
-//       "Your go to adventure enthusiast and amateur stand-up comedian",
-//     ourStory:
-//       "We met at a comedy show where shruthi was performing her stand-up routine and Neha was in the audience",
-//     funDate:
-//       "Hiking in the mountains, laughing, roasting marshmallows and sharing stories",
-//     singleImage1: require("../../assets/image20.jpg"),
-//     singleImage2: require("../../assets/image21.jpg"),
-//   },
-//   {
-//     id: 2,
-//     imageSource: require("../../assets/profile-2.png"),
-//     imageSource1: require("../../assets/profile-9.jpg"),
-//     imageSource2: require("../../assets/profile-10.jpg"),
-//     imageSource3: require("../../assets/profile-11.jpg"),
-//     name1: "Anusha",
-//     age1: 24,
-//     name2: "Nikitha",
-//     age2: 26,
-//     location: "3 km away",
-//     description: "Crazy cat lady who is as crazy as a cat who loves to explore",
-//     ourStory: "We met at a coffee shop and bonded over our love for cats",
-//     funDate: "Visiting a cat café and having a cat-themed movie marathon",
-//   },
-//   {
-//     id: 3,
-//     imageSource: require("../../assets/profile-3.png"),
-//     imageSource1: require("../../assets/profile-5.jpg"),
-//     imageSource2: require("../../assets/profile-13.jpg"),
-//     imageSource3: require("../../assets/profile-12.jpg"),
-//     name1: "Julia",
-//     age1: 27,
-//     name2: "Jenny",
-//     age2: 24,
-//     location: "4 km away",
-//     description:
-//       "Your go to adventure enthusiast and amateur stand-up comedian",
-//     ourStory:
-//       "We met at a hiking event and instantly clicked while exploring nature",
-//     funDate: "Going on a spontaneous road trip to explore new hiking trails",
-//   },
-//   {
-//     id: 4,
-//     imageSource: require("../../assets/profile-4.png"),
-//     imageSource1: require("../../assets/profile-14.jpg"),
-//     imageSource2: require("../../assets/profile-7.jpg"),
-//     imageSource3: require("../../assets/profile-8.jpg"),
-//     name1: "Shivani",
-//     age1: 23,
-//     name2: "Chandini",
-//     age2: 25,
-//     location: "10 km away",
-//     description:
-//       "We love to travel and experience new places, cultures, animals etc",
-//     ourStory:
-//       "We met while traveling solo in Europe and decided to explore the rest of the trip together",
-//     funDate:
-//       "Attending a cultural festival in a foreign country and trying out exotic foods",
-//   },
-//   // Add more profiles as needed
-// ];
 
 const HomeScreen = ({ route, navigation }) => {
   const { yourTeamProfile, refreshYourTeam, dispatch } = route.params;
@@ -119,15 +46,49 @@ const HomeScreen = ({ route, navigation }) => {
   //const dispatch = useDispatch();
   const showIcons = useSelector((state) => state.showIcons);
 
-  // useEffect(() => {
-  //   if (profiles.length <= 0) {
-  //     Alert.alert(
-  //       "No new profiles to show",
-  //       "Please re-load the app to get new profiles.",
-  //       [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-  //     );
-  //   }
-  // }, [profiles]);
+  // Chat room Create API Function
+
+  const createChatRoom = async () => {
+    const url = 'https://duble-api-277cfc5cb720.herokuapp.com/chat-room/api/match';
+
+  
+    const requestData = {
+      teamA: {
+        teamId: 'teamAId',
+        members: ['member1', 'member2'],
+      },
+      teamB: {
+        teamId: 'teamBId',
+        members: ['member3', 'member4'],
+      },
+    };
+
+    try {
+      
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData), 
+      });
+
+      
+      if (response.ok) {
+        const responseData = await response.json();
+        Alert.alert('Success', 'Chat room created successfully');
+        console.log('Response Data:', responseData); 
+      } else {
+        Alert.alert('Error', 'Failed to create chat room');
+        console.log('Error:', response.status);
+      }
+    } catch (error) {
+      Alert.alert('Error', 'An error occurred while creating the chat room');
+      console.error('Error:', error);
+    }
+  };
+
+  // Chat room Create API Function
 
   const updateCurrentIndex = (val) => {
     if (val < profiles.length) {
@@ -155,10 +116,6 @@ const HomeScreen = ({ route, navigation }) => {
 
   const toggleHeart = async () => {
     setIsHeartActive(!isHeartActive);
-    // updateCurrentIndex(
-    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-    // );
-    // getSavedData();
     const likedTeamId = profiles[currentProfileIndex]._id; // The team being liked
     const likingTeamId = yourTeamProfile._id; // The user's team profile
     console.log(likedTeamId, "IsD", likingTeamId);
@@ -203,11 +160,6 @@ const HomeScreen = ({ route, navigation }) => {
   };
 
   const toggleDislike = async () => {
-    // setIsDislikeActive(!isDislikeActive);
-    // updateCurrentIndex(
-    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-    // );
-
     const dislikedTeamId = profiles[currentProfileIndex]._id; // The team being disliked
     const dislikingTeamId = yourTeamProfile._id; // The user's team profile
 
@@ -227,14 +179,6 @@ const HomeScreen = ({ route, navigation }) => {
     } catch (error) {
       console.error("Error updating dislike status:", error);
     }
-  };
-
-  const handleScroll = (event) => {
-    // const currentOffset = event.nativeEvent.contentOffset.y;
-    // const show = currentOffset <= 0;
-    // if (show !== showIcons) {
-    //   dispatch(toggleShowIcons());
-    // }
   };
 
   const renderCarouselItem = ({ item }) => {
@@ -277,7 +221,7 @@ const HomeScreen = ({ route, navigation }) => {
       }
     } catch (error) {
       console.error("Fetching data failed:", error);
-      Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
+      //Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
     }
   }
 
@@ -293,277 +237,281 @@ const HomeScreen = ({ route, navigation }) => {
     }
     scrollViewRef.current?.scrollTo({ y: 0, animated: true });
   }, [currentProfileIndex, profiles]);
+  console.log("Profile Array -----> ",profiles);
+
+  if (!profiles || profiles.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>No teams available</Text>
+      </View>
+    );
+  }
 
   return (
-    <ScrollView
-      ref={scrollViewRef}
-      contentContainerStyle={{ flexGrow: 1 }}
-      // onScroll={handleScroll}
-      scrollEventThrottle={16}
-      style={{ backgroundColor: "#EDEEF1" }}
+    
+<ScrollView
+ref={scrollViewRef}
+contentContainerStyle={{ flexGrow: 1 }}
+scrollEventThrottle={16}
+style={{ backgroundColor: "#EDEEF1" }}
+>
+<View style={{ flex: 1 }}>
+  <View style={styles.carouselContainer}>
+    <Carousel
+      loop={false}
+      data={profiles[currentProfileIndex]?.images || []}
+      renderItem={renderCarouselItem}
+      width={width}
+      height={654}
+    />
+  </View>
+  <View style={styles.textContainer}>
+    <View style={styles.nameContainer}>
+      <Text style={styles.nameText}>
+        {profiles[currentProfileIndex]?.name1},
+      </Text>
+      <Text style={styles.ageText}>
+        {profiles[currentProfileIndex]?.age1}
+      </Text>
+      <View style={styles.divider} />
+      <Text style={styles.nameText}>
+        {profiles[currentProfileIndex]?.name2},
+      </Text>
+      <Text style={styles.ageText}>
+        {profiles[currentProfileIndex]?.age2}
+      </Text>
+    </View>
+    <View style={styles.locationContainer}>
+      <MaterialIcons
+        name="location-on"
+        size={18}
+        color="white"
+        style={styles.locationIcon}
+      />
+      <Text style={styles.locationText}>
+        {profiles[currentProfileIndex]?.location}
+      </Text>
+    </View>
+    <Text style={styles.descriptionText}>
+      "{profiles[currentProfileIndex]?.description}"
+    </Text>
+  </View>
+</View>
+
+{showIcons ? (
+  <View style={styles.actionContainer1}>
+    <TouchableOpacity
+      style={styles.actionButton1}
+      onPress={toggleDislike}
     >
-      <View style={{ flex: 1 }}>
-        <View style={styles.carouselContainer}>
-          <Carousel
-            loop={false}
-            data={images}
-            // autoPlay={true}
-            renderItem={renderCarouselItem}
-            width={width}
-            height={654}
-            //onSnapToItem={(index) => setCurrentProfileIndex(index)}
-          />
-        </View>
-        <View style={styles.textContainer}>
-          <View style={styles.nameContainer}>
-            <Text style={styles.nameText}>
-              {profiles[currentProfileIndex]?.name1},
-            </Text>
-            <Text style={styles.ageText}>
-              {profiles[currentProfileIndex]?.age1}
-            </Text>
-            <View style={styles.divider} />
-            <Text style={styles.nameText}>
-              {profiles[currentProfileIndex]?.name2},
-            </Text>
-            <Text style={styles.ageText}>
-              {profiles[currentProfileIndex]?.age2}
-            </Text>
-          </View>
-          <View style={styles.locationContainer}>
-            <MaterialIcons
-              name="location-on"
-              size={18}
-              color="white"
-              style={styles.locationIcon}
-            />
-            <Text style={styles.locationText}>
-              {profiles[currentProfileIndex]?.location}
-            </Text>
-          </View>
-          <Text style={styles.descriptionText}>
-            "{profiles[currentProfileIndex]?.description}"
-          </Text>
-        </View>
+      <View
+        style={{
+          backgroundColor: "#6420AA",
+          borderRadius: 999,
+          width: 60,
+          height: 60,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <AntDesign name="close" size={30} color="white" />
       </View>
-      {showIcons ? (
-        <View style={styles.actionContainer1}>
-          <TouchableOpacity
-            style={styles.actionButton1}
-            onPress={toggleDislike}
-          >
-            <View
-              style={{
-                backgroundColor: "#6420AA",
-                borderRadius: 999,
-                width: 60,
-                height: 60,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <AntDesign name="close" size={30} color="white" />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton2} onPress={toggleHeart}>
-            <View
-              style={[
-                styles.heartButton,
-                {
-                  backgroundColor: isHeartActive ? "#FF3156" : "#FF3156",
-                },
-              ]}
-            >
-              <AntDesign name="heart" size={30} color="white" />
-            </View>
-          </TouchableOpacity>
-        </View>
-      ) : null}
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.actionButton2} onPress={toggleHeart}>
+      <View
+        style={[
+          styles.heartButton,
+          {
+            backgroundColor: isHeartActive ? "#FF3156" : "#FF3156",
+          },
+        ]}
+      >
+        <AntDesign name="heart" size={30} color="white" />
+      </View>
+    </TouchableOpacity>
+  </View>
+) : null}
 
-      {profiles[currentProfileIndex]?.dynamicContent?.length > 0 ? (
-        profiles[currentProfileIndex].dynamicContent.map((content, index) => (
-          <View key={index} style={styles.viewContainer}>
-            <View style={styles.searchContainer}>
-              {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
-              <Text style={styles.searchText}>{content.label}</Text>
-            </View>
-            <Text style={styles.text}>{content.value}</Text>
-          </View>
-        ))
-      ) : (
-        // Show activity indicator while loading
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
-          <Text style={styles.loadingText}>Loading content...</Text>
-        </View>
-      )}
+{profiles[currentProfileIndex]?.dynamicContent?.length > 0 ? (
+  profiles[currentProfileIndex].dynamicContent.map((content, index) => (
+    <View key={index} style={styles.viewContainer}>
+      <View style={styles.searchContainer}>
+        <Text style={styles.searchText}>{content.label}</Text>
+      </View>
+      <Text style={styles.text}>{content.value}</Text>
+    </View>
+  ))
+) : (
+  <View style={styles.loadingContainer}>
+    <ActivityIndicator size="large" color="#0000ff" />
+    <Text style={styles.loadingText}>No teams to show</Text>
+  </View>
+)}
 
-      <View style={styles.singleBioContainer}>
-        <Image
-          source={{
-            uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1727100502759_8eead210-d44d-4f38-b5ed-83870624e598.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20240923%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240923T140824Z&X-Amz-Expires=360000&X-Amz-Signature=3b0597a36daa210bf81201e6abf44f3bc9a2548167ef261fee830af31ccf1977&X-Amz-SignedHeaders=host&x-id=GetObject`,
-          }}
-          style={styles.singleImage}
+<View style={styles.singleBioContainer}>
+  <Image
+    source={{ uri: profiles[currentProfileIndex]?.image1 }}
+    style={styles.singleImage}
+  />
+  <View style={styles.bioDataContainer}>
+    <View style={styles.singleNameContainer}>
+      <Text style={styles.nameText1}>
+        {profiles[currentProfileIndex]?.name1},
+      </Text>
+      <Text style={styles.ageText1}>
+        {profiles[currentProfileIndex]?.age1}
+      </Text>
+    </View>
+    <View style={styles.rowContainer}>
+      <View style={styles.iconContainer}>
+        <MaterialIcons
+          name="location-on"
+          size={18}
+          color="#121212"
+          style={styles.locationIcon}
         />
-        <View style={styles.bioDataContainer}>
-          <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>
-              {profiles[currentProfileIndex]?.name1},
-            </Text>
-            <Text style={styles.ageText1}>
-              {profiles[currentProfileIndex]?.age1}
-            </Text>
-          </View>
-          <View style={styles.rowContainer}>
-            <View style={styles.iconContainer}>
-              <MaterialIcons
-                name="location-on"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.place}
-              </Text>
-            </View>
-
-            <View style={styles.iconContainer}>
-              <SimpleLineIcons
-                name="graduation"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.occupation}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.rowContainer}>
-            <View style={styles.iconContainer3}>
-              <FontAwesome5
-                name="ruler-vertical"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.height}
-              </Text>
-            </View>
-            <View style={styles.iconContainer}>
-              <AntDesign
-                name="hearto"
-                size={17}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.gender}
-              </Text>
-            </View>
-          </View>
-          <Text style={styles.singleBioText}>
-            "I bet I run faster than you."
-          </Text>
-        </View>
+        <Text style={styles.cell}>
+          {profiles[currentProfileIndex]?.place}
+        </Text>
       </View>
-      <View style={styles.singleBioContainer}>
-        <Image
-          source={{
-            uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1727100500887_7d9450ac-7075-4026-a09e-d2794c099707.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20240923%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240923T140824Z&X-Amz-Expires=360000&X-Amz-Signature=e2c5261ecb1407e39156316432d69271cff3325455f61ea1ce8e7c0d25e6fad8&X-Amz-SignedHeaders=host&x-id=GetObject`,
-          }}
-          style={styles.singleImage}
+
+      <View style={styles.iconContainer}>
+        <SimpleLineIcons
+          name="graduation"
+          size={18}
+          color="#121212"
+          style={styles.locationIcon}
         />
-        <View style={styles.bioDataContainer}>
-          <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>
-              {profiles[currentProfileIndex]?.name2},
-            </Text>
-            <Text style={styles.ageText1}>
-              {profiles[currentProfileIndex]?.age2}
-            </Text>
-          </View>
-          <View style={styles.rowContainer}>
-            <View style={styles.iconContainer}>
-              <MaterialIcons
-                name="location-on"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.place}
-              </Text>
-            </View>
+        <Text style={styles.cell}>
+          {profiles[currentProfileIndex]?.occupation}
+        </Text>
+      </View>
+    </View>
 
-            <View style={styles.iconContainer}>
-              <SimpleLineIcons
-                name="graduation"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.occupation}
-              </Text>
-            </View>
-          </View>
+    <View style={styles.rowContainer}>
+      <View style={styles.iconContainer3}>
+        <FontAwesome5
+          name="ruler-vertical"
+          size={18}
+          color="#121212"
+          style={styles.locationIcon}
+        />
+        <Text style={styles.cell}>
+          {profiles[currentProfileIndex]?.height}
+        </Text>
+      </View>
+      <View style={styles.iconContainer}>
+        <AntDesign
+          name="hearto"
+          size={17}
+          color="#121212"
+          style={styles.locationIcon}
+        />
+        <Text style={styles.cell}>
+          {profiles[currentProfileIndex]?.gender}
+        </Text>
+      </View>
+    </View>
+    <Text style={styles.singleBioText}>
+      "I bet I run faster than you."
+    </Text>
+  </View>
+</View>
 
-          <View style={styles.rowContainer}>
-            {/* <View style={styles.iconContainer3}>
-                <FontAwesome5
-                  name="ruler-vertical"
-                  size={18}
-                  color="#121212"
-                  style={styles.locationIcon}
-                />
-                <Text style={styles.cell}>155 cm</Text>
-              </View> */}
-            <View style={styles.iconContainer}>
-              <AntDesign
-                name="hearto"
-                size={17}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.gender}
-              </Text>
-            </View>
-          </View>
-          <Text style={styles.singleBioText}>
-            "Joker with a punchline prowess."
-          </Text>
-        </View>
+<View style={styles.singleBioContainer}>
+  <Image
+    source={{ uri: profiles[currentProfileIndex]?.image2 }}
+    style={styles.singleImage}
+  />
+  <View style={styles.bioDataContainer}>
+    <View style={styles.singleNameContainer}>
+      <Text style={styles.nameText1}>
+        {profiles[currentProfileIndex]?.name2},
+      </Text>
+      <Text style={styles.ageText1}>
+        {profiles[currentProfileIndex]?.age2}
+      </Text>
+    </View>
+    <View style={styles.rowContainer}>
+      <View style={styles.iconContainer}>
+        <MaterialIcons
+          name="location-on"
+          size={18}
+          color="#121212"
+          style={styles.locationIcon}
+        />
+        <Text style={styles.cell}>
+          {profiles[currentProfileIndex]?.place}
+        </Text>
       </View>
 
-      <View style={styles.actionContainer2}>
-        <TouchableOpacity style={styles.actionButton} onPress={toggleDislike}>
-          <View style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Reject</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton} onPress={toggleHeart}>
-          <View
-            style={[
-              styles.buttonContainer,
-              { backgroundColor: isHeartActive ? "#FF3156" : "#FF3156" },
-            ]}
-          >
-            <Text style={styles.buttonText}>Like</Text>
-          </View>
-        </TouchableOpacity>
+      <View style={styles.iconContainer}>
+        <SimpleLineIcons
+          name="graduation"
+          size={18}
+          color="#121212"
+          style={styles.locationIcon}
+        />
+        <Text style={styles.cell}>
+          {profiles[currentProfileIndex]?.occupation}
+        </Text>
       </View>
-    </ScrollView>
+    </View>
+
+    <View style={styles.rowContainer}>
+      <View style={styles.iconContainer}>
+        <AntDesign
+          name="hearto"
+          size={17}
+          color="#121212"
+          style={styles.locationIcon}
+        />
+        <Text style={styles.cell}>
+          {profiles[currentProfileIndex]?.gender}
+        </Text>
+      </View>
+    </View>
+    <Text style={styles.singleBioText}>
+      "Joker with a punchline prowess."
+    </Text>
+  </View>
+</View>
+
+<View style={styles.actionContainer2}>
+  <TouchableOpacity style={styles.actionButton} onPress={toggleDislike}>
+    <View style={styles.buttonContainer}>
+      <Text style={styles.buttonText}>Reject</Text>
+    </View>
+  </TouchableOpacity>
+  <TouchableOpacity style={styles.actionButton} onPress={toggleHeart}>
+    <View
+      style={[
+        styles.buttonContainer,
+        { backgroundColor: isHeartActive ? "#FF3156" : "#FF3156" },
+      ]}
+    >
+      <Text style={styles.buttonText}>Like</Text>
+    </View>
+  </TouchableOpacity>
+</View>
+</ScrollView>
+
+
   );
 };
 
 const styles = StyleSheet.create({
-  // swipe: {
-  //   position: absolute,
-  // },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#EDEEF1',
+  },
+  emptyText: {
+    fontSize: 20,
+    color: '#333',
+  },
+
   image: {
     width: "92%",
     height: 600,
@@ -608,7 +556,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#121212",
     marginRight: 10,
-    // lineHeight: 36.31,
   },
   ageText1: {
     fontSize: 30,
@@ -651,10 +598,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingRight: 20,
     paddingLeft: 8,
-    // position: "absolute",
-    // bottom: 10,
-    // left: 0,
-    // right: 0,
     marginVertical: 10,
   },
   actionButton1: { flex: 1, alignItems: "flex-end", marginHorizontal: 15 },
@@ -715,11 +658,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 16,
-    //fontWeight: "bold",
-    // marginTop: 5,
   },
   loadingContainer: {
-    //flex: 1,
     height: 600,
     justifyContent: "center",
     alignItems: "center",
@@ -736,17 +676,6 @@ const styles = StyleSheet.create({
   loadingIndicator: {
     transform: [{ scale: 2 }], // Increase the size of the ActivityIndicator
   },
-  // loadingContainer: {
-  //   position: "absolute",
-  //   top: 0,
-  //   left: 0,
-  //   right: 0,
-  //   bottom: 0,
-  //   backgroundColor: "rgba(255, 255, 255, 0.8)",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   zIndex: 1000, // Ensure it's above other content
-  // },
   singleImage: {
     height: 110,
     width: 117,
@@ -760,14 +689,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     marginVertical: 10,
     marginHorizontal: 20,
-    //   marginBottom: 10,
     borderRadius: 6,
     paddingBottom: 13,
   },
   singleNameContainer: {
     flex: 0.2,
     flexDirection: "row",
-    // backgroundColor: "pink",
   },
   bioDataContainer: {
     flex: 1,
@@ -777,21 +704,17 @@ const styles = StyleSheet.create({
   rowContainer: {
     flex: 1,
     flexDirection: "row",
-    //alignItems: "flex-end",
-    //backgroundColor: "#ccc",
   },
   iconContainer: {
     flex: 0.8,
     flexDirection: "row",
     marginRight: 3,
-    //  backgroundColor: "green",
   },
   iconContainer3: {
     flex: 0.8,
     flexDirection: "row",
     marginLeft: 4,
     marginRight: 3,
-    //  backgroundColor: "green",
   },
   cell: {
     fontSize: 14, // Font size between 15 to 20
@@ -822,11 +745,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#454545",
   },
-  // carouselImage: {
-  //   width: viewportWidth - 60,
-  //   height: 200,
-  //   borderRadius: 10,
-  // },
 });
 
 export default HomeScreen;
