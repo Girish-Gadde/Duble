@@ -48,7 +48,7 @@ const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
 
   // const { mobileNumber } = route.params;
-  const mobileNumber = "6305148600";
+  const mobileNumber = "6305148607";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
   //const [individualProfile, setIndividualProfile] = useState(null);
@@ -81,6 +81,7 @@ const HomeTab = ({ route, navigation }) => {
       console.log(responseData._id, "User ID");
       setUserId(responseData._id);
       // const userId = responseData._id;
+      //await AsyncStorage.removeItem("selectedTeamIndex");
       await AsyncStorage.setItem("userId", responseData._id);
       // Once the user ID is fetched, get the associated teams
       getYourTeam(responseData._id);

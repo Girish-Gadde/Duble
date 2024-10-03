@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect } from "react";
 import { Text, View, Image, StyleSheet } from "react-native";
@@ -10,6 +11,17 @@ const SetUpScreen = ({ route, navigation }) => {
   };
 
   useEffect(() => {
+    const storeMobileNumber = async () => {
+      try {
+        await AsyncStorage.setItem("mobileNumber", mobileNumber);
+        console.log("Mobile number stored in AsyncStorage:", mobileNumber);
+      } catch (error) {
+        console.error("Error storing mobile number:", error);
+      }
+    };
+
+    storeMobileNumber();
+
     const timer = setTimeout(() => {
       navigateToNameScreen();
     }, 1000);

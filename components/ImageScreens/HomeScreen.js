@@ -244,9 +244,13 @@ const HomeScreen = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    getSavedData();
-    const currentProfile = profiles[currentProfileIndex];
-    console.log(currentProfile, "VG");
+    if (yourTeamProfile) {
+      getSavedData();
+      const currentProfile = profiles[currentProfileIndex];
+      console.log(currentProfile, "VG");
+    } else {
+      getAllTeams();
+    }
   }, []);
 
   useEffect(() => {
@@ -286,6 +290,32 @@ const HomeScreen = ({ route, navigation }) => {
     }
   }
 
+  async function getAllTeams() {
+    try {
+      const response = await fetch(`${serverIP}/auth/get-all-teams`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch saved data");
+      }
+
+      const responseData = await response.json();
+
+      if (responseData.length > 0) {
+        console.log(responseData, "FILTERED PROFILES FROM BACK-END");
+        setCurrentProfileIndex(0); // Set to the first profile by default
+        setProfiles(responseData); // Set the filtered profiles from the back-end
+      }
+    } catch (error) {
+      console.error("Fetching data failed:", error);
+      Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
+    }
+  }
+
   useEffect(() => {
     if (profiles.length > 0) {
       const currentProfile = profiles[currentProfileIndex];
@@ -298,6 +328,14 @@ const HomeScreen = ({ route, navigation }) => {
     }
     scrollViewRef.current?.scrollTo({ y: 0, animated: true });
   }, [currentProfileIndex, profiles]);
+
+  if (!profiles || profiles.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>No teams available</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView
@@ -569,6 +607,16 @@ const styles = StyleSheet.create({
   // swipe: {
   //   position: absolute,
   // },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#EDEEF1",
+  },
+  emptyText: {
+    fontSize: 20,
+    color: "#333",
+  },
   image: {
     width: "92%",
     height: 600,

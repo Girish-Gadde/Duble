@@ -1,4 +1,4 @@
-export const serverIP = "http://192.168.29.179:4002";
+export const serverIP = "https://duble-api-277cfc5cb720.herokuapp.com";
 
 //https://duble-api-277cfc5cb720.herokuapp.com/
 //http://192.168.29.179:4001

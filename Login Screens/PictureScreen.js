@@ -33,6 +33,10 @@ const PictureScreen = ({ route, navigation }) => {
     }
   };
 
+  const removeImage = (index) => {
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+  };
+
   const uploadData = async () => {
     if (images.length === 0) {
       Alert.alert("No Images", "Please upload at least one image.");
@@ -97,7 +101,15 @@ const PictureScreen = ({ route, navigation }) => {
 
       <View style={styles.imageGrid}>
         {images.map((image, index) => (
-          <Image key={index} source={{ uri: image }} style={styles.image} />
+          <View key={index} style={styles.imageContainer}>
+            <Image source={{ uri: image }} style={styles.image} />
+            <TouchableOpacity
+              style={styles.removeButton}
+              onPress={() => removeImage(index)}
+            >
+              <Text style={styles.removeButtonText}>X</Text>
+            </TouchableOpacity>
+          </View>
         ))}
       </View>
 
@@ -193,6 +205,27 @@ const styles = StyleSheet.create({
     height: 150,
     marginBottom: 10,
     borderRadius: 10,
+  },
+  imageContainer: {
+    position: "relative",
+    margin: 5,
+    flexDirection: "row",
+  },
+  removeButton: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    backgroundColor: "#6A6C6D",
+    borderRadius: 12,
+    width: 22,
+    height: 22,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  removeButtonText: {
+    color: "white",
+    fontSize: 14,
+    fontWeight: "bold",
   },
 });
 
