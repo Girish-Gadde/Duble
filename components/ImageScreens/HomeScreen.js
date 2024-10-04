@@ -286,7 +286,7 @@ const HomeScreen = ({ route, navigation }) => {
       }
     } catch (error) {
       console.error("Fetching data failed:", error);
-      Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
+      //Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
     }
   }
 
@@ -312,7 +312,7 @@ const HomeScreen = ({ route, navigation }) => {
       }
     } catch (error) {
       console.error("Fetching data failed:", error);
-      Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
+      //Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
     }
   }
 
@@ -444,7 +444,7 @@ const HomeScreen = ({ route, navigation }) => {
       <View style={styles.singleBioContainer}>
         <Image
           source={{
-            uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1727100502759_8eead210-d44d-4f38-b5ed-83870624e598.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20240923%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240923T140824Z&X-Amz-Expires=360000&X-Amz-Signature=3b0597a36daa210bf81201e6abf44f3bc9a2548167ef261fee830af31ccf1977&X-Amz-SignedHeaders=host&x-id=GetObject`,
+            uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1728022750487_7d2a7b91-1007-4559-844d-bc6fc64ea47d.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20241004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241004T061911Z&X-Amz-Expires=360000&X-Amz-Signature=ff5168ca49652da53b47378261f9b83829671083f3dc663e865fdffc9e1b44ce&X-Amz-SignedHeaders=host&x-id=GetObject`,
           }}
           style={styles.singleImage}
         />
@@ -515,7 +515,7 @@ const HomeScreen = ({ route, navigation }) => {
       <View style={styles.singleBioContainer}>
         <Image
           source={{
-            uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1727100500887_7d9450ac-7075-4026-a09e-d2794c099707.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20240923%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240923T140824Z&X-Amz-Expires=360000&X-Amz-Signature=e2c5261ecb1407e39156316432d69271cff3325455f61ea1ce8e7c0d25e6fad8&X-Amz-SignedHeaders=host&x-id=GetObject`,
+            uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1728022750118_0052b1e3-c392-4d48-bc7e-56196aa290c4.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20241004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241004T061911Z&X-Amz-Expires=360000&X-Amz-Signature=01bbd47b27c4dbe8b89000a7e403df851f90906a106b31d3cfc95de4aabdf4ea&X-Amz-SignedHeaders=host&x-id=GetObject`,
           }}
           style={styles.singleImage}
         />

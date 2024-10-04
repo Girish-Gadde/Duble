@@ -204,7 +204,7 @@ const TeamProfile = ({ route, navigation }) => {
         <View style={styles.singleBioContainer}>
           <Image
             source={{
-              uri: `${serverIP}/uploads/1724755758498_a4d3817e-fde1-4f45-8800-40d09942d5ca.jpeg`,
+              uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1727947071067_cb819375-e94e-4925-8b0c-1d84a2f74bf3.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20241003%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241003T091757Z&X-Amz-Expires=604800&X-Amz-Signature=421fcac76d1c1ec609952754c921f3231de8c2bd12d6a09c084522b9a4d52d0c&X-Amz-SignedHeaders=host&x-id=GetObject`,
             }}
             style={styles.singleImage}
           />
@@ -263,7 +263,7 @@ const TeamProfile = ({ route, navigation }) => {
         <View style={styles.singleBioContainer}>
           <Image
             source={{
-              uri: `${serverIP}/uploads/1724755758531_200a964c-9120-475c-8287-97b17aa8d72b.jpeg`,
+              uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1727947071185_32af6e2c-398d-43ab-8780-063a618dfb9d.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20241003%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241003T091757Z&X-Amz-Expires=604800&X-Amz-Signature=c9dd77056d7e81661014b4c6366416291bc618aa1df0617946c6b3bdc2039941&X-Amz-SignedHeaders=host&x-id=GetObject`,
             }}
             style={styles.singleImage}
           />

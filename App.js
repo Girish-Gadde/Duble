@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -23,26 +23,43 @@ import PhoneLogin1 from "./Login Screens/PhoneLogin1";
 import Chat from "./Chat";
 import { UserProvider } from "./components/Team Switch/UserContext";
 import Notification from "./components/Team/TeamUpRequest/NotificationScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [initialRoute, setInitialRoute] = useState("HomeTab");
+  useEffect(() => {
+    const checkMobileNumber = async () => {
+      try {
+        const mobileNumber = await AsyncStorage.getItem("mobileNumber");
+        // Check if mobileNumber is not null and a string
+        if (mobileNumber && typeof mobileNumber === "string") {
+          console.log(mobileNumber, "Mobile No..");
+          setInitialRoute("HomeTab");
+        } else {
+          setInitialRoute("DubleStart");
+        }
+      } catch (error) {
+        console.error("Failed to check mobile number in AsyncStorage:", error);
+        setInitialRoute("DubleStart"); // Default to DubleStart on error
+      }
+    };
+
+    checkMobileNumber();
+  }, []);
+
   return (
     <Provider store={store}>
       <UserProvider>
         <NavigationContainer independent={true}>
-          <Stack.Navigator>
+          <Stack.Navigator initialRouteName={initialRoute}>
             {/* You can add your screens here */}
             {/* <Stack.Screen
-          name="Home"
-          component={Login}
-          options={{ headerShown: false }}
-        /> */}
-            <Stack.Screen
               name="HomeTab"
               component={HomeTab}
               options={{ headerShown: false }}
-            />
+            /> */}
             <Stack.Screen
               name="DubleStart"
               component={DubleStart}
@@ -98,11 +115,11 @@ export default function App() {
               component={SetUpScreen}
               options={{ headerShown: false }}
             />
-            {/* <Stack.Screen
-            name="HomeTab"
-            component={HomeTab}
-            options={{ headerShown: false }}
-          /> */}
+            <Stack.Screen
+              name="HomeTab"
+              component={HomeTab}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name="TeamProfileStack"
               component={TeamProfileStack}
