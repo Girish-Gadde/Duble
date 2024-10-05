@@ -37,6 +37,12 @@ const MatchScreen = ({ route, navigation }) => {
 
   // **EFFECT TO FETCH MATCHED TEAMS**
   useEffect(() => {
+    if (!yourTeamProfile) {
+      console.log("Profile not available");
+      setLoading(false); // Stop loading if no profile is available
+      return;
+    }
+
     const matchIDs = yourTeamProfile.matchIDs;
 
     const fetchTeams = async () => {

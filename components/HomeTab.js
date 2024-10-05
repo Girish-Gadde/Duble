@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { ActivityIndicator, Image, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Image, Text, View } from "react-native";
 import Teams from "./Teams";
 import Likes from "./LikeScreens/Likes";
 import Home from "./Home";
@@ -47,8 +47,8 @@ const HomeTab = ({ route, navigation }) => {
 
   //const navigation = useNavigation();
 
-  // const { mobileNumber } = route.params;
-  const mobileNumber = "6305148605";
+  const { mobileNumber } = route.params;
+  //const mobileNumber = "6305148605";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
   //const [individualProfile, setIndividualProfile] = useState(null);
@@ -81,7 +81,6 @@ const HomeTab = ({ route, navigation }) => {
       console.log(responseData._id, "User ID");
       setUserId(responseData._id);
       // const userId = responseData._id;
-      //await AsyncStorage.removeItem("selectedTeamIndex");
       await AsyncStorage.setItem("userId", responseData._id);
       // Once the user ID is fetched, get the associated teams
       getYourTeam(responseData._id);
@@ -104,7 +103,20 @@ const HomeTab = ({ route, navigation }) => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch your team");
+        //throw new Error("Failed to fetch your team-1");
+        Alert.alert(
+          "No Teams found",
+          "Please create your teams.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                //navigation.navigate("Teams");
+              },
+            },
+          ],
+          { cancelable: false }
+        );
       }
 
       const responseData = await response.json();
@@ -184,7 +196,27 @@ const HomeTab = ({ route, navigation }) => {
   //   }
   // }
   const navigateToTeamProfile = () => {
-    navigation.navigate("TeamProfileStack", { navigation, profile, dispatch });
+    if (profile) {
+      navigation.navigate("TeamProfileStack", {
+        navigation,
+        profile,
+        dispatch,
+      });
+    } else {
+      Alert.alert(
+        "No Team found",
+        "Please create your team",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              //navigation.navigate("Teams");
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    }
   };
 
   if (loading) {
@@ -200,7 +232,7 @@ const HomeTab = ({ route, navigation }) => {
   return (
     <NavigationContainer independent={true}>
       <Tab.Navigator
-        initialRouteName="Home"
+        initialRouteName="Teams"
         screenOptions={{
           tabBarActiveTintColor: "#FF3156",
           tabBarInactiveTintColor: "black",
@@ -266,129 +298,127 @@ const HomeTab = ({ route, navigation }) => {
             }}
           />
         )}
-        {profile && (
-          <Tab.Screen
-            name="Likes"
-            component={LikeStack}
-            initialParams={{
-              navigation,
-              yourTeamProfile: profile,
-              refreshYourTeam,
-            }}
-            options={{
-              tabBarIcon: ({ focused, color, size }) => (
-                <View style={{ position: "relative" }}>
-                  <Ionicons
-                    name={focused ? "heart" : "heart-outline"}
-                    size={size}
-                    color={color}
-                  />
-                  <View
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      backgroundColor: "#FF3156",
-                      borderRadius: 6,
-                      width: 8,
-                      height: 8,
-                    }}
-                  />
-                </View>
-              ),
-              tabBarLabelStyle: {
-                marginBottom: 20, // Adjust as needed to decrease the gap
-                fontWeight: "bold",
-              },
-              headerShown: false,
-            }}
-          />
-        )}
-        {profile && (
-          <Tab.Screen
-            name="Home"
-            component={HomeScreen}
-            initialParams={{
-              navigation,
-              yourTeamProfile: profile,
-              refreshYourTeam,
-              dispatch,
-            }}
-            options={{
-              tabBarIcon: ({ focused, color, size }) => (
+
+        <Tab.Screen
+          name="Likes"
+          component={LikeStack}
+          initialParams={{
+            navigation,
+            yourTeamProfile: profile,
+            refreshYourTeam,
+          }}
+          options={{
+            tabBarIcon: ({ focused, color, size }) => (
+              <View style={{ position: "relative" }}>
                 <Ionicons
-                  name={focused ? "logo-twitter" : "logo-twitter"}
+                  name={focused ? "heart" : "heart-outline"}
                   size={size}
                   color={color}
                 />
-                // <Image
-                //   source={require("../assets/Vector.jpg")} // Replace with your image source
-                //   style={{
-                //     width: 22,
-                //     height: 22,
-                //     borderRadius: 0,
-                //     marginLeft: 2,
-                //   }}
-                // />
-              ),
-              tabBarLabelStyle: {
-                marginBottom: 20, // Adjust as needed to decrease the gap
-                fontWeight: "bold",
-              },
-              headerTitle: () => (
-                <HeaderTitleWithIcon
-                  title="duble"
-                  iconName="swap-horiz"
-                  navigateToTeamProfile={navigateToTeamProfile}
-                /> // Use the HeaderTitleWithIcon component
-              ),
-              headerTitleAlign: "center",
-            }}
-          />
-        )}
-        {profile && (
-          <Tab.Screen
-            name="Matches"
-            component={Matches}
-            initialParams={{
-              navigation,
-              yourTeamProfile: profile,
-              refreshYourTeam,
-              dispatch,
-            }}
-            options={{
-              tabBarIcon: ({ focused, color, size }) => (
-                <View style={{ position: "relative" }}>
-                  <Ionicons
-                    name={
-                      focused
-                        ? "chatbubble-ellipses-outline"
-                        : "chatbubble-ellipses-outline"
-                    }
-                    size={size}
-                    color={color}
-                  />
-                  <View
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      backgroundColor: "#FF3156",
-                      borderRadius: 6,
-                      width: 8,
-                      height: 8,
-                    }}
-                  />
-                </View>
-              ),
-              tabBarLabelStyle: {
-                marginBottom: 20, // Adjust as needed to decrease the gap
-                fontWeight: "bold",
-              },
-              headerShown: false,
-            }}
-          />
-        )}
+                <View
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    backgroundColor: "#FF3156",
+                    borderRadius: 6,
+                    width: 8,
+                    height: 8,
+                  }}
+                />
+              </View>
+            ),
+            tabBarLabelStyle: {
+              marginBottom: 20, // Adjust as needed to decrease the gap
+              fontWeight: "bold",
+            },
+            headerShown: false,
+          }}
+        />
+
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          initialParams={{
+            navigation,
+            yourTeamProfile: profile,
+            refreshYourTeam,
+            dispatch,
+          }}
+          options={{
+            tabBarIcon: ({ focused, color, size }) => (
+              <Ionicons
+                name={focused ? "logo-twitter" : "logo-twitter"}
+                size={size}
+                color={color}
+              />
+              // <Image
+              //   source={require("../assets/Vector.jpg")} // Replace with your image source
+              //   style={{
+              //     width: 22,
+              //     height: 22,
+              //     borderRadius: 0,
+              //     marginLeft: 2,
+              //   }}
+              // />
+            ),
+            tabBarLabelStyle: {
+              marginBottom: 20, // Adjust as needed to decrease the gap
+              fontWeight: "bold",
+            },
+            headerTitle: () => (
+              <HeaderTitleWithIcon
+                title="duble"
+                iconName="swap-horiz"
+                navigateToTeamProfile={navigateToTeamProfile}
+              /> // Use the HeaderTitleWithIcon component
+            ),
+            headerTitleAlign: "center",
+          }}
+        />
+
+        <Tab.Screen
+          name="Matches"
+          component={Matches}
+          initialParams={{
+            navigation,
+            yourTeamProfile: profile,
+            refreshYourTeam,
+            dispatch,
+          }}
+          options={{
+            tabBarIcon: ({ focused, color, size }) => (
+              <View style={{ position: "relative" }}>
+                <Ionicons
+                  name={
+                    focused
+                      ? "chatbubble-ellipses-outline"
+                      : "chatbubble-ellipses-outline"
+                  }
+                  size={size}
+                  color={color}
+                />
+                <View
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    backgroundColor: "#FF3156",
+                    borderRadius: 6,
+                    width: 8,
+                    height: 8,
+                  }}
+                />
+              </View>
+            ),
+            tabBarLabelStyle: {
+              marginBottom: 20, // Adjust as needed to decrease the gap
+              fontWeight: "bold",
+            },
+            headerShown: false,
+          }}
+        />
+
         {individualProfile && (
           <Tab.Screen
             name="Profile"

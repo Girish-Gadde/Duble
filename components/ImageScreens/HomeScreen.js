@@ -306,7 +306,7 @@ const HomeScreen = ({ route, navigation }) => {
       const responseData = await response.json();
 
       if (responseData.length > 0) {
-        console.log(responseData, "FILTERED PROFILES FROM BACK-END");
+        console.log(responseData, " PROFILES FROM BACK-END");
         setCurrentProfileIndex(0); // Set to the first profile by default
         setProfiles(responseData); // Set the filtered profiles from the back-end
       }

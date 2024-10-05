@@ -24,18 +24,23 @@ import Chat from "./Chat";
 import { UserProvider } from "./components/Team Switch/UserContext";
 import Notification from "./components/Team/TeamUpRequest/NotificationScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ActivityIndicator, Text, View } from "react-native";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [initialRoute, setInitialRoute] = useState("HomeTab");
+  const [initialRoute, setInitialRoute] = useState(null);
+  const [mobileNumber, setMobileNumber] = useState(null);
   useEffect(() => {
+    // await AsyncStorage.removeItem("selectedTeamIndex");
+    // await AsyncStorage.removeItem("mobileNumber");
     const checkMobileNumber = async () => {
       try {
-        const mobileNumber = await AsyncStorage.getItem("mobileNumber");
+        const mobileNo = await AsyncStorage.getItem("mobileNumber");
         // Check if mobileNumber is not null and a string
-        if (mobileNumber && typeof mobileNumber === "string") {
-          console.log(mobileNumber, "Mobile No..");
+        if (mobileNo && typeof mobileNo === "string") {
+          console.log(mobileNo, "Mobile No..");
+          setMobileNumber(mobileNo);
           setInitialRoute("HomeTab");
         } else {
           setInitialRoute("DubleStart");
@@ -48,6 +53,16 @@ export default function App() {
 
     checkMobileNumber();
   }, []);
+
+  if (!initialRoute) {
+    // Show loading indicator while data is being fetched
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#FF3156" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <Provider store={store}>
@@ -118,6 +133,9 @@ export default function App() {
             <Stack.Screen
               name="HomeTab"
               component={HomeTab}
+              initialParams={{
+                mobileNumber,
+              }}
               options={{ headerShown: false }}
             />
             <Stack.Screen

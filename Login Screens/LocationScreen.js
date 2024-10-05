@@ -101,7 +101,7 @@ const LocationScreen = ({ route, navigation }) => {
       )}
 
       {location && (
-        <TouchableOpacity style={styles.button} onPress={navigateToNextScreen}>
+        <TouchableOpacity style={styles.button1} onPress={navigateToNextScreen}>
           <Text style={styles.buttonText}>Done</Text>
         </TouchableOpacity>
       )}
@@ -143,13 +143,24 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    width: 356,
+    width: "90%",
     height: 49,
     backgroundColor: "#6420AA",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 35,
     marginVertical: 10,
+  },
+  button1: {
+    width: "90%",
+    height: 49,
+    backgroundColor: "#6420AA",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 35,
+    marginVertical: 10,
+    position: "relative",
+    top: "50%",
   },
   buttonText: {
     color: "#fff",

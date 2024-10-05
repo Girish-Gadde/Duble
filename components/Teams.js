@@ -146,7 +146,7 @@ const Teams = ({ route, navigation }) => {
       setError("");
     } catch (err) {
       console.error("Error fetching team data:", err);
-      setError("Failed to fetch your team. Please try again later.");
+      setError("Please create your teams.");
     }
   };
 
@@ -323,12 +323,7 @@ const Teams = ({ route, navigation }) => {
                 {error ? (
                   <Text style={styles.errorText}>{error}</Text>
                 ) : (
-                  <View
-                    style={[
-                      styles.scrollContainer,
-                      { height: scrollContainerHeight },
-                    ]}
-                  >
+                  <View style={[styles.scrollContainer, { height: "53%" }]}>
                     <ScrollView
                       showsVerticalScrollIndicator={true}
                       contentContainerStyle={styles.scrollContent} // Keep contents aligned at top
@@ -521,7 +516,7 @@ const styles = StyleSheet.create({
     // left: 0,
     // right: 0,
     marginTop: 40,
-    marginBottom: 5,
+    marginBottom: 3,
     //backgroundColor: "#ccc",
   },
   actionButton: {
@@ -534,8 +529,8 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     paddingHorizontal: 10,
     alignItems: "center",
-    width: 150,
-    height: 49,
+    width: "100%",
+    height: "100%",
   },
   buttonContainer2: {
     backgroundColor: "#FF3156",
@@ -543,8 +538,8 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     paddingHorizontal: 10,
     alignItems: "center",
-    width: 150,
-    height: 49,
+    width: "100%",
+    height: "100%",
   },
   buttonText: {
     color: "white",

@@ -10,6 +10,7 @@ import {
   FlatList,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { menuClickAction } from "../Redux/Actions";
@@ -218,10 +219,17 @@ const Likes = ({ route, navigation }) => {
   //const { yourTeamProfile } = route.params;
   const yourTeamProfile = useSelector((state) => state.profile);
   const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   console.log(yourTeamProfile, "HOME_LIKE");
 
   useEffect(() => {
+    if (!yourTeamProfile) {
+      console.log("Profile not available");
+      setLoading(false); // Stop loading if no profile is available
+      return;
+    }
+
     const likedByIDs = yourTeamProfile.likedByIDs;
     // Function to fetch teams from the back-end
     const fetchTeams = async () => {
@@ -243,6 +251,8 @@ const Likes = ({ route, navigation }) => {
         setTeams(data);
       } catch (error) {
         console.error("Error fetching teams:", error);
+      } finally {
+        setLoading(false); // Stop loading when the data is fetched
       }
     };
 
@@ -253,6 +263,26 @@ const Likes = ({ route, navigation }) => {
     dispatch(menuClickAction());
     navigation.navigate("LikedProfile", { profile: item, yourTeamProfile });
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#FF3156" />
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (!yourTeamProfile) {
+    return (
+      <View style={styles.noProfileContainer}>
+        <Text style={styles.noProfileText}>
+          No teams found. Please create a team first.
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <TextInput style={styles.searchBar} placeholder="Search..." />
@@ -326,6 +356,33 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     color: "#45474B",
     fontWeight: "400",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#454545",
+  },
+  noProfileContainer: {
+    flex: 1, // Full height of the screen
+    justifyContent: "center", // Center vertically
+    alignItems: "center", // Center horizontally
+    padding: 20, // Add some padding for spacing
+    backgroundColor: "#f9f9f9", // Light background color for better contrast
+  },
+  noProfileText: {
+    fontSize: 16, // Medium font size for readability
+    fontWeight: "bold", // Make the text bold
+    color: "#333", // Dark gray text color for better contrast
+    textAlign: "center", // Center the text
+    marginTop: 5, // Small space between the image and text
+    flexWrap: "wrap", // Ensure text wraps if it's too long
+    width: "100%", // Full width to prevent overflow in grid layout
   },
 });
 
