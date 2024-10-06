@@ -47,8 +47,8 @@ const HomeTab = ({ route, navigation }) => {
 
   //const navigation = useNavigation();
 
-  const { mobileNumber } = route.params;
-  //const mobileNumber = "6305148605";
+  //  const { mobileNumber } = route.params;
+  const mobileNumber = "6305148605";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
   //const [individualProfile, setIndividualProfile] = useState(null);

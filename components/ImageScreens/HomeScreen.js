@@ -155,6 +155,22 @@ const HomeScreen = ({ route, navigation }) => {
   };
 
   const toggleHeart = async () => {
+    if (!yourTeamProfile) {
+      Alert.alert(
+        "Your team is not created",
+        "Please create your team to proceed further.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              //navigation.navigate("Teams");
+            },
+          },
+        ],
+        { cancelable: true }
+      );
+    }
+
     setIsHeartActive(!isHeartActive);
     // updateCurrentIndex(
     //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
@@ -762,7 +778,7 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     paddingHorizontal: 10,
     alignItems: "center",
-    width: 170,
+    width: "100%",
     height: 49,
   },
   buttonText: {

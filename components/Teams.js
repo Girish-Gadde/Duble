@@ -515,7 +515,7 @@ const styles = StyleSheet.create({
     bottom: "2%",
     // left: 0,
     // right: 0,
-    marginTop: 40,
+    marginTop: 4,
     marginBottom: 3,
     //backgroundColor: "#ccc",
   },
@@ -530,7 +530,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: "center",
     width: "100%",
-    height: "100%",
+    height: 49,
   },
   buttonContainer2: {
     backgroundColor: "#FF3156",
@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: "center",
     width: "100%",
-    height: "100%",
+    height: 49,
   },
   buttonText: {
     color: "white",
@@ -562,7 +562,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 100,
   },
-
   headerProfile: {
     flexDirection: "column",
     width: 123,
@@ -799,7 +798,6 @@ const styles = StyleSheet.create({
     borderRadius: 25, // Makes the image round
     // Space between image and text
   },
-
   itemContainer: {
     flexDirection: "row", // Align items horizontally
     alignItems: "center", // Center items vertically

@@ -32,9 +32,9 @@ export default function App() {
   const [initialRoute, setInitialRoute] = useState(null);
   const [mobileNumber, setMobileNumber] = useState(null);
   useEffect(() => {
-    // await AsyncStorage.removeItem("selectedTeamIndex");
-    // await AsyncStorage.removeItem("mobileNumber");
     const checkMobileNumber = async () => {
+      // await AsyncStorage.removeItem("selectedTeamIndex");
+      // await AsyncStorage.removeItem("mobileNumber");
       try {
         const mobileNo = await AsyncStorage.getItem("mobileNumber");
         // Check if mobileNumber is not null and a string
