@@ -48,7 +48,7 @@ const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
 
   //  const { mobileNumber } = route.params;
-  const mobileNumber = "6305148605";
+  const mobileNumber = "6305148607";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
   //const [individualProfile, setIndividualProfile] = useState(null);
@@ -441,7 +441,11 @@ const HomeTab = ({ route, navigation }) => {
                 fontWeight: "bold",
               },
               headerTitle: () => (
-                <HeaderTitleWithIcon title="duble" iconName="menu" />
+                <HeaderTitleWithIcon
+                  title="duble"
+                  iconName="menu"
+                  navigateToTeamProfile={navigateToTeamProfile}
+                />
               ),
               // headerTitle: isEditVisible
               //   ? () => <HeaderTitleWithIcon title="duble" iconName="menu" />

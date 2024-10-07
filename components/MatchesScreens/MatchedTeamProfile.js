@@ -49,7 +49,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
 
   const toggleHeart = () => {
     setIsHeartActive(!isHeartActive);
-    navigation.navigate("LikedMatch", { profile });
+    navigation.navigate("Chat", { profile });
     // setCurrentProfileIndex(
     //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
     // );
@@ -102,7 +102,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
           text: "Cancel",
           onPress: () => {
             // If "Yes" is pressed, execute the toggleDislike function
-            navigation.goBack();
+            ///navigation.goBack();
           }, // Adds a "Cancel" button
         },
         {
@@ -169,27 +169,24 @@ const MatchedTeamProfile = ({ route, navigation }) => {
           </View>
           <Text style={styles.descriptionText}>"{profile.description}""</Text>
         </View>
-        {showIcons ? (
-          <View style={styles.actionContainer1}>
-            <TouchableOpacity
-              style={styles.actionButton1}
-              onPress={navigateBack}
+
+        <View style={styles.actionContainer1}>
+          <TouchableOpacity style={styles.actionButton1} onPress={toggleHeart}>
+            <View
+              style={{
+                backgroundColor: "#6420AA",
+                borderRadius: 999,
+                width: 60,
+                height: 60,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
-              <View
-                style={{
-                  backgroundColor: "#6420AA",
-                  borderRadius: 999,
-                  width: 60,
-                  height: 60,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <AntDesign name="close" size={30} color="white" />
-              </View>
-            </TouchableOpacity>
-          </View>
-        ) : null}
+              <AntDesign name="close" size={30} color="white" />
+            </View>
+          </TouchableOpacity>
+        </View>
+
         {profile.dynamicContent?.length > 0 ? (
           profile.dynamicContent.map((content, index) => (
             <View key={index} style={styles.viewContainer}>

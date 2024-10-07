@@ -106,6 +106,8 @@ const LikedProfile = ({ route, navigation }) => {
       if (!response.ok) {
         throw new Error("Failed to update dislike status");
       }
+      await refreshYourTeam();
+      navigation.goBack();
       //removeProfile();
     } catch (error) {
       console.error("Error updating dislike status:", error);

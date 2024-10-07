@@ -241,6 +241,7 @@ const HomeScreen = ({ route, navigation }) => {
         throw new Error("Failed to update dislike status");
       }
       removeProfile();
+      refreshYourTeam();
     } catch (error) {
       console.error("Error updating dislike status:", error);
     }
@@ -405,39 +406,35 @@ const HomeScreen = ({ route, navigation }) => {
           </Text>
         </View>
       </View>
-      {showIcons ? (
-        <View style={styles.actionContainer1}>
-          <TouchableOpacity
-            style={styles.actionButton1}
-            onPress={toggleDislike}
+
+      <View style={styles.actionContainer1}>
+        <TouchableOpacity style={styles.actionButton1} onPress={toggleDislike}>
+          <View
+            style={{
+              backgroundColor: "#6420AA",
+              borderRadius: 999,
+              width: 60,
+              height: 60,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            <View
-              style={{
-                backgroundColor: "#6420AA",
-                borderRadius: 999,
-                width: 60,
-                height: 60,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <AntDesign name="close" size={30} color="white" />
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton2} onPress={toggleHeart}>
-            <View
-              style={[
-                styles.heartButton,
-                {
-                  backgroundColor: isHeartActive ? "#FF3156" : "#FF3156",
-                },
-              ]}
-            >
-              <AntDesign name="heart" size={30} color="white" />
-            </View>
-          </TouchableOpacity>
-        </View>
-      ) : null}
+            <AntDesign name="close" size={30} color="white" />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.actionButton2} onPress={toggleHeart}>
+          <View
+            style={[
+              styles.heartButton,
+              {
+                backgroundColor: isHeartActive ? "#FF3156" : "#FF3156",
+              },
+            ]}
+          >
+            <AntDesign name="heart" size={30} color="white" />
+          </View>
+        </TouchableOpacity>
+      </View>
 
       {profiles[currentProfileIndex]?.dynamicContent?.length > 0 ? (
         profiles[currentProfileIndex].dynamicContent.map((content, index) => (

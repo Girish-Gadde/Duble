@@ -128,6 +128,9 @@ const ProfileDetails = ({ route, navigation }) => {
     "🔍 Our Story ",
   ];
 
+  const [addedPrompts, setAddedPrompts] = useState([]); // Track added prompts
+  const [availablePrompts, setAvailablePrompts] = useState(prompts); // Keep track of available prompts
+
   // const navigation = useNavigation();
   const handleAboutMeEdit = () => {
     setAboutMeEditing(true);
@@ -224,6 +227,7 @@ const ProfileDetails = ({ route, navigation }) => {
         // Update state with the new prompt
         console.log(data, "DATA");
         dispatch(setIndividualProfile(data.user));
+        setAddedPrompts([...addedPrompts, selectedPrompt]);
         // setPromptText(inputText);
         // setSelectedPrompt(selectedPrompt);
         setSelectedPrompt(null);
@@ -840,7 +844,10 @@ const ProfileDetails = ({ route, navigation }) => {
           {isDropdownVisible && (
             <View style={styles.dropdown}>
               {prompts
-                .filter((prompt) => prompt !== selectedPrompt)
+                .filter(
+                  (prompt) =>
+                    !addedPrompts.includes(prompt) && prompt !== selectedPrompt // Filter out both added prompts and selected prompt
+                )
                 .map((prompt) => (
                   <TouchableOpacity
                     key={prompt}
@@ -850,6 +857,9 @@ const ProfileDetails = ({ route, navigation }) => {
                     <Text style={styles.searchText2}>{prompt}</Text>
                   </TouchableOpacity>
                 ))}
+              {prompts.length === addedPrompts.length && (
+                <Text style={styles.noPromptText}>No prompts left to add</Text> // Show this message when all prompts are added
+              )}
             </View>
           )}
           <TextInput
