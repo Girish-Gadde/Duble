@@ -92,7 +92,7 @@ const profiles = [
 
 const Teams = ({ route, navigation }) => {
   // Pop up modal code
-  const { userId, refreshYourTeam } = route.params;
+  const { userId, refreshYourTeam, mobileNumber } = route.params;
   console.log("USER ID ---->", userId);
   const [isPopup1Visible, setPopup1Visible] = useState(false);
   const [isPopup2Visible, setPopup2Visible] = useState(false);
@@ -292,7 +292,7 @@ const Teams = ({ route, navigation }) => {
                         <Text style={styles.closeButtonText}>X</Text>
                       </TouchableOpacity>
                       <View>
-                        <CreateTeam />
+                        <CreateTeam mobileNumber={mobileNumber} />
                       </View>
                     </View>
                   </View>
@@ -313,7 +313,7 @@ const Teams = ({ route, navigation }) => {
                       >
                         <Text style={styles.closeButtonText}>X</Text>
                       </TouchableOpacity>
-                      <JoinTeam />
+                      <JoinTeam mobileNumber={mobileNumber} />
                     </View>
                   </View>
                 </Modal>

@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
-import axios from 'axios';
-import * as Sharing from 'expo-sharing';
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import axios from "axios";
+import * as Sharing from "expo-sharing";
+import { serverIP } from "@/config";
 
-export default function CreateTeam({ navigation }) {
-  const [teamName, setTeamName] = useState('');
-  const [inviteLink, setInviteLink] = useState('');
-  const [otp, setOtp] = useState(''); // State to store OTP
+export default function CreateTeam({ mobileNumber, navigation }) {
+  console.log("Mobilen No7 ---->", mobileNumber);
+  const [teamName, setTeamName] = useState("");
+  const [inviteLink, setInviteLink] = useState("");
+  const [otp, setOtp] = useState(""); // State to store OTP
+  const [teamateMobileNumber, setTeamateMobileNumber] = useState(null);
 
   // Hardcoded creator's name
-  const creatorName = '66d6ee9e92e63ffe7c44f9ef'; // Replace with the actual hardcoded name
+  const creatorName = "6305148607"; // Replace with the actual hardcoded name
 
   const generateOtp = () => {
     // Generate a random 6-digit OTP
@@ -19,12 +29,12 @@ export default function CreateTeam({ navigation }) {
 
   const createTeam = async () => {
     if (!teamName) {
-      Alert.alert('Error', 'Please provide the Team Name');
+      Alert.alert("Error", "Please provide the Team Name");
       return;
     }
 
     try {
-      const response = await axios.post('http://192.168.1.10:4002/team/create-team', {
+      const response = await axios.post(`${serverIP}/team/create-team`, {
         teamName,
         creatorName, // Use the hardcoded creator name
       });
@@ -32,16 +42,16 @@ export default function CreateTeam({ navigation }) {
       const { inviteLink } = response.data;
       setInviteLink(inviteLink);
       generateOtp(); // Generate OTP when the team is created
-      Alert.alert('Team Created', `Invite Link: ${inviteLink}`);
+      Alert.alert("Team Created", `Invite Link: ${inviteLink}`);
     } catch (error) {
-      console.error('Error creating team:', error);
-      Alert.alert('Error', 'Failed to create team');
+      console.error("Error creating team:", error);
+      Alert.alert("Error", "Failed to create team");
     }
   };
 
   const shareInvite = async () => {
     if (!inviteLink || !otp) {
-      Alert.alert('Error', 'Please generate an invite link and OTP first');
+      Alert.alert("Error", "Please generate an invite link and OTP first");
       return;
     }
 
@@ -51,15 +61,15 @@ export default function CreateTeam({ navigation }) {
     try {
       if (await Sharing.isAvailableAsync()) {
         await Sharing.shareAsync(inviteLink, {
-          title: 'Invite Link',
+          title: "Invite Link",
           message: message, // Include team name and OTP in the message
         });
-        console.log('Shared successfully');
+        console.log("Shared successfully");
       } else {
-        Alert.alert('Error', 'Sharing not available on this platform');
+        Alert.alert("Error", "Sharing not available on this platform");
       }
     } catch (error) {
-      console.error('Error sharing:', error);
+      console.error("Error sharing:", error);
     }
   };
 
@@ -74,6 +84,13 @@ export default function CreateTeam({ navigation }) {
         value={teamName}
         onChangeText={setTeamName}
       />
+      <Text style={styles.label}>Team mate's Mobile number</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter your team mate's mobile number"
+        value={teamateMobileNumber}
+        onChangeText={setTeamateMobileNumber}
+      />
 
       <TouchableOpacity style={styles.button} onPress={createTeam}>
         <Text style={styles.buttonText}>Create Team</Text>
@@ -87,23 +104,21 @@ export default function CreateTeam({ navigation }) {
           </TouchableOpacity>
         </View>
       ) : null}
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    padding: '10%',
-    marginTop:'5%',
-    
+    justifyContent: "center",
+    padding: "10%",
+    marginTop: "5%",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: '20%',
-    textAlign: 'center',
+    fontWeight: "bold",
+    marginBottom: "20%",
+    textAlign: "center",
   },
   label: {
     fontSize: 16,
@@ -111,26 +126,26 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     paddingHorizontal: 10,
     marginBottom: 20,
     borderRadius: 5,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   button: {
-    backgroundColor: '#FF3156',
+    backgroundColor: "#FF3156",
     padding: 15,
     borderRadius: 5,
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 10,
   },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
   inviteLink: {
-    textAlign: 'center',
+    textAlign: "center",
     marginVertical: 10,
     fontSize: 14,
   },

@@ -48,7 +48,7 @@ const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
 
   //  const { mobileNumber } = route.params;
-  const mobileNumber = "6305148607";
+  const mobileNumber = "6305148600";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
   //const [individualProfile, setIndividualProfile] = useState(null);
@@ -260,7 +260,12 @@ const HomeTab = ({ route, navigation }) => {
           <Tab.Screen
             name="Teams"
             component={Teams}
-            initialParams={{ navigation, userId, refreshYourTeam }}
+            initialParams={{
+              navigation,
+              userId,
+              refreshYourTeam,
+              mobileNumber,
+            }}
             options={{
               tabBarIcon: ({ focused, color, size }) => (
                 <View style={{ position: "relative" }}>
