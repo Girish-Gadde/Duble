@@ -11,7 +11,7 @@ import axios from "axios";
 import * as Sharing from "expo-sharing";
 import { serverIP } from "@/config";
 
-export default function CreateTeam({ mobileNumber, navigation }) {
+export default function CreateTeam({ mobileNumber, fetchTeams, navigation }) {
   console.log("Mobilen No7 ---->", mobileNumber);
   const [teamName, setTeamName] = useState("");
   const [inviteLink, setInviteLink] = useState("");
@@ -19,7 +19,7 @@ export default function CreateTeam({ mobileNumber, navigation }) {
   const [teamateMobileNumber, setTeamateMobileNumber] = useState(null);
 
   // Hardcoded creator's name
-  const creatorName = "6305148607"; // Replace with the actual hardcoded name
+  //const creatorName = "6305148607"; // Replace with the actual hardcoded name
 
   const generateOtp = () => {
     // Generate a random 6-digit OTP
@@ -28,21 +28,34 @@ export default function CreateTeam({ mobileNumber, navigation }) {
   };
 
   const createTeam = async () => {
-    if (!teamName) {
+    if (!teamateMobileNumber && !teamName) {
       Alert.alert("Error", "Please provide the Team Name");
       return;
     }
 
     try {
-      const response = await axios.post(`${serverIP}/team/create-team`, {
+      const response = await axios.post(`${serverIP}/auth/create-a-team`, {
         teamName,
-        creatorName, // Use the hardcoded creator name
+        mobileNumber,
+        teamateMobileNumber, // Use the hardcoded creator name
       });
 
-      const { inviteLink } = response.data;
-      setInviteLink(inviteLink);
-      generateOtp(); // Generate OTP when the team is created
-      Alert.alert("Team Created", `Invite Link: ${inviteLink}`);
+      console.log(response, "TEaM");
+      //await refreshYourTeam();
+      //const { inviteLink } = response.data;
+      //setInviteLink(inviteLink);
+      //generateOtp(); // Generate OTP when the team is created
+      Alert.alert("Success", response.data.message, [
+        {
+          text: "OK",
+          onPress: () => {
+            fetchTeams(); // Call refreshYourTeam
+            // navigation.goBack(); // Navigate back to the previous screen
+          },
+        },
+      ]);
+      setTeamName("");
+      setTeamateMobileNumber("");
     } catch (error) {
       console.error("Error creating team:", error);
       Alert.alert("Error", "Failed to create team");

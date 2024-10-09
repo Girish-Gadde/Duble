@@ -292,7 +292,10 @@ const Teams = ({ route, navigation }) => {
                         <Text style={styles.closeButtonText}>X</Text>
                       </TouchableOpacity>
                       <View>
-                        <CreateTeam mobileNumber={mobileNumber} />
+                        <CreateTeam
+                          mobileNumber={mobileNumber}
+                          fetchTeams={fetchTeams}
+                        />
                       </View>
                     </View>
                   </View>

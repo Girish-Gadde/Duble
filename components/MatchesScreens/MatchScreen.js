@@ -67,9 +67,7 @@ const MatchScreen = ({ route, navigation }) => {
       }
     };
 
-    if (matchIDs && matchIDs.length > 0) {
-      fetchTeams();
-    }
+    fetchTeams();
   }, [yourTeamProfile]);
 
   // **EFFECT TO FETCH CHAT ROOMS**

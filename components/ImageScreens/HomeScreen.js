@@ -256,7 +256,7 @@ const HomeScreen = ({ route, navigation }) => {
   };
 
   const renderCarouselItem = ({ item }) => {
-    console.log(item, "PATH");
+    //  console.log(item, "PATH");
     return <Image source={item} style={styles.image} resizeMode="cover" />;
   };
 
@@ -297,7 +297,7 @@ const HomeScreen = ({ route, navigation }) => {
       //  console.log(responseData, "RES0");
 
       if (responseData.length > 0) {
-        console.log(responseData, "FILTERED PROFILES FROM BACK-END");
+        // console.log(responseData, "FILTERED PROFILES FROM BACK-END");
         setCurrentProfileIndex(0); // Set to the first profile by default
         setProfiles(responseData); // Set the filtered profiles from the back-end
       }

@@ -48,7 +48,7 @@ const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
 
   //  const { mobileNumber } = route.params;
-  const mobileNumber = "6305148600";
+  const mobileNumber = "6305148607";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
   //const [individualProfile, setIndividualProfile] = useState(null);
@@ -121,7 +121,7 @@ const HomeTab = ({ route, navigation }) => {
 
       const responseData = await response.json();
       const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
-      console.log(savedIndex, "SAVED");
+      console.log(savedIndex, responseData, "SAVED-7");
       //setProfile(responseData[displayIndex.current]);
       dispatch(setProfile(responseData[savedIndex]));
     } catch (error) {
