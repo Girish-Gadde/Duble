@@ -326,7 +326,7 @@ const Teams = ({ route, navigation }) => {
                 {error ? (
                   <Text style={styles.errorText}>{error}</Text>
                 ) : (
-                  <View style={[styles.scrollContainer, { height: "53%" }]}>
+                  <View style={[styles.scrollContainer, { height: "44%" }]}>
                     <ScrollView
                       showsVerticalScrollIndicator={true}
                       contentContainerStyle={styles.scrollContent} // Keep contents aligned at top

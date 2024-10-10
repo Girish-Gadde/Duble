@@ -22,8 +22,11 @@ import ChatNavigation from "../components/ChatScreens/ChatNavigation";
 import Notification from "../components/Team/TeamUpRequest/NotificationScreen";
 import { setIndividualProfile, setProfile } from "./Redux/Actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { io } from "socket.io-client";
 
 const Tab = createBottomTabNavigator();
+
+const socket = io(serverIP);
 
 const HomeTab = ({ route, navigation }) => {
   const dispatch = useDispatch();
@@ -55,6 +58,13 @@ const HomeTab = ({ route, navigation }) => {
   //const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
   useEffect(() => {
+    socket.emit("register", mobileNumber);
+
+    // Listen for 'teamCreated' event
+    socket.on("teamCreated", (data) => {
+      console.log("TEAM-MSG");
+      Alert.alert(data.message);
+    });
     getUserId();
   }, []);
 
