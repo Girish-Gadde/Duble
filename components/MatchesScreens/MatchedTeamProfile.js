@@ -30,6 +30,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [images, setImages] = useState([]);
+  const [roomId, setRoomId] = useState(null);
   const menuClicked = useSelector((state) => state.menuClicked);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
   //const navigation = useNavigation();
@@ -39,6 +40,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
       uri: `${imagePath}`,
     }));
     setImages(formattedImages);
+    // createChatRoom();
   }, []);
 
   useEffect(() => {
@@ -47,9 +49,13 @@ const MatchedTeamProfile = ({ route, navigation }) => {
     }
   }, [menuClicked, navigation]);
 
-  const toggleHeart = () => {
-    setIsHeartActive(!isHeartActive);
-    navigation.navigate("Chat", { profile });
+  const handleNavigate = (roomId) => {
+    //createChatRoom();
+    // setIsHeartActive(!isHeartActive);
+    console.log(roomId, "ROOM-ID----->");
+    if (roomId) {
+      navigation.navigate("Chat", { profile, roomId });
+    }
     // setCurrentProfileIndex(
     //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
     // );
@@ -121,6 +127,53 @@ const MatchedTeamProfile = ({ route, navigation }) => {
     return <Image source={item} style={styles.image} resizeMode="cover" />;
   };
 
+  const createChatRoom = async () => {
+    const url = `${serverIP}/chat-room/api/match`;
+
+    const requestData = {
+      teamA: {
+        teamId: `${yourTeamProfile._id}`,
+        members: [`${yourTeamProfile.name1}`, `${yourTeamProfile.name2}`],
+      },
+      teamB: {
+        teamId: `${profile._id}`,
+        members: [`${profile.name1}`, `${profile.name2}`],
+      },
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        setRoomId(responseData.roomId);
+        let roomId1 = responseData.roomId;
+        console.log(responseData, "Response Data-1---->:", roomId1);
+
+        navigation.navigate("Chat", { profile, roomId: roomId1 });
+
+        // Alert.alert("Success", "Chat room created successfully", [
+        //   {
+        //     text: "OK",
+        //     onPress: () => handleNavigate(responseData.roomId),
+        //   },
+        // ]);
+      } else {
+        Alert.alert("Error", "Failed to create chat room");
+        console.log("Error:", response.status);
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while creating the chat room");
+      console.error("Error:", error);
+    }
+  };
+
   // const images = [
   //   profile.imageSource,
   //   profile.imageSource1,
@@ -171,7 +224,10 @@ const MatchedTeamProfile = ({ route, navigation }) => {
         </View>
 
         <View style={styles.actionContainer1}>
-          <TouchableOpacity style={styles.actionButton1} onPress={toggleHeart}>
+          <TouchableOpacity
+            style={styles.actionButton1}
+            onPress={createChatRoom}
+          >
             <View
               style={{
                 backgroundColor: "#6420AA",

@@ -73,18 +73,18 @@ const MatchScreen = ({ route, navigation }) => {
   // **EFFECT TO FETCH CHAT ROOMS**
   useEffect(() => {
     const fetchRooms = async () => {
-      if (!teamId) {
+      if (!yourTeamProfile._id) {
         console.warn("No team ID provided");
         alert("Please enter a team ID");
         setLoading(false);
         return;
       }
 
-      console.log("Fetching rooms for team ID:", teamId);
+      console.log("Fetching rooms for team ID:", yourTeamProfile._id);
 
       try {
         const response = await axios.get(
-          `${serverIP}/chat-room/api/rooms/${teamId}`
+          `${serverIP}/chat-room/api/rooms/${yourTeamProfile._id}`
         );
         console.log("Fetched rooms data:", response.data);
 
@@ -104,7 +104,7 @@ const MatchScreen = ({ route, navigation }) => {
     };
 
     fetchRooms();
-  }, [teamId]); // Fetch rooms when component mounts
+  }, [yourTeamProfile]); // Fetch rooms when component mounts
 
   // **NAVIGATION FUNCTIONS**
   const navigateToMatchedTeam = (profile) => {
