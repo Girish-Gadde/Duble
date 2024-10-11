@@ -20,9 +20,10 @@ import { UserContext } from "./Team Switch/UserContext";
 import { useUserContext } from "./Team Switch/UserContext";
 import ChatNavigation from "../components/ChatScreens/ChatNavigation";
 import Notification from "../components/Team/TeamUpRequest/NotificationScreen";
-import { setIndividualProfile, setProfile } from "./Redux/Actions";
+import { setIndividualProfile, setProfile, setTeams } from "./Redux/Actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { io } from "socket.io-client";
+import parseErrorStack from "react-native/Libraries/Core/Devtools/parseErrorStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,6 +34,7 @@ const HomeTab = ({ route, navigation }) => {
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   // const [selectedTeamIndex, setSelectedTeamIndex] = useState(null);
   console.log(selectedTeamIndex, "Indexxxxxxxxxxxxxxxx");
   //index = selectedTeamIndex
@@ -54,6 +56,7 @@ const HomeTab = ({ route, navigation }) => {
   const mobileNumber = "6305148607";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
+  const teams = useSelector((state) => state.teams);
   //const [individualProfile, setIndividualProfile] = useState(null);
   //const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
@@ -94,6 +97,7 @@ const HomeTab = ({ route, navigation }) => {
       await AsyncStorage.setItem("userId", responseData._id);
       // Once the user ID is fetched, get the associated teams
       getYourTeam(responseData._id);
+      fetchTeams(responseData._id);
       setLoading(false);
     } catch (error) {
       console.error("Failed to fetch user ID:", error);
@@ -157,7 +161,6 @@ const HomeTab = ({ route, navigation }) => {
 
       const responseData = await response.json();
       //setProfile(responseData[displayIndex.current]);
-      console.log(responseData, "INIDIVIDUAL_TEAM");
       const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
       console.log(savedIndex, "SAVED");
       setSelectedTeamIndex(savedIndex);
@@ -179,6 +182,32 @@ const HomeTab = ({ route, navigation }) => {
   const refreshYourInidividualTeam = async () => {
     const userId = await AsyncStorage.getItem("userId");
     await getYourIndividualTeam(userId);
+  };
+
+  const fetchTeams = async (userId) => {
+    try {
+      const response = await fetch(
+        `${serverIP}/auth/get-your-team?userId=${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch your team");
+      }
+
+      const responseData = await response.json();
+      console.log(responseData, "YOUR_TEAMS");
+      dispatch(setTeams(responseData));
+      setError("");
+    } catch (err) {
+      console.error("Error fetching team data:", err);
+      setError("Please create your teams.");
+    }
   };
 
   // async function getYourTeam() {
@@ -242,7 +271,7 @@ const HomeTab = ({ route, navigation }) => {
   return (
     <NavigationContainer independent={true}>
       <Tab.Navigator
-        initialRouteName="Teams"
+        initialRouteName="Home"
         screenOptions={{
           tabBarActiveTintColor: "#FF3156",
           tabBarInactiveTintColor: "black",
@@ -266,7 +295,7 @@ const HomeTab = ({ route, navigation }) => {
           ],
         }}
       >
-        {userId && (
+        {teams && (
           <Tab.Screen
             name="Teams"
             component={Teams}
@@ -275,6 +304,8 @@ const HomeTab = ({ route, navigation }) => {
               userId,
               refreshYourTeam,
               mobileNumber,
+              dispatch,
+              error,
             }}
             options={{
               tabBarIcon: ({ focused, color, size }) => (

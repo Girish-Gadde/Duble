@@ -5,6 +5,7 @@ import {
   MENU_CLICK,
   SET_INDIVIDUAL_PROFILE,
   SET_PROFILE,
+  SET_TEAMS,
   TOGGLE_EDIT_BUTTON_AND_BIO,
   TOGGLE_SHOW_ICONS,
 } from "./Actions";
@@ -15,6 +16,7 @@ const initialState = {
   menuClicked: true,
   individualProfile: null,
   profile: null,
+  teams: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -43,6 +45,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         profile: action.payload,
+      };
+    case SET_TEAMS:
+      return {
+        ...state,
+        teams: action.payload,
       };
     case CLEAR_PROFILES:
       return {

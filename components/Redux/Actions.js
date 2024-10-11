@@ -5,6 +5,7 @@ export const TOGGLE_SHOW_ICONS = "TOGGLE_SHOW_ICONS";
 export const MENU_CLICK = "MENU_CLICK";
 export const SET_INDIVIDUAL_PROFILE = "SET_INDIVIDUAL_PROFILE";
 export const SET_PROFILE = "SET_PROFILE";
+export const SET_TEAMS = "SET_TEAMS";
 export const CLEAR_PROFILES = "CLEAR_PROFILES";
 export const UPDATE_PROFILE = "UPDATE_PROFILE";
 
@@ -27,6 +28,11 @@ export const setIndividualProfile = (profile) => ({
 
 export const setProfile = (profile) => ({
   type: SET_PROFILE,
+  payload: profile,
+});
+
+export const setTeams = (profile) => ({
+  type: SET_TEAMS,
   payload: profile,
 });
 

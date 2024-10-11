@@ -22,6 +22,8 @@ import JoinTeam from "./Team/TeamCreateManually/JoinTeam";
 import { UserContext } from "./Team Switch/UserContext";
 import { serverIP } from "@/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector } from "react-redux";
+import { setTeams } from "./Redux/Actions";
 
 //const serverIP = "http://192.168.1.10:4002";
 //const userId = "66d6e8e49b889ada7a2c9fcf";
@@ -92,7 +94,8 @@ const profiles = [
 
 const Teams = ({ route, navigation }) => {
   // Pop up modal code
-  const { userId, refreshYourTeam, mobileNumber } = route.params;
+  const { userId, refreshYourTeam, mobileNumber, dispatch, error } =
+    route.params;
   console.log("USER ID ---->", userId);
   const [isPopup1Visible, setPopup1Visible] = useState(false);
   const [isPopup2Visible, setPopup2Visible] = useState(false);
@@ -116,13 +119,14 @@ const Teams = ({ route, navigation }) => {
   // Pop up modal code
 
   //Team Selection Code
-  const [teams, setTeams] = useState([]);
-  const [error, setError] = useState("");
+  //const [teams, setTeams] = useState([]);
+  const teams = useSelector((state) => state.teams);
+  //const [error, setError] = useState("");
   const [tempSelection, setTempSelection] = useState(null);
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
 
   useEffect(() => {
-    fetchTeams();
+    // fetchTeams();
   }, []);
 
   const fetchTeams = async () => {
@@ -142,7 +146,7 @@ const Teams = ({ route, navigation }) => {
       }
 
       const responseData = await response.json();
-      setTeams(responseData);
+      dispatch(setTeams(responseData));
       setError("");
     } catch (err) {
       console.error("Error fetching team data:", err);
