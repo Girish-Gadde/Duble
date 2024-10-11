@@ -164,11 +164,11 @@ const ChatScreen = ({ route }) => {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.innerContainer}>
-          <View style={styles.participantsContainer}>
+          {/* <View style={styles.participantsContainer}>
             <Text style={styles.participantsText}>
               Participants: {participants.join(", ")}
             </Text>
-          </View>
+          </View> */}
           <FlatList
             ref={flatListRef}
             data={messages}

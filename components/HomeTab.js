@@ -48,7 +48,7 @@ const HomeTab = ({ route, navigation }) => {
   //const navigation = useNavigation();
 
   // const { mobileNumber } = route.params;
-  const mobileNumber = "6305148605";
+  const mobileNumber = "6305148607";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
   //const [individualProfile, setIndividualProfile] = useState(null);
@@ -215,7 +215,7 @@ const HomeTab = ({ route, navigation }) => {
               display: "flex",
               paddingHorizontal: 12,
               paddingVertical: 20,
-              height: "13%",
+              height: "12%",
               justifyContent: "center",
               //marginBottom: 10,
             },

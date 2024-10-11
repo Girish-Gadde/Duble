@@ -170,7 +170,7 @@ const Teams = ({ route, navigation }) => {
 
   // Calculate 20% of screen height
   const screenHeight = Dimensions.get("window").height;
-  const scrollContainerHeight = screenHeight * 0.3;
+  const scrollContainerHeight = screenHeight * 0.30;
 
   //Team Selection Code
 
@@ -311,7 +311,7 @@ const Teams = ({ route, navigation }) => {
       {error ? (
         <Text style={styles.errorText}>{error}</Text>
       ) : (
-        <View style={[styles.scrollContainer, { height: '53%' }]}>
+        <View style={[styles.scrollContainer, { height: '44%' }]}>
           <ScrollView
              showsVerticalScrollIndicator={false}  
              showsHorizontalScrollIndicator={false}
@@ -504,8 +504,8 @@ const styles = StyleSheet.create({
     bottom: '2%',
     // left: 0,
     // right: 0,
-    marginTop: '10%',
-    marginBottom: '7.5%',
+    marginTop: 40,
+    marginBottom: 5,
     //backgroundColor: "#ccc",
   },
   actionButton: {
@@ -603,7 +603,8 @@ const styles = StyleSheet.create({
   profileView: {
     // backgroundColor: "#ccc",
     position: "absolute",
-    top: "20%",
+    //top: "15%",
+    marginVertical:'13%'
   },
   notifView: {
     flexDirection: "row",
@@ -796,5 +797,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+
 
 export default Teams;
