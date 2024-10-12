@@ -11,7 +11,12 @@ import axios from "axios";
 import * as Sharing from "expo-sharing";
 import { serverIP } from "@/config";
 
-export default function CreateTeam({ mobileNumber, fetchTeams, navigation }) {
+export default function CreateTeam({
+  mobileNumber,
+  fetchTeams,
+  userId,
+  navigation,
+}) {
   console.log("Mobilen No7 ---->", mobileNumber);
   const [teamName, setTeamName] = useState("");
   const [inviteLink, setInviteLink] = useState("");
@@ -49,6 +54,7 @@ export default function CreateTeam({ mobileNumber, fetchTeams, navigation }) {
         {
           text: "OK",
           onPress: () => {
+            console.log("DG");
             fetchTeams(); // Call refreshYourTeam
             // navigation.goBack(); // Navigate back to the previous screen
           },

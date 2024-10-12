@@ -67,7 +67,7 @@ const LikedProfile = ({ route, navigation }) => {
         console.log("Match updated successfully:", result);
         // Optionally, navigate to the "LikedMatch" screen with the profile data
         await refreshYourTeam();
-        navigation.navigate("LikedMatch", { profile });
+        navigation.navigate("LikedMatch", { profile, yourTeamProfile });
       } else {
         console.error("Failed to update match:", result.message);
       }

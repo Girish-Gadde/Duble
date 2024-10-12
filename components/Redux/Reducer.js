@@ -16,7 +16,7 @@ const initialState = {
   menuClicked: true,
   individualProfile: null,
   profile: null,
-  teams: null,
+  teams: [],
 };
 
 const reducer = (state = initialState, action) => {

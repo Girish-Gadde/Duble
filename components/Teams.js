@@ -94,7 +94,7 @@ const profiles = [
 
 const Teams = ({ route, navigation }) => {
   // Pop up modal code
-  const { userId, refreshYourTeam, mobileNumber, dispatch, error } =
+  const { userId, refreshYourTeam, mobileNumber, dispatch, fetchTeams, error } =
     route.params;
   console.log("USER ID ---->", userId);
   const [isPopup1Visible, setPopup1Visible] = useState(false);
@@ -129,7 +129,7 @@ const Teams = ({ route, navigation }) => {
     // fetchTeams();
   }, []);
 
-  const fetchTeams = async () => {
+  const fetchTeams1 = async () => {
     try {
       const response = await fetch(
         `${serverIP}/auth/get-your-team?userId=${userId}`,
@@ -146,6 +146,7 @@ const Teams = ({ route, navigation }) => {
       }
 
       const responseData = await response.json();
+      console.log(responseData, "REES");
       dispatch(setTeams(responseData));
       setError("");
     } catch (err) {
@@ -298,7 +299,8 @@ const Teams = ({ route, navigation }) => {
                       <View>
                         <CreateTeam
                           mobileNumber={mobileNumber}
-                          fetchTeams={fetchTeams}
+                          fetchTeams={fetchTeams1}
+                          userId={userId}
                         />
                       </View>
                     </View>
@@ -726,7 +728,6 @@ const styles = StyleSheet.create({
   noTeamsTextTeam: {
     fontSize: 16,
     textAlign: "center",
-    marginTop: 20,
     color: "#888",
   },
   errorText: {

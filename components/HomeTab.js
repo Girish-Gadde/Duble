@@ -30,6 +30,8 @@ const Tab = createBottomTabNavigator();
 const socket = io(serverIP);
 
 const HomeTab = ({ route, navigation }) => {
+  //const { mobileNumber } = route.params;
+  const mobileNumber = "6305148604";
   const dispatch = useDispatch();
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
   const [userId, setUserId] = useState(null);
@@ -52,8 +54,6 @@ const HomeTab = ({ route, navigation }) => {
 
   //const navigation = useNavigation();
 
-  //  const { mobileNumber } = route.params;
-  const mobileNumber = "6305148603";
   const individualProfile = useSelector((state) => state.individualProfile);
   const profile = useSelector((state) => state.profile);
   const teams = useSelector((state) => state.teams);
@@ -64,8 +64,10 @@ const HomeTab = ({ route, navigation }) => {
     socket.emit("register", mobileNumber);
 
     // Listen for 'teamCreated' event
-    socket.on("teamCreated", (data) => {
+    socket.on("teamCreated", async (data) => {
       console.log("TEAM-MSG");
+      const userId = await AsyncStorage.getItem("userId");
+      fetchTeams(userId);
       Alert.alert(data.message);
     });
     getUserId();
@@ -185,6 +187,7 @@ const HomeTab = ({ route, navigation }) => {
   };
 
   const fetchTeams = async (userId) => {
+    console.log(userId, "USEER---IDD");
     try {
       const response = await fetch(
         `${serverIP}/auth/get-your-team?userId=${userId}`,
@@ -295,55 +298,54 @@ const HomeTab = ({ route, navigation }) => {
           ],
         }}
       >
-        {teams && (
-          <Tab.Screen
-            name="Teams"
-            component={Teams}
-            initialParams={{
-              navigation,
-              userId,
-              refreshYourTeam,
-              mobileNumber,
-              dispatch,
-              error,
-            }}
-            options={{
-              tabBarIcon: ({ focused, color, size }) => (
-                <View style={{ position: "relative" }}>
-                  <Ionicons
-                    name={focused ? "shuffle" : "shuffle"}
-                    size={size}
-                    color={color}
-                  />
+        <Tab.Screen
+          name="Teams"
+          component={Teams}
+          initialParams={{
+            navigation,
+            userId,
+            refreshYourTeam,
+            mobileNumber,
+            dispatch,
+            fetchTeams,
+            error,
+          }}
+          options={{
+            tabBarIcon: ({ focused, color, size }) => (
+              <View style={{ position: "relative" }}>
+                <Ionicons
+                  name={focused ? "shuffle" : "shuffle"}
+                  size={size}
+                  color={color}
+                />
 
-                  <View
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      backgroundColor: "#FF3156",
-                      borderRadius: 6,
-                      width: 8,
-                      height: 8,
-                    }}
-                  />
-                </View>
-              ),
-              tabBarLabelStyle: {
-                marginBottom: 20, // Adjust as needed to decrease the gap
-                fontWeight: "bold",
-              },
-              headerTitle: () => (
-                <HeaderTitleWithIcon1
-                  title="duble"
-                  iconName="swap-horiz"
-                  iconName1="menu"
-                /> // Use the HeaderTitleWithIcon component
-              ),
-              headerTitleAlign: "center",
-            }}
-          />
-        )}
+                <View
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    backgroundColor: "#FF3156",
+                    borderRadius: 6,
+                    width: 8,
+                    height: 8,
+                  }}
+                />
+              </View>
+            ),
+            tabBarLabelStyle: {
+              marginBottom: 20, // Adjust as needed to decrease the gap
+              fontWeight: "bold",
+            },
+            headerTitle: () => (
+              <HeaderTitleWithIcon1
+                title="duble"
+                iconName="swap-horiz"
+                iconName1="menu"
+              /> // Use the HeaderTitleWithIcon component
+            ),
+            headerTitleAlign: "center",
+          }}
+        />
 
         <Tab.Screen
           name="Likes"

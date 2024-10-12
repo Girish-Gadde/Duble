@@ -50,10 +50,11 @@ const Matches = ({ route, navigation }) => {
               <HeaderTitleWithIcon2
                 title="duble"
                 iconName="swap-horiz"
-                iconName1="menu"
+                iconName1="arrow-back"
               />
             ),
             headerTitleAlign: "center",
+            headerLeft: () => null,
           }}
         />
         <Stack.Screen

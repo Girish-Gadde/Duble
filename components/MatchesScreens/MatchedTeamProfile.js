@@ -50,15 +50,10 @@ const MatchedTeamProfile = ({ route, navigation }) => {
   }, [menuClicked, navigation]);
 
   const handleNavigate = (roomId) => {
-    //createChatRoom();
-    // setIsHeartActive(!isHeartActive);
     console.log(roomId, "ROOM-ID----->");
     if (roomId) {
       navigation.navigate("Chat", { profile, roomId });
     }
-    // setCurrentProfileIndex(
-    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-    // );
   };
 
   const toggleDislike = async () => {
@@ -150,8 +145,9 @@ const MatchedTeamProfile = ({ route, navigation }) => {
         body: JSON.stringify(requestData),
       });
 
+      const responseData = await response.json();
+
       if (response.ok) {
-        const responseData = await response.json();
         setRoomId(responseData.roomId);
         let roomId1 = responseData.roomId;
         console.log(responseData, "Response Data-1---->:", roomId1);
@@ -165,7 +161,14 @@ const MatchedTeamProfile = ({ route, navigation }) => {
         //   },
         // ]);
       } else {
-        Alert.alert("Error", "Failed to create chat room");
+        setRoomId(responseData.roomId);
+        Alert.alert("Alert", "Chat room already exists for this team", [
+          {
+            text: "OK",
+            onPress: handleNavigate(responseData.roomId),
+          },
+        ]);
+
         console.log("Error:", response.status);
       }
     } catch (error) {

@@ -1,13 +1,77 @@
-import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { serverIP } from "@/config";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 
 const LikedMatch = ({ route, navigation }) => {
-  const { profile } = route.params;
+  const { profile, yourTeamProfile } = route.params;
+  const [roomId, setRoomId] = useState(null);
 
   const navigateBack = () => {
     navigation.goBack();
   };
+  const createChatRoom = async () => {
+    const url = `${serverIP}/chat-room/api/match`;
+
+    const requestData = {
+      teamA: {
+        teamId: `${yourTeamProfile._id}`,
+        members: [`${yourTeamProfile.name1}`, `${yourTeamProfile.name2}`],
+      },
+      teamB: {
+        teamId: `${profile._id}`,
+        members: [`${profile.name1}`, `${profile.name2}`],
+      },
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok) {
+        setRoomId(responseData.roomId);
+        let roomId1 = responseData.roomId;
+        console.log(responseData, "Response Data-1---->:", roomId1);
+
+        navigation.navigate("LikedChat", { profile, roomId: roomId1 });
+
+        // Alert.alert("Success", "Chat room created successfully", [
+        //   {
+        //     text: "OK",
+        //     onPress: () => handleNavigate(responseData.roomId),
+        //   },
+        // ]);
+      } else {
+        setRoomId(responseData.roomId);
+        Alert.alert("Alert", "Chat room already exists for this team", [
+          {
+            text: "OK",
+            onPress: handleNavigate(responseData.roomId),
+          },
+        ]);
+
+        console.log("Error:", response.status);
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while creating the chat room");
+      console.error("Error:", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.crossIcon} onPress={navigateBack}>
@@ -20,12 +84,7 @@ const LikedMatch = ({ route, navigation }) => {
       <Text style={styles.text}>
         You matched with {profile.name1} & {profile.name2}!
       </Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate("LikedChat", { profile });
-        }}
-      >
+      <TouchableOpacity style={styles.button} onPress={createChatRoom}>
         <Text style={styles.buttonText}>Start Chatting</Text>
       </TouchableOpacity>
     </View>
