@@ -18,11 +18,7 @@ const Matches = ({ route, navigation }) => {
     dispatch(menuClickAction());
     //navigation.navigate("LikeScreen1");
   };
-  const handleClick = () => {
-    console.log("EF");
-    dispatch(menuClickAction());
-    //navigation.navigate("LikeScreen1");
-  };
+
   return (
     <NavigationContainer independent="true">
       <Stack.Navigator initialRouteName="MatchScreen">
@@ -52,18 +48,18 @@ const Matches = ({ route, navigation }) => {
           name="Chat"
           component={ChatScreen}
           initialParams={{ navigation, refreshYourTeam }}
-          options={{
-            headerTitle: () => (
-              <HeaderTitleWithIcon2
-                title="duble"
-                iconName="swap-horiz"
-                iconName1="arrow-back"
-                handleMenuClick={handleMenuClick}
-              />
-            ),
-            headerTitleAlign: "center",
-            headerLeft: () => null,
-          }}
+          // options={{
+          //   headerTitle: () => (
+          //     <HeaderTitleWithIcon2
+          //       title="duble"
+          //       iconName="swap-horiz"
+          //       iconName1="arrow-back"
+          //       handleMenuClick={handleMenuClick}
+          //     />
+          //   ),
+          //   headerTitleAlign: "center",
+          //   headerLeft: () => null,
+          // }}
         />
         <Stack.Screen
           name="TeamProfile"

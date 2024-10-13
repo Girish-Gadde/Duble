@@ -24,10 +24,10 @@ const Login = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image
+      {/* <Image
         source={require("../assets/Duble-Image.jpg")}
         style={styles.headerImage}
-      />
+      /> */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[

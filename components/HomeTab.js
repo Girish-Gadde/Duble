@@ -30,8 +30,8 @@ const Tab = createBottomTabNavigator();
 const socket = io(serverIP);
 
 const HomeTab = ({ route, navigation }) => {
-  //const { mobileNumber } = route.params;
-  const mobileNumber = "6305148604";
+  const { mobileNumber } = route.params;
+  //const mobileNumber = "6305148604";
   const dispatch = useDispatch();
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
   const [userId, setUserId] = useState(null);
@@ -213,6 +213,7 @@ const HomeTab = ({ route, navigation }) => {
         "selectedTeamIndex",
         JSON.stringify(lastTeamIndex)
       );
+      dispatch(setProfile(responseData[lastTeamIndex]));
 
       setError("");
     } catch (err) {
