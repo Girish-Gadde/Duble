@@ -3,6 +3,7 @@
 import {
   CLEAR_PROFILES,
   MENU_CLICK,
+  MENU_CLICK1,
   SET_INDIVIDUAL_PROFILE,
   SET_PROFILE,
   SET_TEAMS,
@@ -14,6 +15,7 @@ const initialState = {
   showEditButtonAndBio: false,
   showIcons: true,
   menuClicked: true,
+  menuClicked1: true,
   individualProfile: null,
   profile: null,
   teams: [],
@@ -35,6 +37,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         menuClicked: !state.menuClicked, // Toggle the menuClicked state
+      };
+    case MENU_CLICK1:
+      return {
+        ...state,
+        menuClicked1: !state.menuClicked1, // Toggle the menuClicked1 state
       };
     case SET_INDIVIDUAL_PROFILE:
       return {

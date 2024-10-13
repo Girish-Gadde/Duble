@@ -206,6 +206,14 @@ const HomeTab = ({ route, navigation }) => {
       const responseData = await response.json();
       console.log(responseData, "YOUR_TEAMS");
       dispatch(setTeams(responseData));
+      // Set the index to the last added team (last in the list)
+      const lastTeamIndex = responseData.length - 1;
+      setSelectedTeamIndex(lastTeamIndex);
+      await AsyncStorage.setItem(
+        "selectedTeamIndex",
+        JSON.stringify(lastTeamIndex)
+      );
+
       setError("");
     } catch (err) {
       console.error("Error fetching team data:", err);

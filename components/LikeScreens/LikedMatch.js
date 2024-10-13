@@ -11,7 +11,7 @@ import {
 import Icon from "react-native-vector-icons/AntDesign";
 
 const LikedMatch = ({ route, navigation }) => {
-  const { profile, yourTeamProfile } = route.params;
+  const { profile, yourTeamProfile, refreshYourTeam } = route.params;
   const [roomId, setRoomId] = useState(null);
 
   const navigateBack = () => {
@@ -46,7 +46,7 @@ const LikedMatch = ({ route, navigation }) => {
         setRoomId(responseData.roomId);
         let roomId1 = responseData.roomId;
         console.log(responseData, "Response Data-1---->:", roomId1);
-
+        refreshYourTeam();
         navigation.navigate("LikedChat", { profile, roomId: roomId1 });
 
         // Alert.alert("Success", "Chat room created successfully", [

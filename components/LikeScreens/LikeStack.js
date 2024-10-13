@@ -59,7 +59,7 @@ export const LikeStack = ({ route, navigation }) => {
         <Stack.Screen
           name="LikedMatch"
           component={LikedMatch}
-          initialParams={{ navigation }}
+          initialParams={{ navigation, refreshYourTeam }}
           options={{ headerShown: false }}
         />
         <Stack.Screen

@@ -44,6 +44,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
+    console.log(menuClicked, "KO");
     if (menuClicked) {
       navigation.goBack(); // Go back when menuClicked is true
     }
@@ -52,7 +53,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
   const handleNavigate = (roomId) => {
     console.log(roomId, "ROOM-ID----->");
     if (roomId) {
-      navigation.navigate("Chat", { profile, roomId });
+      navigation.navigate("Chat", { profile, roomId, navigation });
     }
   };
 
@@ -151,7 +152,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
         setRoomId(responseData.roomId);
         let roomId1 = responseData.roomId;
         console.log(responseData, "Response Data-1---->:", roomId1);
-
+        refreshYourTeam();
         navigation.navigate("Chat", { profile, roomId: roomId1 });
 
         // Alert.alert("Success", "Chat room created successfully", [

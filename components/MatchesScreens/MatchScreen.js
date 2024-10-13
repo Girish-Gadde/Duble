@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import axios from "axios"; // Make sure to import axios if you're using it
 import { useSelector } from "react-redux";
-import { menuClickAction } from "../Redux/Actions";
+import { menuClickAction, menuClickAction1 } from "../Redux/Actions";
 // import { useUserContext } from 'path-to-your-context'; // Uncomment and adjust the path if you have a UserContext
 
 const MatchScreen = ({ route, navigation }) => {
@@ -115,13 +115,14 @@ const MatchScreen = ({ route, navigation }) => {
   const handleRoomPress = (room) => {
     const { roomId, teams } = room;
     // Find the team that matches the teamId and get its members
-    const team = teams.find((t) => t.teamId === teamId);
+    const team = teams.find((t) => t.teamId === yourTeamProfile._id);
     const memberName =
       team && team.members && team.members.length > 0
         ? team.members[0]
         : "No member";
     console.log("Room selected:", roomId);
     console.log("Members:", team ? team.members : "No members");
+    dispatch(menuClickAction());
     navigation.navigate("Chat", { roomId, username: memberName });
   };
 

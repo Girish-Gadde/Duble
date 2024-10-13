@@ -20,15 +20,22 @@ import { useSelector } from "react-redux";
 
 const socket = io(`${serverIP}/chat-room`);
 
-const ChatScreen = ({ route }) => {
+const ChatScreen = ({ route, navigation }) => {
   const { roomId } = route.params;
   const individualProfile = useSelector((state) => state.individualProfile);
+  const menuClicked = useSelector((state) => state.menuClicked);
   const [username, setUsername] = useState(individualProfile.name);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [participants, setParticipants] = useState([]);
   const flatListRef = useRef(null);
   //  const username = "Shivani";
+  console.log(menuClicked, "OO");
+  useEffect(() => {
+    if (menuClicked) {
+      navigation.goBack(); // Go back when menuClicked is true
+    }
+  }, [menuClicked, navigation]);
 
   useEffect(() => {
     console.log(`Joining room: ${roomId} as ${username}`);

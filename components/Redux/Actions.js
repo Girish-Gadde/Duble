@@ -3,6 +3,7 @@
 export const TOGGLE_EDIT_BUTTON_AND_BIO = "TOGGLE_EDIT_BUTTON_AND_BIO";
 export const TOGGLE_SHOW_ICONS = "TOGGLE_SHOW_ICONS";
 export const MENU_CLICK = "MENU_CLICK";
+export const MENU_CLICK1 = "MENU_CLICK1";
 export const SET_INDIVIDUAL_PROFILE = "SET_INDIVIDUAL_PROFILE";
 export const SET_PROFILE = "SET_PROFILE";
 export const SET_TEAMS = "SET_TEAMS";
@@ -19,6 +20,10 @@ export const toggleShowIcons = () => ({
 
 export const menuClickAction = () => ({
   type: MENU_CLICK,
+});
+
+export const menuClickAction1 = () => ({
+  type: MENU_CLICK1,
 });
 
 export const setIndividualProfile = (profile) => ({
