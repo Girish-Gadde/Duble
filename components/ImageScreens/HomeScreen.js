@@ -709,7 +709,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
     position: "absolute",
-    top: "30%",
+    top: "39%",
     marginBottom: "2%",
   },
   actionContainer2: {

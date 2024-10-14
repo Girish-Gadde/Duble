@@ -248,6 +248,7 @@ const Teams = ({ route, navigation }) => {
                 style={{
                   justifyContent: "center",
                   flexDirection: "row",
+                  width:'150%',
                   gap: 50,
                   marginBottom: "5%",
                 }}
@@ -334,7 +335,7 @@ const Teams = ({ route, navigation }) => {
                 ) : (
                   <View style={[styles.scrollContainer, { height: "44%" }]}>
                     <ScrollView
-                      showsVerticalScrollIndicator={true}
+                      showsVerticalScrollIndicator={false}
                       contentContainerStyle={styles.scrollContent} // Keep contents aligned at top
                     >
                       <View style={styles.itemsContainer}>
@@ -510,8 +511,8 @@ const styles = StyleSheet.create({
   createTeamBtnText: {
     fontSize: 16,
     color: "#FF3156",
-    marginLeft: 5,
-    textDecorationLine: "underline",
+    marginRight: 5,
+    //textDecorationLine: "underline",
     // position: "relative",
     // top: -120,
     // right: 20,
@@ -520,13 +521,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingRight: 20,
-    paddingLeft: '4%',
+    paddingLeft: '5%',
     paddingVertical:'4%',
     position: "relative",
     bottom: "6%",
     // left: 0,
     // right: 0,
-    marginTop: '67%',
+    marginTop: '65%',
     marginBottom: 3,
     backgroundColor: "white",
   },
