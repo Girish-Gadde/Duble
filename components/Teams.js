@@ -265,7 +265,7 @@ const Teams = ({ route, navigation }) => {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={openPopup2}>
+                {/* <TouchableOpacity onPress={openPopup2}>
                   <View style={{ flexDirection: "row" }}>
                     <Ionicons
                       name="add"
@@ -275,7 +275,7 @@ const Teams = ({ route, navigation }) => {
                     />
                     <Text style={styles.createTeamBtnText}>Join Team</Text>
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </TouchableOpacity>
 
               <View style={styles.containerPopup}>
@@ -446,7 +446,7 @@ const Teams = ({ route, navigation }) => {
                 onPress={handleConfirmSelection}
                 style={styles.actionButton}
               >
-                <View style={styles.buttonContainer2}>
+                <View style={styles.buttonContainer2} >
                   <Text style={styles.buttonText}>Switch</Text>
                 </View>
               </TouchableOpacity>
@@ -520,7 +520,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingRight: 20,
-    paddingLeft: 8,
+    paddingLeft: '4%',
     paddingVertical:'4%',
     position: "relative",
     bottom: "6%",
@@ -532,7 +532,7 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: '2%',
   },
   buttonContainer1: {
     backgroundColor: "#6420AA",
@@ -551,6 +551,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     height: 49,
+    
   },
   buttonText: {
     color: "white",
@@ -821,7 +822,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   popup: {
-    height: height * 0.6,
+    height: "62%",
     backgroundColor: "#fff",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
