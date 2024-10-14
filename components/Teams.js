@@ -199,7 +199,7 @@ const Teams = ({ route, navigation }) => {
 
   useEffect(() => {
     Animated.spring(translateY, {
-      toValue: height * 0.32,
+      toValue: height * 0.31,
       useNativeDriver: true,
     }).start();
   }, []);
@@ -430,8 +430,9 @@ const Teams = ({ route, navigation }) => {
               />
             </View>
           )}
-          {/* <Text style={styles.teamsText}>No teams yet :(</Text> */}
-          <View style={styles.actionContainer2}>
+        </Animated.View>
+        <View>
+        <View style={styles.actionContainer2}>
             <TouchableOpacity
               style={styles.actionButton}
               onPress={navigateToHomeScreen}
@@ -457,7 +458,7 @@ const Teams = ({ route, navigation }) => {
               </TouchableOpacity>
             )}
           </View>
-        </Animated.View>
+        </View>
       </View>
       {/* </Modal> */}
 
@@ -480,7 +481,7 @@ const styles = StyleSheet.create({
     // marginTop: 55,
   },
   animatedView: {
-    height: height * 0.45, // 40% of the screen height
+    height: "50%", // 40% of the screen height
     backgroundColor: "white",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -520,13 +521,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingRight: 20,
     paddingLeft: 8,
-    position: "absolute",
-    bottom: "2%",
+    paddingVertical:'4%',
+    position: "relative",
+    bottom: "6%",
     // left: 0,
     // right: 0,
-    marginTop: 4,
+    marginTop: '67%',
     marginBottom: 3,
-    //backgroundColor: "#ccc",
+    backgroundColor: "white",
   },
   actionButton: {
     flex: 1,
@@ -674,59 +676,102 @@ const styles = StyleSheet.create({
     color: "#0000FF",
   },
 
+  // new Scroll Styling
+
+  scrollContainer: {
+    marginBottom:'8%',
+    height: '60%', // Set the height to a fixed percentage (as per your requirement)
+    width: '100%', // Ensure full width of the screen
+  },
+  scrollContent: {
+    flexGrow: 1, // Allow the ScrollView's content to expand beyond the view height
+    
+  },
+  itemsContainer: {
+    padding: '3%', // Add padding to the items
+  },
+  teamItemWrapper: {
+    flexDirection: 'row', // Align items in a row
+    alignItems: 'center',
+    marginVertical: '5%',
+    gap:10
+  },
+  itemImage: {
+    width: '15%', // Set a fixed percentage width for the image
+    height: undefined, // Allow height to auto-adjust based on aspect ratio
+    aspectRatio: 1, // Keep the image square
+    marginRight: '5%', // Space between image and text
+  },
+  teamItemTeam: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1, // Make the team info take up remaining space
+  },
+  teamTextTeam: {
+    fontSize: 16,
+    color: '#000',
+  },
+  noTeamsTextTeam: {
+    fontSize: 16,
+    color: '#888',
+    textAlign: 'center',
+  },
+  // new Scroll Styling
+
   // Team Styling
   containerTeam: {
     flex: 1,
   },
-  scrollContainer: {
-    // Constrains the height to 20% of screen height
-    overflow: "hidden",
-  },
-  scrollContent: {
-    justifyContent: "flex-start", // Align items to the top
-  },
-  itemsContainer: {
-    paddingBottom: 20, // Add space at the bottom
-  },
+  // scrollContainer: {
+  //   // Constrains the height to 20% of screen height
+  //   //overflow: "scroll",
+  // },
+  // scrollContent: {
+  //   justifyContent: "flex-start", // Align items to the top
+  // },
+  // itemsContainer: {
+  //   //paddingBottom: '2\0%', // Add space at the bottom
+  // },
   headingTeam: {
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
   },
-  teamItemWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: "4%",
-  },
-  teamItemTeam: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 15,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 5 },
-    elevation: 3,
-    flex: 1,
-  },
-  itemImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
-  },
+  // teamItemWrapper: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   gap: 10,
+  //   marginBottom: "4%",
+  // },
+  // teamItemTeam: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   justifyContent: "space-between",
+  //   padding: '6%',
+  //   backgroundColor: "#fff",
+  //   borderRadius: 8,
+  //   shadowColor: "#000",
+  //   shadowOpacity: 0.1,
+  //   shadowRadius: 10,
+  //   shadowOffset: { width: 0, height: 5 },
+  //   elevation: 3,
+  //   flex: 1,
+  // },
+  // itemImage: {
+  //   width: 40,
+  //   height: 40,
+  //   borderRadius: 20,
+  //   marginRight: 10,
+  // },
   teamTextTeam: {
     fontSize: 18,
     fontWeight: "500",
     flexShrink: 1,
   },
   noTeamsTextTeam: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: "center",
     color: "#888",
   },

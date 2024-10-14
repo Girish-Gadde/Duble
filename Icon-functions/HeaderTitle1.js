@@ -24,7 +24,7 @@ const HeaderTitleWithIcon1 = ({ title, iconName, iconName1 }) => {
       <TouchableOpacity
         style={{
           position: "absolute",
-          right: 200,
+          right: "190%",
           top: -1,
         }}
         // onPress={handleMenuClick}
@@ -58,7 +58,8 @@ const HeaderTitleWithIcon1 = ({ title, iconName, iconName1 }) => {
       <TouchableOpacity
         style={{
           position: "absolute",
-          right: -125,
+          //right: -120,
+          right:'-120%'
           //top: -1,
         }}
         onPress={handleMenuClick}

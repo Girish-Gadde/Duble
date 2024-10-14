@@ -704,13 +704,13 @@ const styles = StyleSheet.create({
     color: "#EDEEF1",
     marginBottom: 20,
   },
-  actionContainer1: {
+ actionContainer1: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 20,
     position: "absolute",
-    top: 565,
-    marginBottom: 20,
+    top: "30%",
+    marginBottom: '2%',
   },
   actionContainer2: {
     flexDirection: "row",
