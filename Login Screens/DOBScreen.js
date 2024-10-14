@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
   View,
@@ -12,7 +11,6 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 const DOBScreen = ({ route, navigation }) => {
-  //const navigation = useNavigation();
   const { name, mobileNumber } = route.params;
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -20,16 +18,20 @@ const DOBScreen = ({ route, navigation }) => {
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
+    //setShow(false); // Close the picker after a date is selected
     setDate(currentDate);
-    setDob(currentDate.toLocaleDateString());
+    setDob(currentDate.toLocaleDateString()); // Format date to display in the input
   };
 
   const showDatepicker = () => {
-    setShow(true);
+    setShow(true); // Open the date picker when tapped
   };
 
   const navigateToLocationScreen = () => {
+    if (!dob) {
+      alert("Please select your date of birth.");
+      return;
+    }
     navigation.navigate("LocationScreen", {
       name,
       dob,
@@ -37,32 +39,39 @@ const DOBScreen = ({ route, navigation }) => {
       navigation,
     });
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Set Up</Text>
       <View style={styles.textLogin}>
-        <Text style={styles.subtitle}>Hi {name} When’s your birthday?</Text>
+        <Text style={styles.subtitle}>Hi {name}, When’s your birthday?</Text>
+
+        {/* Make sure TouchableOpacity triggers the date picker */}
         <TouchableOpacity onPress={showDatepicker}>
           <TextInput
             style={styles.input}
             placeholder="Select date of birth"
             value={dob}
-            editable={false}
+            editable={false} // Disable direct input
+            pointerEvents="none" // Disable interaction on the input field itself
           />
         </TouchableOpacity>
+
         <Text style={styles.subtitle1}>This can’t be changed later</Text>
       </View>
 
+      {/* Show the date picker when 'show' is true */}
       {show && (
         <DateTimePicker
           testID="dateTimePicker"
           value={date}
           mode="date"
-          display="default"
+          display={Platform.OS === "ios" ? "spinner" : "default"}
           onChange={onChange}
-          maximumDate={new Date()}
+          maximumDate={new Date()} // Prevent selecting future dates
         />
       )}
+
       <TouchableOpacity
         style={styles.button}
         onPress={navigateToLocationScreen}
@@ -94,7 +103,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 45,
     alignSelf: "center",
-    // marginLeft: 20,
     fontWeight: "400",
     lineHeight: 23.96,
     color: "#121212",
@@ -103,14 +111,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 10,
     alignSelf: "center",
-    // marginLeft: 20,
     fontWeight: "400",
     lineHeight: 14.38,
     color: "#121212",
   },
   input: {
-    width: 356,
-    height: 49,
+    width: 340,
+    height: 40,
     borderWidth: 2,
     borderColor: "#6420AA",
     marginBottom: 10,
@@ -120,8 +127,8 @@ const styles = StyleSheet.create({
     color: "black",
   },
   button: {
-    width: 356,
-    height: 49,
+    width: 340,
+    height: 40,
     backgroundColor: "#6420AA",
     justifyContent: "center",
     alignItems: "center",

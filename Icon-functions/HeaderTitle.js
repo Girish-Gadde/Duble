@@ -21,13 +21,14 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
         flexDirection: "row",
         alignItems: "center",
         position: "relative",
+        width:'100%'
       }}
     >
       <TouchableOpacity
         style={{
           position: "absolute",
-          left: -128,
-          top: -3,
+          left: "-120%",
+          top: "-10%",
         }}
         onPress={navigateToTeamProfile}
       >
@@ -81,7 +82,7 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
       <TouchableOpacity
         style={{
           position: "absolute",
-          right: -120,
+          right: "-120%",
           //top: -1,
         }}
         onPress={handleMenuClick}

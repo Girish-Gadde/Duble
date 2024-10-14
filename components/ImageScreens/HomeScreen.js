@@ -709,8 +709,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
     position: "absolute",
-    top: 565,
-    marginBottom: 20,
+    top: "35%",
+    marginBottom: '2%',
   },
   actionContainer2: {
     flexDirection: "row",
