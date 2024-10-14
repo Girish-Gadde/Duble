@@ -457,7 +457,7 @@ const HomeScreen = ({ route, navigation }) => {
       <View style={styles.singleBioContainer}>
         <Image
           source={{
-            uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1728022750487_7d2a7b91-1007-4559-844d-bc6fc64ea47d.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20241004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241004T061911Z&X-Amz-Expires=360000&X-Amz-Signature=ff5168ca49652da53b47378261f9b83829671083f3dc663e865fdffc9e1b44ce&X-Amz-SignedHeaders=host&x-id=GetObject`,
+            uri: profiles[currentProfileIndex]?.selectedImages[0],
           }}
           style={styles.singleImage}
         />
@@ -528,7 +528,7 @@ const HomeScreen = ({ route, navigation }) => {
       <View style={styles.singleBioContainer}>
         <Image
           source={{
-            uri: `https://bucketeer-8cda0928-3329-49d6-98ee-5d948af91bad.s3.us-east-1.amazonaws.com/1728022750118_0052b1e3-c392-4d48-bc7e-56196aa290c4.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVZH4SBSYQDJYBH4J%2F20241004%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241004T061911Z&X-Amz-Expires=360000&X-Amz-Signature=01bbd47b27c4dbe8b89000a7e403df851f90906a106b31d3cfc95de4aabdf4ea&X-Amz-SignedHeaders=host&x-id=GetObject`,
+            uri: profiles[currentProfileIndex]?.selectedImages[1],
           }}
           style={styles.singleImage}
         />
@@ -704,13 +704,13 @@ const styles = StyleSheet.create({
     color: "#EDEEF1",
     marginBottom: 20,
   },
- actionContainer1: {
+  actionContainer1: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 20,
     position: "absolute",
     top: "30%",
-    marginBottom: '2%',
+    marginBottom: "2%",
   },
   actionContainer2: {
     flexDirection: "row",
