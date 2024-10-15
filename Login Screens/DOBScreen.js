@@ -16,7 +16,7 @@ const DOBScreen = ({ route, navigation }) => {
   const { name, mobileNumber } = route.params;
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
-  const [dob, setDob] = useState("");
+  const [dob, setDob] = useState(null);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -30,12 +30,16 @@ const DOBScreen = ({ route, navigation }) => {
   };
 
   const navigateToLocationScreen = () => {
-    navigation.navigate("LocationScreen", {
-      name,
-      dob,
-      mobileNumber,
-      navigation,
-    });
+    if (dob) {
+      navigation.navigate("LocationScreen", {
+        name,
+        dob,
+        mobileNumber,
+        navigation,
+      });
+    } else {
+      alert("Please select your date of birth");
+    }
   };
   return (
     <SafeAreaView style={styles.container}>

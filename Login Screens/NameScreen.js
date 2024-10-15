@@ -14,7 +14,11 @@ const NameScreen = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
   const [name, setName] = useState(null);
   const navigateToDOBScreen = () => {
-    navigation.navigate("DOBScreen", { name, mobileNumber, navigation });
+    if (name) {
+      navigation.navigate("DOBScreen", { name, mobileNumber, navigation });
+    } else {
+      alert("Please enter your name");
+    }
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -43,22 +47,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    paddingTop: '15%',
+    paddingTop: "15%",
     backgroundColor: "#fff",
   },
   title: {
     fontSize: 45,
     lineHeight: 53.91,
     fontWeight: "700",
-    marginTop: '5%',
-    marginBottom: '15%',
+    marginTop: "5%",
+    marginBottom: "15%",
   },
   textLogin: {
-    marginBottom: '5%',
+    marginBottom: "5%",
   },
   subtitle: {
     fontSize: 20,
-    marginBottom: '12%',
+    marginBottom: "12%",
     alignSelf: "center",
     // marginLeft: 20,
     fontWeight: "400",

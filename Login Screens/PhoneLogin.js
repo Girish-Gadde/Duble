@@ -23,7 +23,6 @@ const PhoneLogin = ({ navigation }) => {
   };
 
   const sendPhoneNumberForOtp = async () => {
-    navigation.navigate("OTPScreen", { mobileNumber, navigation });
     try {
       const response = await fetch(`${serverIP}/auth/sendOtp`, {
         method: "POST",
@@ -38,10 +37,12 @@ const PhoneLogin = ({ navigation }) => {
       });
 
       if (!response.ok) {
+        alert("Please enter valid mobile number");
         throw new Error(`Error: ${response.status}`);
       }
 
       const data = await response.json();
+      navigation.navigate("OTPScreen", { mobileNumber, navigation });
       console.log("Response: ", data);
     } catch (error) {
       console.error("Error: ", error);
@@ -76,24 +77,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    paddingTop: '15%',
+    paddingTop: "15%",
     backgroundColor: "#fff",
   },
   title: {
     fontSize: 45,
     lineHeight: 53.91,
     fontWeight: "700",
-    marginTop: '10%',
-    marginBottom: '15%',
+    marginTop: "10%",
+    marginBottom: "15%",
   },
   textLogin: {
-    marginBottom: '5%',
+    marginBottom: "5%",
   },
   subtitle: {
     fontSize: 14,
     marginBottom: 7,
     alignSelf: "flex-start",
-    marginLeft: '5%',
+    marginLeft: "5%",
     fontWeight: "400",
     lineHeight: 16.77,
   },
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 2,
     borderColor: "#6420AA",
-    marginBottom: '2%',
+    marginBottom: "2%",
     paddingHorizontal: 20,
     backgroundColor: "#fff",
     borderRadius: 35,
