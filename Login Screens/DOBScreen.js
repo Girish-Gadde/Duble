@@ -31,7 +31,7 @@ const DOBScreen = ({ route, navigation }) => {
 
   const navigateToLocationScreen = () => {
     if (dob) {
-      navigation.navigate("LocationScreen", {
+      navigation.navigate("GenderScreen", {
         name,
         dob,
         mobileNumber,

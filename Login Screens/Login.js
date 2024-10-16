@@ -86,22 +86,22 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     //alignContent:'center',
     alignItems: "center",
-    padding: '5%',
+    padding: "5%",
   },
   buttonContainer: {
-    marginVertical: '4%', // Spacing between the button container and other elements
-    width: '100%', // Container takes up 90% of the screen width
-    height:'16%'
+    marginVertical: "4%", // Spacing between the button container and other elements
+    width: "100%", // Container takes up 90% of the screen width
+    height: "16%",
   },
   button: {
     flexDirection: "row", // Row layout to align icon/image and text side by side
     alignItems: "center", // Vertically centers icon/image and text
     justifyContent: "center", // Centers both icon/image and text horizontally
-    paddingVertical: '3%', // Vertical padding for the button
-    marginVertical: '2%', // Margin between buttons
+    paddingVertical: "3%", // Vertical padding for the button
+    marginVertical: "2%", // Margin between buttons
     borderRadius: 33, // Rounded corners
-    width: '100%', // Button width takes up the full width of the container (90% of screen width)
-    height: '40%', // Button height is set to 10% of the screen height
+    width: "100%", // Button width takes up the full width of the container (90% of screen width)
+    height: "40%", // Button height is set to 10% of the screen height
   },
   activeButton: {
     backgroundColor: "#6420AA", // Background color for the active button
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     borderColor: "#6420AA", // Border color for inactive button
   },
   icon: {
-    marginRight: '4%', // Space between the icon and text
+    marginRight: "4%", // Space between the icon and text
   },
   buttonText: {
     fontSize: 18, // Text size
@@ -120,10 +120,10 @@ const styles = StyleSheet.create({
     textAlign: "center", // Text alignment in the center
   },
   image: {
-    width: '8%', // Set image width to 8% of the screen width
+    width: "8%", // Set image width to 8% of the screen width
     height: undefined, // Allows the aspect ratio to be maintained
     aspectRatio: 1, // Ensures the image remains square
-    marginRight: '4%', // Space between the image and text
+    marginRight: "4%", // Space between the image and text
   },
   headerImage: {
     width: "112%",

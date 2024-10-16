@@ -10,7 +10,7 @@ import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 
 const LocationScreen = ({ route, navigation }) => {
-  const { name, dob, mobileNumber } = route.params;
+  const { name, dob, gender, occupation, mobileNumber } = route.params;
   const [location, setLocation] = useState(null);
   const [mapRegion, setMapRegion] = useState(null);
   const [address, setAddress] = useState(null);
@@ -56,6 +56,8 @@ const LocationScreen = ({ route, navigation }) => {
     navigation.navigate("PictureScreen", {
       name,
       dob,
+      gender,
+      occupation,
       mobileNumber,
       location,
       address,

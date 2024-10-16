@@ -75,7 +75,15 @@ const OTPScreen = ({ route, navigation }) => {
       }
 
       const data = await response.json();
-      navigation.navigate("VerifyScreen", { otp, mobileNumber, navigation });
+
+      if (data.Details === "Navigate to Account Details") {
+        navigation.navigate("VerifyScreen", { otp, mobileNumber, navigation });
+      } else if (data.Details === "Navigate to Home page") {
+        navigation.navigate("HomeTab", { mobileNumber });
+      } else {
+        alert("Unexpected response. Please try again.");
+      }
+
       console.log("Response: ", data);
     } catch (error) {
       console.error("Error: ", error);

@@ -14,7 +14,9 @@ import PhoneLogin from "./Login Screens/PhoneLogin";
 import OTPScreen from "./Login Screens/OTPScreen";
 import VerifyScreen from "./Login Screens/VerifyScreen";
 import NameScreen from "./Login Screens/NameScreen";
+import GenderScreen from "./Login Screens/GenderScreen";
 import DOBScreen from "./Login Screens/DOBScreen";
+import JobScreen from "./Login Screens/JobScreen";
 import LocationScreen from "./Login Screens/LocationScreen";
 import PictureScreen from "./Login Screens/PictureScreen";
 import SetUpScreen from "./Login Screens/SetUpScreen";
@@ -33,8 +35,8 @@ export default function App() {
   const [mobileNumber, setMobileNumber] = useState(null);
   useEffect(() => {
     const checkMobileNumber = async () => {
-      //await AsyncStorage.removeItem("selectedTeamIndex");
-      //await AsyncStorage.removeItem("mobileNumber");
+      // await AsyncStorage.removeItem("selectedTeamIndex");
+      // await AsyncStorage.removeItem("mobileNumber");
       try {
         const mobileNo = await AsyncStorage.getItem("mobileNumber");
         // Check if mobileNumber is not null and a string
@@ -111,8 +113,18 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="GenderScreen"
+              component={GenderScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="DOBScreen"
               component={DOBScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="JobScreen"
+              component={JobScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

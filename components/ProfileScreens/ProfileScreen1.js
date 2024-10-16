@@ -60,6 +60,30 @@ const profiles = [
   // Add more profiles as needed
 ];
 
+const calculateAge = (dob) => {
+  // Check if dob is in "DD/MM/YYYY" format
+  const [day, month, year] = dob.split("/");
+  // Create a new Date object using the year, month (0-indexed), and day
+  const birthDate = new Date(year, month - 1, day); // Month is 0-indexed in JavaScript
+
+  if (isNaN(birthDate.getTime())) {
+    throw new Error(`Invalid date format for dob: ${dob}`);
+  }
+
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+
+  // Adjust age if the birthday hasn't occurred yet this year
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age--;
+  }
+  return age;
+};
+
 const ProfileScreen1 = ({ route, navigation }) => {
   const { profile } = route.params;
 
@@ -89,6 +113,14 @@ const ProfileScreen1 = ({ route, navigation }) => {
   const goToProfileDetails = () => {
     navigation.navigate("ProfileDetails", { profile, navigation });
   };
+
+  // Calculate age based on profile.dob
+  let age = 0;
+  try {
+    age = calculateAge(profile.dob); // Calculate age from DOB
+  } catch (error) {
+    console.error(error);
+  }
 
   return (
     <ScrollView
@@ -123,7 +155,7 @@ const ProfileScreen1 = ({ route, navigation }) => {
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
             <Text style={styles.nameText}>{profile.name},</Text>
-            <Text style={styles.ageText}>{profile.dob}</Text>
+            <Text style={styles.ageText}>{age}</Text>
           </View>
           <View style={styles.locationContainer}>
             <MaterialIcons
