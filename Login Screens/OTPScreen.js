@@ -127,6 +127,10 @@ const OTPScreen = ({ route, navigation }) => {
       <TouchableOpacity onPress={sendPhoneNumberForOtp}>
         <Text style={styles.sendText}>Send again</Text>
       </TouchableOpacity>
+      <Text style={styles.loginText}>
+        You will get a call from Duble to verify your number and this helps us
+        create safe community for you
+      </Text>
     </SafeAreaView>
   );
 };
@@ -192,6 +196,15 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  loginText: {
+    fontWeight: "400",
+    fontSize: 15,
+    textAlign: "center",
+    width: "85%",
+    lineHeight: 18.15,
+    paddingVertical: 7,
+    marginBottom: 17,
   },
 });
 

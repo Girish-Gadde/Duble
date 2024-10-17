@@ -17,7 +17,7 @@ const DubleStart = () => {
   });
   return (
     <View style={styles.container}>
-      <Image source={require("../assets/Vector.jpg")} style={styles.image} />
+      <Image source={require("../assets/Vector.png")} style={styles.image} />
     </View>
   );
 };

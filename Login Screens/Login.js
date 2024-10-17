@@ -24,10 +24,15 @@ const Login = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <Image
-        source={require("../assets/Duble-Image.jpg")}
+      <Text style={styles.headerText}>
+        Team up with your best friend. Meet new pairs. Have real fun!
+      </Text>
+      <Image
+        source={{
+          uri: `https://s3-alpha-sig.figma.com/img/7889/0d42/087188931516e3df55030265bce6448a?Expires=1730073600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=i9OX0hcPfjiUZGoOVAA4wSgDg08l-KJT5UztBW4T~c-RRJOQY54YIvjHimu~WsOoS3pgywGn6JUpyVitAnbKvfOGrcBksJgOTETQ6Fr3ttwkrHplb-syKgbBHOMVBfa5oVK0~A4fC0g55kXBPjGD4DKvSfzVgfO7phmir7cy2cyHNBjsVxnFCkrZMCbIkLLmwnKdU9k-O1GJIT9gugPSLVPhXYWciRS38CupIj3XecUHZZWldPvLFrimoEdp-xt18b1aV22jJsAoraB90rliIKPtDZ3XHtCfEBrdFOWAkbCH5CNb178vxtrEYM32SIBziB4hCGJjz57fbnSnIjX6RQ__`,
+        }}
         style={styles.headerImage}
-      /> */}
+      />
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[
@@ -126,9 +131,18 @@ const styles = StyleSheet.create({
     marginRight: "4%", // Space between the image and text
   },
   headerImage: {
-    width: "112%",
-    height: "80%",
+    width: "104%",
+    height: "60%",
     marginBottom: 20,
+  },
+  headerText: {
+    fontWeight: "700",
+    fontSize: 20,
+    textAlign: "center",
+    width: "85%",
+    lineHeight: 24.2,
+    paddingVertical: 10,
+    marginVertical: 12,
   },
 });
 

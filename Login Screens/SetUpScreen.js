@@ -31,10 +31,16 @@ const SetUpScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../assets/Star1.jpg")} // Replace with your image path
-        style={styles.image}
-      />
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("../assets/Star1.jpg")} // Replace with your image path
+          style={styles.image}
+        />
+        <Image
+          source={require("../assets/checkmark.png")} // Replace with your image path
+          style={styles.checkmark}
+        />
+      </View>
       <Text style={styles.verifiedText}>You’re all set up!</Text>
     </View>
   );
@@ -56,6 +62,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#121212",
+  },
+  imageContainer: {
+    position: "relative", // Needed for overlay positioning
+  },
+  checkmark: {
+    position: "absolute",
+    width: 18,
+    height: 12.86,
+    bottom: 28, // Position the checkmark at the bottom-right
+    right: 16,
   },
 });
 

@@ -55,6 +55,10 @@ const PhoneLogin = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Log in</Text>
+      <Text style={styles.loginText}>
+        Enter your phone number to team up with your best friend and meet new
+        people!
+      </Text>
       <View style={styles.textLogin}>
         <Text style={styles.subtitle}>Enter phone number</Text>
         <TextInput
@@ -69,6 +73,9 @@ const PhoneLogin = ({ navigation }) => {
       <TouchableOpacity style={styles.button} onPress={sendPhoneNumberForOtp}>
         <Text style={styles.buttonText}>Verify</Text>
       </TouchableOpacity>
+      <Text style={styles.messageText}>
+        Your number is safe with us and is stored in encrypted form
+      </Text>
     </SafeAreaView>
   );
 };
@@ -85,7 +92,7 @@ const styles = StyleSheet.create({
     lineHeight: 53.91,
     fontWeight: "700",
     marginTop: "10%",
-    marginBottom: "15%",
+    marginBottom: "2%",
   },
   textLogin: {
     marginBottom: "5%",
@@ -121,6 +128,24 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  loginText: {
+    fontWeight: "400",
+    fontSize: 15,
+    textAlign: "center",
+    width: "80%",
+    lineHeight: 18.15,
+    paddingVertical: 7,
+    marginBottom: 17,
+  },
+  messageText: {
+    fontWeight: "400",
+    fontSize: 12,
+    textAlign: "center",
+    width: "84%",
+    lineHeight: 14.52,
+    paddingVertical: 10,
+    marginVertical: 15,
   },
 });
 

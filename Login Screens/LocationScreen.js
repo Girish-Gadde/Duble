@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  Image,
 } from "react-native";
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
@@ -81,6 +82,12 @@ const LocationScreen = ({ route, navigation }) => {
           </View>
         </View>
       )}
+      {!location && (
+        <Image
+          source={require("../assets/location.png")} // Replace with your image path
+          style={styles.locationImage}
+        />
+      )}
 
       {/* {mapRegion && (
         <MapView
@@ -123,7 +130,7 @@ const styles = StyleSheet.create({
     lineHeight: 53.91,
     fontWeight: "700",
     marginTop: 20,
-    marginBottom: 45,
+    marginBottom: 35,
   },
   textLogin: {
     marginBottom: 20,
@@ -171,6 +178,12 @@ const styles = StyleSheet.create({
   setUpView: {
     flex: 0.6,
     alignItems: "center",
+  },
+  locationImage: {
+    width: "90%",
+    height: 380,
+    paddingVertical: 10,
+    marginVertical: 20,
   },
 });
 
