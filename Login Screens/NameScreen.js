@@ -13,11 +13,12 @@ const NameScreen = ({ route, navigation }) => {
   // const navigation = useNavigation();
   const { mobileNumber } = route.params;
   const [name, setName] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigateToDOBScreen = () => {
     if (name) {
       navigation.navigate("DOBScreen", { name, mobileNumber, navigation });
     } else {
-      alert("Please enter your name");
+      setErrorMessage("Please enter your name");
     }
   };
   return (
@@ -28,6 +29,7 @@ const NameScreen = ({ route, navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter name"
+          placeholderTextColor="#D3D3D3"
           keyboardType="default"
           autoCapitalize="none"
           value={name}
@@ -36,6 +38,9 @@ const NameScreen = ({ route, navigation }) => {
 
         <Text style={styles.subtitle1}>This will appear on your profile</Text>
       </View>
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
       <TouchableOpacity style={styles.button} onPress={navigateToDOBScreen}>
         <Text style={styles.buttonText}>Done</Text>
       </TouchableOpacity>
@@ -58,7 +63,7 @@ const styles = StyleSheet.create({
     marginBottom: "15%",
   },
   textLogin: {
-    marginBottom: "5%",
+    marginBottom: "3.5%",
   },
   subtitle: {
     fontSize: 20,
@@ -100,6 +105,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 15,
+    fontSize: 14,
   },
 });
 

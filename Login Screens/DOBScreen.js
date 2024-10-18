@@ -17,6 +17,7 @@ const DOBScreen = ({ route, navigation }) => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
   const [dob, setDob] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -38,7 +39,7 @@ const DOBScreen = ({ route, navigation }) => {
         navigation,
       });
     } else {
-      alert("Please select your date of birth");
+      setErrorMessage("Please select your date of birth");
     }
   };
   return (
@@ -67,6 +68,10 @@ const DOBScreen = ({ route, navigation }) => {
           maximumDate={new Date()}
         />
       )}
+
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
       <TouchableOpacity
         style={styles.button}
         onPress={navigateToLocationScreen}
@@ -92,11 +97,11 @@ const styles = StyleSheet.create({
     marginBottom: 45,
   },
   textLogin: {
-    marginBottom: 20,
+    marginBottom: 15,
   },
   subtitle: {
     fontSize: 20,
-    marginBottom: 45,
+    marginBottom: 40,
     alignSelf: "center",
     // marginLeft: 20,
     fontWeight: "400",
@@ -105,7 +110,7 @@ const styles = StyleSheet.create({
   },
   subtitle1: {
     fontSize: 12,
-    marginBottom: 10,
+    marginBottom: 8,
     alignSelf: "center",
     // marginLeft: 20,
     fontWeight: "400",
@@ -134,6 +139,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 15,
+    fontSize: 14,
   },
 });
 

@@ -13,6 +13,8 @@ const JobScreen = ({ route, navigation }) => {
   // const navigation = useNavigation();
   const { name, dob, gender, mobileNumber } = route.params;
   const [occupation, setOccupation] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const navigateToLocScreen = () => {
     if (occupation) {
       navigation.navigate("LocationScreen", {
@@ -24,7 +26,7 @@ const JobScreen = ({ route, navigation }) => {
         navigation,
       });
     } else {
-      alert("Please enter your occupation");
+      setErrorMessage("Please enter your occupation");
     }
   };
   return (
@@ -43,6 +45,9 @@ const JobScreen = ({ route, navigation }) => {
 
         <Text style={styles.subtitle1}>This will appear on your profile</Text>
       </View>
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
       <TouchableOpacity style={styles.button} onPress={navigateToLocScreen}>
         <Text style={styles.buttonText}>Done</Text>
       </TouchableOpacity>
@@ -65,11 +70,11 @@ const styles = StyleSheet.create({
     marginBottom: "15%",
   },
   textLogin: {
-    marginBottom: "5%",
+    marginBottom: "3.5%",
   },
   subtitle: {
     fontSize: 20,
-    marginBottom: "12%",
+    marginBottom: "10%",
     alignSelf: "center",
     // marginLeft: 20,
     fontWeight: "400",
@@ -78,7 +83,7 @@ const styles = StyleSheet.create({
   },
   subtitle1: {
     fontSize: 12,
-    marginBottom: 10,
+    marginBottom: 7,
     alignSelf: "center",
     // marginLeft: 20,
     fontWeight: "400",
@@ -107,6 +112,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 15,
+    fontSize: 14,
   },
 });
 

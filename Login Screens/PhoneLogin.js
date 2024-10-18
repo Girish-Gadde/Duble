@@ -12,6 +12,7 @@ import { serverIP } from "../config";
 
 const PhoneLogin = ({ navigation }) => {
   const [mobileNumber, setMobileNumber] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   //const navigation = useNavigation();
 
   const handleMobileNumberChange = (text) => {
@@ -37,7 +38,7 @@ const PhoneLogin = ({ navigation }) => {
       });
 
       if (!response.ok) {
-        alert("Please enter valid mobile number");
+        setErrorMessage("Please enter a valid mobile number");
         throw new Error(`Error: ${response.status}`);
       }
 
@@ -64,12 +65,16 @@ const PhoneLogin = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Phone number"
+          placeholderTextColor="#D3D3D3"
           keyboardType="phone-pad"
           value={mobileNumber}
           onChangeText={handleMobileNumberChange}
         />
         <Text style={styles.subtitle}>OTP will be sent to this number</Text>
       </View>
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
       <TouchableOpacity style={styles.button} onPress={sendPhoneNumberForOtp}>
         <Text style={styles.buttonText}>Verify</Text>
       </TouchableOpacity>
@@ -95,7 +100,7 @@ const styles = StyleSheet.create({
     marginBottom: "2%",
   },
   textLogin: {
-    marginBottom: "5%",
+    marginBottom: "4%",
   },
   subtitle: {
     fontSize: 14,
@@ -114,7 +119,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: "#fff",
     borderRadius: 35,
-    fontSize: 24,
+    fontSize: 20,
     // textAlign: "center",
   },
   button: {
@@ -146,6 +151,11 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     paddingVertical: 10,
     marginVertical: 15,
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 15,
+    fontSize: 14,
   },
 });
 

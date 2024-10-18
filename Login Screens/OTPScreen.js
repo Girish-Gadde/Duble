@@ -16,6 +16,7 @@ import { serverIP } from "@/config";
 const OTPScreen = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
   const [otp, setOtp] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   //const navigation = useNavigation();
 
   const sendPhoneNumberForOtp = async () => {
@@ -70,7 +71,7 @@ const OTPScreen = ({ route, navigation }) => {
       });
 
       if (!response.ok) {
-        alert("Please enter valid OTP");
+        setErrorMessage("Please enter a valid OTP");
         throw new Error(`Error: ${response.status}`);
       }
 
@@ -86,6 +87,7 @@ const OTPScreen = ({ route, navigation }) => {
 
       console.log("Response: ", data);
     } catch (error) {
+      setErrorMessage("Please enter a valid OTP");
       console.error("Error: ", error);
     }
   };
@@ -120,6 +122,10 @@ const OTPScreen = ({ route, navigation }) => {
       />
 
       <Text style={styles.subtitle}>Enter OTP sent to {mobileNumber}</Text>
+
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
 
       <TouchableOpacity style={styles.button} onPress={verifyUserOtp}>
         <Text style={styles.buttonText}>Done</Text>
@@ -205,6 +211,11 @@ const styles = StyleSheet.create({
     lineHeight: 18.15,
     paddingVertical: 7,
     marginBottom: 17,
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 15,
+    fontSize: 14,
   },
 });
 

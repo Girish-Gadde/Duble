@@ -7,10 +7,13 @@ import {
   StyleSheet,
   SafeAreaView,
 } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const GenderScreen = ({ route, navigation }) => {
   const { name, dob, mobileNumber } = route.params;
   const [gender, setGender] = useState("");
+  const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigateToNextScreen = () => {
     if (gender) {
@@ -22,7 +25,7 @@ const GenderScreen = ({ route, navigation }) => {
         navigation,
       });
     } else {
-      alert("Please enter your gender");
+      setErrorMessage("Please select your gender");
     }
   };
 
@@ -30,19 +33,41 @@ const GenderScreen = ({ route, navigation }) => {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Set Up</Text>
       <View style={styles.textLogin}>
-        <Text style={styles.subtitle}>Please enter your gender</Text>
+        <Text style={styles.subtitle}>Please select your gender</Text>
+        {/* Gender Dropdown List */}
+        <DropDownPicker
+          open={open}
+          value={gender}
+          items={[
+            { label: "Male", value: "male" },
+            { label: "Female", value: "female" },
+            { label: "Non-binary", value: "non-binary" },
+            { label: "Other", value: "other" },
+          ]}
+          setOpen={setOpen}
+          setValue={setGender}
+          placeholder="Select your gender"
+          style={styles.dropdown}
+          dropDownContainerStyle={styles.dropDownContainer}
+        />
 
         {/* Gender Input Field */}
-        <TextInput
+        {/* <TextInput
           style={styles.input}
           placeholder="Enter your gender"
           keyboardType="default"
           autoCapitalize="none"
           value={gender}
           onChangeText={(text) => setGender(text)}
-        />
+        /> */}
       </View>
-      <TouchableOpacity style={styles.button} onPress={navigateToNextScreen}>
+      {errorMessage ? (
+        <Text style={styles.errorText}>{errorMessage}</Text>
+      ) : null}
+      <TouchableOpacity
+        style={[styles.button, open && { marginTop: 150 }]}
+        onPress={navigateToNextScreen}
+      >
         <Text style={styles.buttonText}>Done</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -64,11 +89,11 @@ const styles = StyleSheet.create({
     marginBottom: "15%",
   },
   textLogin: {
-    marginBottom: "5%",
+    marginBottom: "6%",
   },
   subtitle: {
     fontSize: 20,
-    marginBottom: "12%",
+    marginBottom: "10%",
     alignSelf: "center",
     fontWeight: "400",
     lineHeight: 23.96,
@@ -86,7 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   button: {
-    width: 340,
+    width: "88%",
     height: 40,
     backgroundColor: "#6420AA",
     justifyContent: "center",
@@ -96,6 +121,20 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 15,
+    fontSize: 14,
+  },
+  dropdown: {
+    borderColor: "gray",
+    backgroundColor: "#fff",
+    width: "85%",
+  },
+  dropDownContainer: {
+    borderColor: "gray",
+    width: "85%",
   },
 });
 
