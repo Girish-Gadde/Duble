@@ -1,0 +1,188 @@
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  Button,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+} from "react-native";
+import axios from "axios"; // Ensure axios is installed for API calls
+import { MaterialIcons } from "@expo/vector-icons";
+import { serverIP } from "@/config";
+
+const Notification = ({ route, navigation }) => {
+  const { individualProfile } = route.params;
+  const { mobileNumber } = individualProfile;
+  const [notifications, setNotifications] = useState(
+    individualProfile.notifications
+  );
+  const [expandedNotification, setExpandedNotification] = useState(null);
+
+  // Handle toggle of notification expansion
+  const toggleExpandNotification = (notificationId) => {
+    if (expandedNotification === notificationId) {
+      setExpandedNotification(null); // Collapse if already expanded
+    } else {
+      setExpandedNotification(notificationId); // Expand the selected notification
+    }
+  };
+
+  // Fetch notifications from the backend
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get(
+        `https://your-backend-url.com/api/notifications/${userId}`
+      );
+      setNotifications(response.data.notifications);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  };
+
+  useEffect(() => {
+    //fetchNotifications(); // Fetch notifications when the component mounts
+  }, []);
+
+  // Handle accept button click
+  const handleAccept = async (notification) => {
+    const { teamName, teamateMobileNumber } = notification;
+
+    try {
+      const response = await axios.post(`${serverIP}/auth/create-a-team`, {
+        teamName,
+        mobileNumber, // Use mobileNumber from individualProfile
+        teamateMobileNumber, // From the notification object
+      });
+
+      console.log(response, "Team created successfully");
+      Alert.alert("Success", response.data.message, [
+        {
+          text: "OK",
+          onPress: () => {
+            console.log("Fetching teams");
+            // fetchTeams(); // Call refreshYourTeam or equivalent function
+          },
+        },
+      ]);
+    } catch (error) {
+      console.error("Error creating team:", error);
+      Alert.alert("Error", "Failed to create team");
+    }
+  };
+
+  // Handle reject button click
+  const handleReject = (notificationId) => {
+    console.log("Rejected notification with ID:", notificationId);
+    Alert.alert("Rejected", `Notification with ID ${notificationId} rejected.`);
+    // You can call your API here to process the rejection logic
+  };
+
+  // Render a single notification item
+  const renderNotificationItem = ({ item }) => (
+    <View style={styles.notificationItem}>
+      <TouchableOpacity
+        style={styles.notificationRow}
+        onPress={() => toggleExpandNotification(item._id)}
+      >
+        <Text style={styles.notificationText}>
+          {item.teamMateName} wants to team up with you
+        </Text>
+        <MaterialIcons
+          name={
+            expandedNotification === item._id
+              ? "keyboard-arrow-down"
+              : "keyboard-arrow-right"
+          }
+          size={24}
+          color="black"
+        />
+      </TouchableOpacity>
+
+      {expandedNotification === item._id && (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.acceptButton}
+            onPress={() => handleAccept(item)}
+          >
+            <Text style={styles.buttonText}>Accept</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.rejectButton}
+            onPress={() => handleReject(item._id)}
+          >
+            <Text style={styles.buttonText}>Reject</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Notifications</Text>
+      <FlatList
+        data={notifications}
+        renderItem={renderNotificationItem}
+        keyExtractor={(item) => item._id}
+        ListEmptyComponent={<Text>No notifications available.</Text>}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 16,
+  },
+  notificationItem: {
+    backgroundColor: "#f9f9f9",
+    padding: 16,
+    marginVertical: 8,
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+  },
+  notificationRow: {
+    flexDirection: "row", // Make the text and icon appear in a row
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  notificationText: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  acceptButton: {
+    backgroundColor: "#4CAF50",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  rejectButton: {
+    backgroundColor: "#f44336",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+});
+
+export default Notification;

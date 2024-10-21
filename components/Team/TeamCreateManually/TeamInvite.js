@@ -14,6 +14,7 @@ import { serverIP } from "@/config";
 export default function CreateTeam({
   mobileNumber,
   fetchTeams,
+  userName,
   userId,
   navigation,
 }) {
@@ -39,11 +40,15 @@ export default function CreateTeam({
     }
 
     try {
-      const response = await axios.post(`${serverIP}/auth/create-a-team`, {
-        teamName,
-        mobileNumber,
-        teamateMobileNumber, // Use the hardcoded creator name
-      });
+      const response = await axios.post(
+        `${serverIP}/auth/request-to-create-a-team`,
+        {
+          teamName,
+          userName,
+          mobileNumber,
+          teamateMobileNumber, // Use the hardcoded creator name
+        }
+      );
 
       console.log(response, "TEaM");
       //await refreshYourTeam();
@@ -55,7 +60,7 @@ export default function CreateTeam({
           text: "OK",
           onPress: () => {
             console.log("DG");
-            fetchTeams(); // Call refreshYourTeam
+            // fetchTeams(); // Call refreshYourTeam
             // navigation.goBack(); // Navigate back to the previous screen
           },
         },

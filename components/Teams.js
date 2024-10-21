@@ -94,8 +94,15 @@ const profiles = [
 
 const Teams = ({ route, navigation }) => {
   // Pop up modal code
-  const { userId, refreshYourTeam, mobileNumber, dispatch, fetchTeams, error } =
-    route.params;
+  const {
+    userId,
+    refreshYourTeam,
+    mobileNumber,
+    dispatch,
+    userName,
+    fetchTeams,
+    error,
+  } = route.params;
   console.log("USER ID ---->", userId);
   const [isPopup1Visible, setPopup1Visible] = useState(false);
   const [isPopup2Visible, setPopup2Visible] = useState(false);
@@ -248,7 +255,7 @@ const Teams = ({ route, navigation }) => {
                 style={{
                   justifyContent: "center",
                   flexDirection: "row",
-                  width:'150%',
+                  width: "150%",
                   gap: 50,
                   marginBottom: "5%",
                 }}
@@ -302,6 +309,7 @@ const Teams = ({ route, navigation }) => {
                           mobileNumber={mobileNumber}
                           fetchTeams={fetchTeams1}
                           userId={userId}
+                          userName={userName}
                         />
                       </View>
                     </View>
@@ -433,7 +441,7 @@ const Teams = ({ route, navigation }) => {
           )}
         </Animated.View>
         <View>
-        <View style={styles.actionContainer2}>
+          <View style={styles.actionContainer2}>
             <TouchableOpacity
               style={styles.actionButton}
               onPress={navigateToHomeScreen}
@@ -447,7 +455,7 @@ const Teams = ({ route, navigation }) => {
                 onPress={handleConfirmSelection}
                 style={styles.actionButton}
               >
-                <View style={styles.buttonContainer2} >
+                <View style={styles.buttonContainer2}>
                   <Text style={styles.buttonText}>Switch</Text>
                 </View>
               </TouchableOpacity>
@@ -521,19 +529,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingRight: 20,
-    paddingLeft: '5%',
-    paddingVertical:'4%',
+    paddingLeft: "5%",
+    paddingVertical: "4%",
     position: "relative",
     bottom: "6%",
     // left: 0,
     // right: 0,
-    marginTop: '65%',
+    marginTop: "65%",
     marginBottom: 3,
     backgroundColor: "white",
   },
   actionButton: {
     flex: 1,
-    marginHorizontal: '2%',
+    marginHorizontal: "2%",
   },
   buttonContainer1: {
     backgroundColor: "#6420AA",
@@ -552,7 +560,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     height: 49,
-    
   },
   buttonText: {
     color: "white",
@@ -681,43 +688,42 @@ const styles = StyleSheet.create({
   // new Scroll Styling
 
   scrollContainer: {
-    marginBottom:'8%',
-    height: '60%', // Set the height to a fixed percentage (as per your requirement)
-    width: '100%', // Ensure full width of the screen
+    marginBottom: "8%",
+    height: "60%", // Set the height to a fixed percentage (as per your requirement)
+    width: "100%", // Ensure full width of the screen
   },
   scrollContent: {
     flexGrow: 1, // Allow the ScrollView's content to expand beyond the view height
-    
   },
   itemsContainer: {
-    padding: '3%', // Add padding to the items
+    padding: "3%", // Add padding to the items
   },
   teamItemWrapper: {
-    flexDirection: 'row', // Align items in a row
-    alignItems: 'center',
-    marginVertical: '5%',
-    gap:10
+    flexDirection: "row", // Align items in a row
+    alignItems: "center",
+    marginVertical: "5%",
+    gap: 10,
   },
   itemImage: {
-    width: '15%', // Set a fixed percentage width for the image
+    width: "15%", // Set a fixed percentage width for the image
     height: undefined, // Allow height to auto-adjust based on aspect ratio
     aspectRatio: 1, // Keep the image square
-    marginRight: '5%', // Space between image and text
+    marginRight: "5%", // Space between image and text
   },
   teamItemTeam: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     flex: 1, // Make the team info take up remaining space
   },
   teamTextTeam: {
     fontSize: 16,
-    color: '#000',
+    color: "#000",
   },
   noTeamsTextTeam: {
     fontSize: 16,
-    color: '#888',
-    textAlign: 'center',
+    color: "#888",
+    textAlign: "center",
   },
   // new Scroll Styling
 

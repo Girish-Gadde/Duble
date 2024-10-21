@@ -2,7 +2,14 @@ import React, { useEffect, useState, useContext, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { ActivityIndicator, Alert, Image, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Teams from "./Teams";
 import Likes from "./LikeScreens/Likes";
 import Home from "./Home";
@@ -19,7 +26,7 @@ import { serverIP } from "@/config";
 import { UserContext } from "./Team Switch/UserContext";
 import { useUserContext } from "./Team Switch/UserContext";
 import ChatNavigation from "../components/ChatScreens/ChatNavigation";
-import Notification from "../components/Team/TeamUpRequest/NotificationScreen";
+import Notification from "../components/Team/TeamUpRequest/Notification";
 import { setIndividualProfile, setProfile, setTeams } from "./Redux/Actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { io } from "socket.io-client";
@@ -31,10 +38,11 @@ const socket = io(serverIP);
 
 const HomeTab = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
-  //const mobileNumber = "6305148604";
+  // const mobileNumber = "9977755522";
   const dispatch = useDispatch();
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
   const [userId, setUserId] = useState(null);
+  const [userName, setUserName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   // const [selectedTeamIndex, setSelectedTeamIndex] = useState(null);
@@ -95,6 +103,7 @@ const HomeTab = ({ route, navigation }) => {
       //  setUserId(responseData.userId);
       console.log(responseData._id, "User ID");
       setUserId(responseData._id);
+      setUserName(responseData.name);
       // const userId = responseData._id;
       await AsyncStorage.setItem("userId", responseData._id);
       // Once the user ID is fetched, get the associated teams
@@ -315,6 +324,7 @@ const HomeTab = ({ route, navigation }) => {
             userId,
             refreshYourTeam,
             mobileNumber,
+            userName,
             dispatch,
             fetchTeams,
             error,
@@ -511,13 +521,27 @@ const HomeTab = ({ route, navigation }) => {
             }}
           />
         )}
-        {profile && (
-          <Tab.Screen
-            name="HiddenScreen"
-            component={Notification}
-            options={{ tabBarButton: () => null, headerShown: false }} // This hides the tab from the tab bar
-          />
-        )}
+
+        <Tab.Screen
+          name="HiddenScreen"
+          component={Notification}
+          initialParams={{
+            navigation,
+            individualProfile,
+          }}
+          options={({ navigation }) => ({
+            tabBarButton: () => null, // Hide the tab from the tab bar
+            headerShown: true, // Enable the header
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={{ marginLeft: 10 }}
+              >
+                <Text style={{ color: "#007AFF", fontSize: 18 }}>Back</Text>
+              </TouchableOpacity>
+            ),
+          })}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
