@@ -45,7 +45,7 @@ export default function CreateTeam({
         {
           teamName,
           userName,
-          mobileNumber,
+          userId,
           teamateMobileNumber, // Use the hardcoded creator name
         }
       );

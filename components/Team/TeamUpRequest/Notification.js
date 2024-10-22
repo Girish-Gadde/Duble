@@ -14,7 +14,7 @@ import { serverIP } from "@/config";
 
 const Notification = ({ route, navigation }) => {
   const { individualProfile } = route.params;
-  const { mobileNumber } = individualProfile;
+  //const { mobileNumber } = individualProfile;
   const [notifications, setNotifications] = useState(
     individualProfile.notifications
   );
@@ -47,13 +47,13 @@ const Notification = ({ route, navigation }) => {
 
   // Handle accept button click
   const handleAccept = async (notification) => {
-    const { teamName, teamateMobileNumber } = notification;
+    const { teamName, userId } = notification;
 
     try {
       const response = await axios.post(`${serverIP}/auth/create-a-team`, {
         teamName,
-        mobileNumber, // Use mobileNumber from individualProfile
-        teamateMobileNumber, // From the notification object
+        userId: individualProfile._id, // Use mobileNumber from individualProfile
+        teamateId: userId, // From the notification object
       });
 
       console.log(response, "Team created successfully");

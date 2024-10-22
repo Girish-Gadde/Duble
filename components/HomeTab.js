@@ -38,7 +38,7 @@ const socket = io(serverIP);
 
 const HomeTab = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
-  // const mobileNumber = "9977755522";
+  //const mobileNumber = "8546757575";
   const dispatch = useDispatch();
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
   const [userId, setUserId] = useState(null);
@@ -69,7 +69,7 @@ const HomeTab = ({ route, navigation }) => {
   //const [profile, setProfile] = useState(null);
   const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
   useEffect(() => {
-    socket.emit("register", mobileNumber);
+    socket.emit("register", userId);
 
     // Listen for 'teamCreated' event
     socket.on("teamCreated", async (data) => {
@@ -79,7 +79,7 @@ const HomeTab = ({ route, navigation }) => {
       Alert.alert(data.message);
     });
     getUserId();
-  }, []);
+  }, [userId]);
 
   async function getUserId() {
     try {
