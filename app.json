@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Duble-1",
+    "name": "Duble",
     "slug": "Duble-1",
-    "version": "1.0.0",
+    "version": "1.0.0", // Update this for new versions
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "myapp",
@@ -13,6 +13,7 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "buildNumber": "1" , // Increment this for new builds
       "supportsTablet": true,
       "config": {
         "googleMapsApiKey": "AIzaSyAFTtQ9taTiY-CM-NBnVV96yMnkZr3TmM4"
@@ -23,7 +24,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.girishgadde.Duble1",
+      "package": "Duble",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyAFTtQ9taTiY-CM-NBnVV96yMnkZr3TmM4"

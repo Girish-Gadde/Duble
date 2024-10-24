@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginVertical: "4%", // Spacing between the button container and other elements
-    width: "100%", // Container takes up 90% of the screen width
+    width: "90%", // Container takes up 90% of the screen width
     height: "16%",
   },
   button: {

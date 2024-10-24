@@ -308,7 +308,7 @@ const HomeTab = ({ route, navigation }) => {
               display: "flex",
               paddingHorizontal: 12,
               paddingVertical: 20,
-              height: "11%",
+              height: "13%",
               justifyContent: "center",
               //marginBottom: 10,
             },

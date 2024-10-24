@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     fontSize: 45,
     lineHeight: 53.91,
     fontWeight: "700",
-    marginTop: 20,
-    marginBottom: 60,
+    marginTop: "10%",
+    marginBottom: "2%",
   },
   textLogin: {
     marginBottom: 20,
@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
     lineHeight: 16.77,
   },
   input: {
-    width: 356,
-    height: 49,
+    width: 340,
+    height: 40,
     borderWidth: 2,
     borderColor: "#6420AA",
     marginBottom: 7,
@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
     borderRadius: 35,
   },
   button: {
-    width: 356,
-    height: 49,
+    width: 340,
+    height: 40,
     backgroundColor: "#6420AA",
     justifyContent: "center",
     alignItems: "center",

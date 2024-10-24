@@ -206,7 +206,7 @@ const Teams = ({ route, navigation }) => {
 
   useEffect(() => {
     Animated.spring(translateY, {
-      toValue: height * 0.31,
+      toValue: height * 0.26,
       useNativeDriver: true,
     }).start();
   }, []);
@@ -341,44 +341,44 @@ const Teams = ({ route, navigation }) => {
                 {error ? (
                   <Text style={styles.errorText}>{error}</Text>
                 ) : (
-                  <View style={[styles.scrollContainer, { height: "44%" }]}>
-                    <ScrollView
-                      showsVerticalScrollIndicator={false}
-                      contentContainerStyle={styles.scrollContent} // Keep contents aligned at top
-                    >
-                      <View style={styles.itemsContainer}>
-                        {teams.length > 0 ? (
-                          teams.map((team, index) => (
-                            <TouchableOpacity
-                              key={index.toString()}
-                              style={styles.teamItemWrapper}
-                              onPress={() => handleTeamClick(index)}
-                            >
-                              <Image
-                                source={{
-                                  uri: "https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-                                }} // Add the image to the item
-                                style={styles.itemImage}
-                              />
-                              <View style={styles.teamItemTeam}>
-                                <Text style={styles.teamTextTeam}>
-                                  {team.name1} and {team.name2}
-                                </Text>
-                                <RadioButton
-                                  selected={selectedTeamIndex === index}
-                                  temporary={tempSelection === index}
-                                />
-                              </View>
-                            </TouchableOpacity>
-                          ))
-                        ) : (
-                          <Text style={styles.noTeamsTextTeam}>
-                            No teams available.
-                          </Text>
-                        )}
-                      </View>
-                    </ScrollView>
-                  </View>
+                  <View style={[styles.scrollContainer, { height: "20%" }]}> 
+  <ScrollView
+    contentContainerStyle={[styles.scrollContent, { paddingBottom: 20 }]} // Padding to avoid cutting off bottom content
+    keyboardShouldPersistTaps="handled"
+    showsVerticalScrollIndicator={false}
+  >
+    <View style={styles.itemsContainer}>
+      {teams.length > 0 ? (
+        teams.map((team, index) => (
+          <TouchableOpacity
+            key={index.toString()}
+            style={styles.teamItemWrapper}
+            onPress={() => handleTeamClick(index)}
+          >
+            <Image
+              source={{
+                uri: "https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+              }}
+              style={styles.itemImage}
+            />
+            <View style={styles.teamItemTeam}>
+              <Text style={styles.teamTextTeam}>
+                {team.name1} and {team.name2}
+              </Text>
+              <RadioButton
+                selected={selectedTeamIndex === index}
+                temporary={tempSelection === index}
+              />
+            </View>
+          </TouchableOpacity>
+        ))
+      ) : (
+        <Text style={styles.noTeamsTextTeam}>No teams available.</Text>
+      )}
+    </View>
+  </ScrollView>
+</View>
+
                 )}
               </View>
 
@@ -487,10 +487,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     backgroundColor: "#B6D0E2",
+    zIndex:10
     // marginTop: 55,
   },
   animatedView: {
-    height: "50%", // 40% of the screen height
+    height: "60%", // 40% of the screen height
     backgroundColor: "white",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -529,19 +530,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingRight: 20,
-    paddingLeft: "5%",
-    paddingVertical: "4%",
+    paddingLeft: '5%',
+    paddingVertical:'4%',
     position: "relative",
     bottom: "6%",
     // left: 0,
     // right: 0,
-    marginTop: "65%",
+    marginTop: '53%',
     marginBottom: 3,
     backgroundColor: "white",
   },
   actionButton: {
     flex: 1,
-    marginHorizontal: "2%",
+    marginHorizontal: '2%',
   },
   buttonContainer1: {
     backgroundColor: "#6420AA",
@@ -560,6 +561,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     height: 49,
+    
   },
   buttonText: {
     color: "white",
@@ -688,42 +690,47 @@ const styles = StyleSheet.create({
   // new Scroll Styling
 
   scrollContainer: {
-    marginBottom: "8%",
-    height: "60%", // Set the height to a fixed percentage (as per your requirement)
-    width: "100%", // Ensure full width of the screen
+    flex:1,
+    marginBottom:'8%',
+    height: '40%', // Set the height to a fixed percentage (as per your requirement)
+    width: '95%', // Ensure full width of the screen
   },
   scrollContent: {
     flexGrow: 1, // Allow the ScrollView's content to expand beyond the view height
+    marginTop:'-10%',
+    
   },
   itemsContainer: {
-    padding: "3%", // Add padding to the items
+    paddingVertical: '10%', // Add padding to the items
+    marginBottom:'10%'
   },
   teamItemWrapper: {
-    flexDirection: "row", // Align items in a row
-    alignItems: "center",
-    marginVertical: "5%",
-    gap: 10,
+    flexDirection: 'row', // Align items in a row
+    alignItems: 'center',
+    marginVertical: '4%',
+    //marginBottom:'4%',
+    gap:10
   },
   itemImage: {
-    width: "15%", // Set a fixed percentage width for the image
+    width: '15%', // Set a fixed percentage width for the image
     height: undefined, // Allow height to auto-adjust based on aspect ratio
     aspectRatio: 1, // Keep the image square
-    marginRight: "5%", // Space between image and text
+    marginRight: '5%', // Space between image and text
   },
   teamItemTeam: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     flex: 1, // Make the team info take up remaining space
   },
   teamTextTeam: {
     fontSize: 16,
-    color: "#000",
+    color: '#000',
   },
   noTeamsTextTeam: {
     fontSize: 16,
-    color: "#888",
-    textAlign: "center",
+    color: '#888',
+    textAlign: 'center',
   },
   // new Scroll Styling
 
@@ -865,5 +872,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+
 
 export default Teams;

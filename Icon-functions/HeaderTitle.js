@@ -27,8 +27,8 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
       <TouchableOpacity
         style={{
           position: "absolute",
-          left: "-120%",
-          top: "-10%",
+          left: "-130%",
+          top: "-25%",
         }}
         onPress={navigateToTeamProfile}
       >
@@ -83,7 +83,7 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
         style={{
           position: "absolute",
           right: "-120%",
-          //top: -1,
+          top: -1,
         }}
         onPress={handleMenuClick}
       >
@@ -104,6 +104,7 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
         style={{
           position: "absolute",
           right: -80, // Adjust the position as needed
+          bottom:6
         }}
         onPress={ () => navigation.navigate("HiddenScreen")}
       >
