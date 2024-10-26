@@ -266,7 +266,7 @@ const HomeScreen = ({ route, navigation }) => {
       const currentProfile = profiles[currentProfileIndex];
       console.log(currentProfile, "VG");
     } else {
-      getAllTeams();
+      //getAllTeams();
     }
   }, []);
 
@@ -402,7 +402,7 @@ const HomeScreen = ({ route, navigation }) => {
             </Text>
           </View>
           <Text style={styles.descriptionText}>
-            "{profiles[currentProfileIndex]?.description}"
+            "{profiles[currentProfileIndex]?.user1Description}"
           </Text>
         </View>
       </View>
@@ -457,7 +457,7 @@ const HomeScreen = ({ route, navigation }) => {
       <View style={styles.singleBioContainer}>
         <Image
           source={{
-            uri: profiles[currentProfileIndex]?.selectedImages[0],
+            uri: profiles[currentProfileIndex]?.user1ProfilePic,
           }}
           style={styles.singleImage}
         />
@@ -479,7 +479,7 @@ const HomeScreen = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.place}
+                {profiles[currentProfileIndex]?.user1Place}
               </Text>
             </View>
 
@@ -491,7 +491,7 @@ const HomeScreen = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.occupation}
+                {profiles[currentProfileIndex]?.user1Occupation}
               </Text>
             </View>
           </View>
@@ -505,7 +505,7 @@ const HomeScreen = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.height}
+                {profiles[currentProfileIndex]?.user1Height}
               </Text>
             </View>
             <View style={styles.iconContainer}>
@@ -516,19 +516,19 @@ const HomeScreen = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.gender}
+                {profiles[currentProfileIndex]?.user1gender}
               </Text>
             </View>
           </View>
           <Text style={styles.singleBioText}>
-            "I bet I run faster than you."
+            {profiles[currentProfileIndex]?.user1Description}
           </Text>
         </View>
       </View>
       <View style={styles.singleBioContainer}>
         <Image
           source={{
-            uri: profiles[currentProfileIndex]?.selectedImages[1],
+            uri: profiles[currentProfileIndex]?.user2ProfilePic,
           }}
           style={styles.singleImage}
         />
@@ -550,7 +550,7 @@ const HomeScreen = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.place}
+                {profiles[currentProfileIndex]?.user2Place}
               </Text>
             </View>
 
@@ -562,7 +562,7 @@ const HomeScreen = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.occupation}
+                {profiles[currentProfileIndex]?.user2Occupation}
               </Text>
             </View>
           </View>
@@ -585,12 +585,12 @@ const HomeScreen = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.gender}
+                {profiles[currentProfileIndex]?.user2gender}
               </Text>
             </View>
           </View>
           <Text style={styles.singleBioText}>
-            "Joker with a punchline prowess."
+            {profiles[currentProfileIndex]?.user2Description}
           </Text>
         </View>
       </View>

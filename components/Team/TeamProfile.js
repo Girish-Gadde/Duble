@@ -115,75 +115,11 @@ const TeamProfile = ({ route, navigation }) => {
             />
             <Text style={styles.locationText}>{profile.location}</Text>
           </View>
-          <Text style={styles.descriptionText}>"{profile.description}""</Text>
+          <Text style={styles.descriptionText}>
+            "{profile.user1Description}""
+          </Text>
         </View>
-        {
-          // showIcons ? (
-          //   <View style={styles.actionContainer1}>
-          //     <TouchableOpacity
-          //       style={styles.actionButton1}
-          //       onPress={navigateBack}
-          //     >
-          //       <View
-          //         style={{
-          //           backgroundColor: "#6420AA",
-          //           borderRadius: 999,
-          //           width: 60,
-          //           height: 60,
-          //           justifyContent: "center",
-          //           alignItems: "center",
-          //         }}
-          //       >
-          //         <AntDesign name="close" size={30} color="white" />
-          //       </View>
-          //     </TouchableOpacity>
-          //     <TouchableOpacity
-          //       style={styles.actionButton2}
-          //       onPress={toggleHeart}
-          //     >
-          //       <View
-          //         style={[
-          //           styles.heartButton,
-          //           { backgroundColor: isHeartActive ? "#FF3156" : "#FF3156" },
-          //         ]}
-          //       >
-          //         <AntDesign name="heart" size={30} color="white" />
-          //       </View>
-          //     </TouchableOpacity>
-          //   </View>
-          // ) : null
-          // <View style={styles.actionContainer2}>
-          //   <TouchableOpacity style={styles.actionButton}>
-          //     <View style={styles.buttonContainer}>
-          //       <Text style={styles.buttonText}>Reject</Text>
-          //     </View>
-          //   </TouchableOpacity>
-          //   <TouchableOpacity style={styles.actionButton} onPress={toggleHeart}>
-          //     <View
-          //       style={[
-          //         styles.buttonContainer,
-          //         { backgroundColor: isHeartActive ? "#00b300" : "#F75394" },
-          //       ]}
-          //     >
-          //       <Text style={styles.buttonText}>Like</Text>
-          //     </View>
-          //   </TouchableOpacity>
-          // </View>
-          // <View style={styles.viewContainer1}>
-          //   <View style={styles.searchContainer}>
-          //     {/* <Ionicons name="search" size={16} color="#454545" /> */}
-          //     <Text style={styles.searchText}>🔍 Our Story</Text>
-          //   </View>
-          //   <Text style={styles.text}>{profile.ourStory}</Text>
-          // </View>
-          // <View style={styles.viewContainer}>
-          //   <View style={styles.searchContainer}>
-          //     {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
-          //     <Text style={styles.searchText}>🌟 Our Idea of a Fun Date</Text>
-          //   </View>
-          //   <Text style={styles.text}>{profile.funDate}</Text>
-          // </View>
-        }
+
         {profile.dynamicContent?.length > 0 ? (
           profile.dynamicContent.map((content, index) => (
             <View key={index} style={styles.viewContainer}>
@@ -204,7 +140,7 @@ const TeamProfile = ({ route, navigation }) => {
         <View style={styles.singleBioContainer}>
           <Image
             source={{
-              uri: profile.selectedImages[0],
+              uri: profile.user1ProfilePic,
             }}
             style={styles.singleImage}
           />
@@ -221,7 +157,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.place}</Text>
+                <Text style={styles.cell}>{profile.user1Place}</Text>
               </View>
 
               <View style={styles.iconContainer}>
@@ -231,7 +167,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.occupation}</Text>
+                <Text style={styles.cell}>{profile.user1Occupation}</Text>
               </View>
             </View>
 
@@ -243,7 +179,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.height}</Text>
+                <Text style={styles.cell}>{profile.user1Height}</Text>
               </View>
               <View style={styles.iconContainer}>
                 <AntDesign
@@ -252,18 +188,16 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.gender}</Text>
+                <Text style={styles.cell}>{profile.user1gender}</Text>
               </View>
             </View>
-            <Text style={styles.singleBioText}>
-              "I bet I run faster than you."
-            </Text>
+            <Text style={styles.singleBioText}>{profile.user1Description}</Text>
           </View>
         </View>
         <View style={styles.singleBioContainer}>
           <Image
             source={{
-              uri: profile.selectedImages[1],
+              uri: profile.user2ProfilePic,
             }}
             style={styles.singleImage}
           />
@@ -280,7 +214,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.place}</Text>
+                <Text style={styles.cell}>{profile.user2Place}</Text>
               </View>
 
               <View style={styles.iconContainer}>
@@ -290,7 +224,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.occupation}</Text>
+                <Text style={styles.cell}>{profile.user2Occupation}</Text>
               </View>
             </View>
 
@@ -311,12 +245,10 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.gender}</Text>
+                <Text style={styles.cell}>{profile.user2gender}</Text>
               </View>
             </View>
-            <Text style={styles.singleBioText}>
-              "Joker with a punchline prowess."
-            </Text>
+            <Text style={styles.singleBioText}>{profile.user2Description}</Text>
           </View>
         </View>
       </View>

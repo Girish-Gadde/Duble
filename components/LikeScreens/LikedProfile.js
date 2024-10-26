@@ -164,7 +164,9 @@ const LikedProfile = ({ route, navigation }) => {
             />
             <Text style={styles.locationText}>{profile.location}</Text>
           </View>
-          <Text style={styles.descriptionText}>"{profile.description}""</Text>
+          <Text style={styles.descriptionText}>
+            "{profile.user1Description}""
+          </Text>
         </View>
         {
           showIcons ? (
@@ -251,7 +253,7 @@ const LikedProfile = ({ route, navigation }) => {
         <View style={styles.singleBioContainer}>
           <Image
             source={{
-              uri: `${serverIP}/uploads/1724755758498_a4d3817e-fde1-4f45-8800-40d09942d5ca.jpeg`,
+              uri: profile.user1ProfilePic,
             }}
             style={styles.singleImage}
           />
@@ -268,7 +270,7 @@ const LikedProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.place}</Text>
+                <Text style={styles.cell}>{profile.user1Place}</Text>
               </View>
 
               <View style={styles.iconContainer}>
@@ -278,7 +280,7 @@ const LikedProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.occupation}</Text>
+                <Text style={styles.cell}>{profile.user1Occupation}</Text>
               </View>
             </View>
 
@@ -290,7 +292,7 @@ const LikedProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.height}</Text>
+                <Text style={styles.cell}>{profile.user1Height}</Text>
               </View>
               <View style={styles.iconContainer}>
                 <AntDesign
@@ -299,18 +301,16 @@ const LikedProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.gender}</Text>
+                <Text style={styles.cell}>{profile.user1gender}</Text>
               </View>
             </View>
-            <Text style={styles.singleBioText}>
-              "I bet I run faster than you."
-            </Text>
+            <Text style={styles.singleBioText}>{profile.user1Description}</Text>
           </View>
         </View>
         <View style={styles.singleBioContainer}>
           <Image
             source={{
-              uri: `${serverIP}/uploads/1724755758531_200a964c-9120-475c-8287-97b17aa8d72b.jpeg`,
+              uri: profile.user2ProfilePic,
             }}
             style={styles.singleImage}
           />
@@ -327,7 +327,7 @@ const LikedProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.place}</Text>
+                <Text style={styles.cell}>{profile.user2Place}</Text>
               </View>
 
               <View style={styles.iconContainer}>
@@ -337,7 +337,7 @@ const LikedProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.occupation}</Text>
+                <Text style={styles.cell}>{profile.user2Occupation}</Text>
               </View>
             </View>
 
@@ -358,12 +358,10 @@ const LikedProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.gender}</Text>
+                <Text style={styles.cell}>{profile.user2gender}</Text>
               </View>
             </View>
-            <Text style={styles.singleBioText}>
-              "Joker with a punchline prowess."
-            </Text>
+            <Text style={styles.singleBioText}>{profile.user2Description}</Text>
           </View>
         </View>
       </View>

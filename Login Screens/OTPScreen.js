@@ -12,6 +12,7 @@ import {
 import Icon from "react-native-vector-icons/MaterialIcons";
 import OTPTextInput from "react-native-otp-textinput";
 import { serverIP } from "@/config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OTPScreen = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
@@ -80,6 +81,7 @@ const OTPScreen = ({ route, navigation }) => {
       if (data.Details === "Navigate to Account Details") {
         navigation.navigate("VerifyScreen", { otp, mobileNumber, navigation });
       } else if (data.Details === "Navigate to Home page") {
+        await AsyncStorage.setItem("mobileNumber", mobileNumber);
         navigation.navigate("HomeTab", { mobileNumber });
       } else {
         alert("Unexpected response. Please try again.");
