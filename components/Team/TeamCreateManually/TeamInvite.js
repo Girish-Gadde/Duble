@@ -33,9 +33,17 @@ export default function CreateTeam({
     setOtp(otpValue);
   };
 
-  const createTeam = async () => {
+  const createATeam = async () => {
     if (!teamateMobileNumber && !teamName) {
       Alert.alert("Error", "Please provide the Team Name");
+      return;
+    }
+
+    if (mobileNumber === teamateMobileNumber) {
+      Alert.alert(
+        "Error",
+        "Your mobile number is same as teammate's mobile number."
+      );
       return;
     }
 
@@ -116,7 +124,7 @@ export default function CreateTeam({
         onChangeText={setTeamateMobileNumber}
       />
 
-      <TouchableOpacity style={styles.button} onPress={createTeam}>
+      <TouchableOpacity style={styles.button} onPress={createATeam}>
         <Text style={styles.buttonText}>Create Team</Text>
       </TouchableOpacity>
 

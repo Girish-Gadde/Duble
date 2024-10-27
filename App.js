@@ -19,6 +19,7 @@ import DOBScreen from "./Login Screens/DOBScreen";
 import JobScreen from "./Login Screens/JobScreen";
 import LocationScreen from "./Login Screens/LocationScreen";
 import PictureScreen from "./Login Screens/PictureScreen";
+import InviteUser from "./Login Screens/InviteUser";
 import SetUpScreen from "./Login Screens/SetUpScreen";
 import { TeamProfileStack } from "./components/Team/TeamProfileStack";
 import PhoneLogin1 from "./Login Screens/PhoneLogin1";
@@ -135,6 +136,11 @@ export default function App() {
             <Stack.Screen
               name="PictureScreen"
               component={PictureScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="InviteUser"
+              component={InviteUser}
               options={{ headerShown: false }}
             />
             <Stack.Screen
