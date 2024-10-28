@@ -11,12 +11,14 @@ import {
 import axios from "axios"; // Ensure axios is installed for API calls
 import { MaterialIcons } from "@expo/vector-icons";
 import { serverIP } from "@/config";
+import { useSelector } from "react-redux";
 
 const Notification = ({ route, navigation }) => {
-  const { individualProfile } = route.params;
+  //const { individualProfile } = route.params;
+  const individualProfile = useSelector((state) => state.individualProfile);
   //const { mobileNumber } = individualProfile;
   const [notifications, setNotifications] = useState(
-    individualProfile.notifications
+    individualProfile?.notifications || []
   );
   const [expandedNotification, setExpandedNotification] = useState(null);
 
@@ -42,8 +44,10 @@ const Notification = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    //fetchNotifications(); // Fetch notifications when the component mounts
-  }, []);
+    if (individualProfile?.notifications) {
+      setNotifications(individualProfile.notifications);
+    }
+  }, [individualProfile]);
 
   // Handle accept button click
   const handleAccept = async (notification) => {
@@ -57,18 +61,24 @@ const Notification = ({ route, navigation }) => {
       });
 
       console.log(response, "Team created successfully");
-      Alert.alert("Success", response.data.message, [
-        {
-          text: "OK",
-          onPress: () => {
-            console.log("Fetching teams");
-            // fetchTeams(); // Call refreshYourTeam or equivalent function
-          },
-        },
-      ]);
+      // Alert.alert("Success", response.data.message, [
+      //   {
+      //     text: "OK",
+      //     onPress: () => {
+      //       console.log("Fetching teams");
+      //       // fetchTeams(); // Call refreshYourTeam or equivalent function
+      //     },
+      //   },
+      // ]);
     } catch (error) {
       console.error("Error creating team:", error);
-      Alert.alert("Error", "Failed to create team");
+      // Check if the server provided a custom error message
+      const errorMessage =
+        error.response && error.response.data && error.response.data.message
+          ? error.response.data.message
+          : "Failed to create team";
+
+      Alert.alert("Error", errorMessage);
     }
   };
 
@@ -122,12 +132,15 @@ const Notification = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Notifications</Text>
-      <FlatList
-        data={notifications}
-        renderItem={renderNotificationItem}
-        keyExtractor={(item) => item._id}
-        ListEmptyComponent={<Text>No notifications available.</Text>}
-      />
+      {notifications && notifications.length > 0 ? (
+        <FlatList
+          data={notifications}
+          renderItem={renderNotificationItem}
+          keyExtractor={(item) => item._id}
+        />
+      ) : (
+        <Text>No notifications available.</Text>
+      )}
     </View>
   );
 };

@@ -77,7 +77,13 @@ export default function CreateTeam({
       setTeamateMobileNumber("");
     } catch (error) {
       console.error("Error creating team:", error);
-      Alert.alert("Error", "Failed to create team");
+      // Check if the server provided a custom error message
+      const errorMessage =
+        error.response && error.response.data && error.response.data.message
+          ? error.response.data.message
+          : "Failed to create team";
+
+      Alert.alert("Error", errorMessage);
     }
   };
 

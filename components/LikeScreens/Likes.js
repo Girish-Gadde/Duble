@@ -1,6 +1,6 @@
 import { serverIP } from "@/config";
-import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -223,39 +223,46 @@ const Likes = ({ route, navigation }) => {
   const dispatch = useDispatch();
   console.log(yourTeamProfile, "HOME_LIKE");
 
-  useEffect(() => {
+  // Function to fetch teams from the back-end
+  const fetchTeams = async () => {
     if (!yourTeamProfile) {
       console.log("Profile not available");
       setLoading(false); // Stop loading if no profile is available
       return;
     }
+    try {
+      const likedByIDs = yourTeamProfile.likedByIDs;
+      const response = await fetch(`${serverIP}/like/get-liked-teams`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ likedByIDs }),
+      });
 
-    const likedByIDs = yourTeamProfile.likedByIDs;
-    // Function to fetch teams from the back-end
-    const fetchTeams = async () => {
-      try {
-        const response = await fetch(`${serverIP}/like/get-liked-teams`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ likedByIDs }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch teams");
-        }
-
-        const data = await response.json();
-        console.log(data, "LIKED_TEAMS-0887");
-        setTeams(data);
-      } catch (error) {
-        console.error("Error fetching teams:", error);
-      } finally {
-        setLoading(false); // Stop loading when the data is fetched
+      if (!response.ok) {
+        throw new Error("Failed to fetch teams");
       }
-    };
 
+      const data = await response.json();
+      console.log(data, "LIKED_TEAMS-0887");
+      setTeams(data);
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+    } finally {
+      setLoading(false); // Stop loading when the data is fetched
+    }
+  };
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setLoading(true); // Show loading spinner every time the screen is focused
+  //     console.log("FOCUS and FETCH");
+  //     fetchTeams();
+  //   }, [yourTeamProfile])
+  // );
+
+  useEffect(() => {
     fetchTeams();
   }, [yourTeamProfile]);
 
