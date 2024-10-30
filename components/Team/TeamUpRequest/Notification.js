@@ -52,15 +52,27 @@ const Notification = ({ route, navigation }) => {
   // Handle accept button click
   const handleAccept = async (notification) => {
     const { teamName, userId } = notification;
-
+    setNotifications((prevNotifications) =>
+      prevNotifications.filter((notif) => notif._id !== notification._id)
+    );
     try {
       const response = await axios.post(`${serverIP}/auth/create-a-team`, {
         teamName,
         userId: individualProfile._id, // Use mobileNumber from individualProfile
-        teamateId: userId, // From the notification object
+        teamateId: userId,
+        notifId: notification._id, // From the notification object
       });
 
       console.log(response, "Team created successfully");
+
+      // handleReject(notification._id);
+
+      // Once team is created, remove the notification from the back end
+      // await axios.post(`${serverIP}/auth/reject-team-invite`, {
+      //   userId: individualProfile._id, // Replace with actual user ID
+      //   notificationId,
+      // });
+
       // Alert.alert("Success", response.data.message, [
       //   {
       //     text: "OK",
@@ -83,10 +95,34 @@ const Notification = ({ route, navigation }) => {
   };
 
   // Handle reject button click
-  const handleReject = (notificationId) => {
-    console.log("Rejected notification with ID:", notificationId);
-    Alert.alert("Rejected", `Notification with ID ${notificationId} rejected.`);
-    // You can call your API here to process the rejection logic
+  const handleReject = async (notificationId) => {
+    console.log(notificationId, "ID");
+    try {
+      // Replace userId with the actual user ID in context (e.g., individualProfile._id)
+      const userId = individualProfile._id;
+
+      const response = await axios.post(`${serverIP}/auth/reject-team-invite`, {
+        userId,
+        notificationId,
+      });
+
+      console.log("Notification rejected:", response.data.message);
+      setNotifications((prevNotifications) =>
+        prevNotifications.filter(
+          (notification) => notification._id !== notificationId
+        )
+      );
+      // Alert.alert("Rejected", "The notification has been successfully removed.");
+
+      // Optional: Trigger any additional actions or state updates, like refreshing the notifications list
+    } catch (error) {
+      console.error("Error rejecting notification:", error);
+      const errorMessage =
+        error.response && error.response.data && error.response.data.message
+          ? error.response.data.message
+          : "Failed to reject notification";
+      Alert.alert("Error", errorMessage);
+    }
   };
 
   // Render a single notification item
@@ -131,7 +167,7 @@ const Notification = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Notifications</Text>
+      {/* <Text style={styles.title}>Notifications</Text> */}
       {notifications && notifications.length > 0 ? (
         <FlatList
           data={notifications}
@@ -151,11 +187,11 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
+  // title: {
+  //   fontSize: 24,
+  //   fontWeight: "bold",
+  //   marginBottom: 16,
+  // },
   notificationItem: {
     backgroundColor: "#f9f9f9",
     padding: 16,

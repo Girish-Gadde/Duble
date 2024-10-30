@@ -32,8 +32,8 @@ const HeaderTitleWithIcon2 = ({
       <TouchableOpacity
         style={{
           position: "absolute",
-          right: 200,
-          top: -1,
+          right: 150,
+          // top: -1,
         }}
         onPress={handleMenuClick}
       >
@@ -45,25 +45,18 @@ const HeaderTitleWithIcon2 = ({
         />
       </TouchableOpacity>
 
-      <Image
+      {/* <Image
         source={require("../assets/capture3.jpeg")} // Replace with your image source
         style={{
           width: 100,
           height: 28,
           borderRadius: 6,
           marginLeft: 2,
+          hidden: true,
         }} // Adjust width, height, and border-radius as needed
-      />
+      /> */}
 
-      {/* <Ionicons
-        name={iconName}
-        size={24}
-        color="black"
-        style={{ marginRight: 5 }}
-      />
-  
-      <Text style={{ fontSize: 25, fontWeight: "400" }}>{title}</Text> */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           position: "absolute",
           right: -125,
@@ -71,7 +64,6 @@ const HeaderTitleWithIcon2 = ({
         }}
         onPress={handleMenuClick}
       >
-        {/* Your button icon or text */}
         <Image
           source={require("../assets/Group.jpg")} // Replace with your image source
           style={{
@@ -81,12 +73,7 @@ const HeaderTitleWithIcon2 = ({
             marginLeft: 2,
           }} // Adjust width, height, and border-radius as needed
         />
-        {/* <MaterialIcons
-          name={iconName} // Example icon name
-          size={34}
-          color="black"
-        /> */}
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

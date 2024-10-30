@@ -25,9 +25,9 @@ import { TeamProfileStack } from "./components/Team/TeamProfileStack";
 import PhoneLogin1 from "./Login Screens/PhoneLogin1";
 import Chat from "./Chat";
 import { UserProvider } from "./components/Team Switch/UserContext";
-import Notification from "./components/Team/TeamUpRequest/NotificationScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, Text, View } from "react-native";
+import Notification from "./components/Team/TeamUpRequest/Notification";
 
 const Stack = createNativeStackNavigator();
 
@@ -163,9 +163,9 @@ export default function App() {
             />
             <Stack.Screen name="ProfileDetails" component={ProfileDetails} />
             <Stack.Screen
-              name="NotificationScreen"
+              name="Notifications1"
               component={Notification}
-              options={{ headerShown: false }}
+              options={{ headerTitleAlign: "center" }}
             />
           </Stack.Navigator>
         </NavigationContainer>

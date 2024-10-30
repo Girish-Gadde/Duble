@@ -221,7 +221,7 @@ const Likes = ({ route, navigation }) => {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-  console.log(yourTeamProfile, "HOME_LIKE");
+  // console.log(yourTeamProfile, "HOME_LIKE");
 
   // Function to fetch teams from the back-end
   const fetchTeams = async () => {

@@ -168,59 +168,37 @@ const LikedProfile = ({ route, navigation }) => {
             "{profile.user1Description}""
           </Text>
         </View>
-        {
-          showIcons ? (
-            <View style={styles.actionContainer1}>
-              <TouchableOpacity
-                style={styles.actionButton1}
-                onPress={toggleDislike}
-              >
-                <View
-                  style={{
-                    backgroundColor: "#6420AA",
-                    borderRadius: 999,
-                    width: 60,
-                    height: 60,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <AntDesign name="close" size={30} color="white" />
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.actionButton2}
-                onPress={toggleHeart}
-              >
-                <View
-                  style={[
-                    styles.heartButton,
-                    { backgroundColor: isHeartActive ? "#FF3156" : "#FF3156" },
-                  ]}
-                >
-                  <AntDesign name="heart" size={30} color="white" />
-                </View>
-              </TouchableOpacity>
+
+        <View style={styles.actionContainer1}>
+          <TouchableOpacity
+            style={styles.actionButton1}
+            onPress={toggleDislike}
+          >
+            <View
+              style={{
+                backgroundColor: "#6420AA",
+                borderRadius: 999,
+                width: 60,
+                height: 60,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <AntDesign name="close" size={30} color="white" />
             </View>
-          ) : null
-          // <View style={styles.actionContainer2}>
-          //   <TouchableOpacity style={styles.actionButton}>
-          //     <View style={styles.buttonContainer}>
-          //       <Text style={styles.buttonText}>Reject</Text>
-          //     </View>
-          //   </TouchableOpacity>
-          //   <TouchableOpacity style={styles.actionButton} onPress={toggleHeart}>
-          //     <View
-          //       style={[
-          //         styles.buttonContainer,
-          //         { backgroundColor: isHeartActive ? "#00b300" : "#F75394" },
-          //       ]}
-          //     >
-          //       <Text style={styles.buttonText}>Like</Text>
-          //     </View>
-          //   </TouchableOpacity>
-          // </View>
-        }
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionButton2} onPress={toggleHeart}>
+            <View
+              style={[
+                styles.heartButton,
+                { backgroundColor: isHeartActive ? "#FF3156" : "#FF3156" },
+              ]}
+            >
+              <AntDesign name="heart" size={30} color="white" />
+            </View>
+          </TouchableOpacity>
+        </View>
+
         {/* <View style={styles.viewContainer1}>
           <View style={styles.searchContainer}>
             <Text style={styles.searchText}>🔍 Our Story</Text>

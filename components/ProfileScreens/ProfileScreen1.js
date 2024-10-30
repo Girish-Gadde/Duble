@@ -131,7 +131,7 @@ const ProfileScreen1 = ({ route, navigation }) => {
     >
       <View style={{ flex: 1 }}>
         <Image
-          source={{ uri: `${profile.images[0]}` }}
+          source={{ uri: `${profile?.images[0]}` }}
           style={styles.image}
           resizeMode="cover"
         />

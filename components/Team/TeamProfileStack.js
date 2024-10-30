@@ -5,11 +5,13 @@ import TeamProfile from "./TeamProfile";
 import TeamProfileDetails from "./TeamProfileDetails";
 import HeaderTitleWithIcon2 from "@/Icon-functions/HeaderTitle2";
 import HeaderTitleWithIcon1 from "@/Icon-functions/HeaderTitle1";
+import { useSelector } from "react-redux";
 
 const Stack = createStackNavigator();
 
 export const TeamProfileStack = ({ route, navigation }) => {
-  const { profile, dispatch } = route.params;
+  const { dispatch } = route.params;
+  const profile = useSelector((state) => state.profile);
   const handleMenuClick = () => {
     // Dispatch action to toggle the state
     navigation.goBack();
@@ -23,15 +25,15 @@ export const TeamProfileStack = ({ route, navigation }) => {
           component={TeamProfile}
           initialParams={{ navigation, profile }}
           options={{
-            headerTitle: () => (
-              <HeaderTitleWithIcon2
-                title="duble"
-                iconName="swap-horiz"
-                iconName1="arrow-back"
-                handleMenuClick={handleMenuClick}
-              /> // Use the HeaderTitleWithIcon component
-            ),
-            headerTitleAlign: "center",
+            // headerTitle: () => (
+            //   <HeaderTitleWithIcon2
+            //     title="duble"
+            //     iconName="swap-horiz"
+            //     iconName1="arrow-back"
+            //     handleMenuClick={handleMenuClick}
+            //   /> // Use the HeaderTitleWithIcon component
+            // ),
+            headerShown: false,
             headerLeft: () => null,
           }}
         />

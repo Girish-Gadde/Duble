@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import {
+  CommonActions,
+  NavigationContainer,
+  useNavigation,
+} from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {
   ActivityIndicator,
@@ -31,6 +35,8 @@ import { setIndividualProfile, setProfile, setTeams } from "./Redux/Actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { io } from "socket.io-client";
 import parseErrorStack from "react-native/Libraries/Core/Devtools/parseErrorStack";
+import Ionicons4 from "react-native-vector-icons/Ionicons";
+import { TeamProfileStack } from "./Team/TeamProfileStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +44,7 @@ const socket = io(serverIP);
 
 const HomeTab = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
-  //const mobileNumber = "6305148607";
+  // const mobileNumber = "8074964497";
   const dispatch = useDispatch();
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
   const [userId, setUserId] = useState(null);
@@ -280,6 +286,15 @@ const HomeTab = ({ route, navigation }) => {
     }
   };
 
+  const navigateToNotifScreen = () => {
+    if (individualProfile) {
+      navigation.navigate("Notifications1", {
+        navigation,
+        individualProfile,
+      });
+    }
+  };
+
   if (loading) {
     // Show loading indicator while data is being fetched
     return (
@@ -357,10 +372,11 @@ const HomeTab = ({ route, navigation }) => {
               fontWeight: "bold",
             },
             headerTitle: () => (
-              <HeaderTitleWithIcon1
+              <HeaderTitleWithIcon
                 title="duble"
-                iconName="swap-horiz"
-                iconName1="menu"
+                iconName="menu"
+                navigateToTeamProfile={navigateToTeamProfile}
+                //navigateToNotifScreen={navigateToNotifScreen}
               /> // Use the HeaderTitleWithIcon component
             ),
             headerTitleAlign: "center",
@@ -375,6 +391,25 @@ const HomeTab = ({ route, navigation }) => {
             yourTeamProfile: profile,
             refreshYourTeam,
           }}
+          listeners={({ navigation }) => ({
+            focus: () => {
+              console.log("TARGET");
+              const state = navigation.getState();
+              const activeRoute = state.routes[state.index].state
+                ? state.routes[state.index].state.routes[
+                    state.routes[state.index].state.index
+                  ].name
+                : null;
+
+              if (
+                ["LikedProfile", "LikedMatch", "LikedChat"].includes(
+                  activeRoute
+                )
+              ) {
+                navigation.goBack(); // Navigate back to LikeScreen1
+              }
+            },
+          })}
           options={{
             tabBarIcon: ({ focused, color, size }) => (
               <View style={{ position: "relative" }}>
@@ -400,7 +435,14 @@ const HomeTab = ({ route, navigation }) => {
               marginBottom: 20, // Adjust as needed to decrease the gap
               fontWeight: "bold",
             },
-            headerShown: false,
+            headerTitle: () => (
+              <HeaderTitleWithIcon
+                title="duble"
+                iconName="swap-horiz"
+                navigateToTeamProfile={navigateToTeamProfile}
+              /> // Use the HeaderTitleWithIcon component
+            ),
+            headerTitleAlign: "center",
           }}
         />
 
@@ -483,48 +525,76 @@ const HomeTab = ({ route, navigation }) => {
               marginBottom: 20, // Adjust as needed to decrease the gap
               fontWeight: "bold",
             },
-            headerShown: false,
+            headerTitle: () => (
+              <HeaderTitleWithIcon
+                title="duble"
+                iconName="swap-horiz"
+                navigateToTeamProfile={navigateToTeamProfile}
+              /> // Use the HeaderTitleWithIcon component
+            ),
+            headerTitleAlign: "center",
           }}
         />
 
-        {individualProfile && (
-          <Tab.Screen
-            name="Profile"
-            component={ProfileStack}
-            initialParams={{
-              navigation,
-              profile: individualProfile,
-              dispatch,
-            }}
-            options={{
-              tabBarIcon: ({ focused, color, size }) => (
-                <Ionicons
-                  name={focused ? "person" : "person-outline"}
-                  size={size}
-                  color={color}
-                />
-              ),
-              tabBarLabelStyle: {
-                marginBottom: 20, // Adjust as needed to decrease the gap
-                fontWeight: "bold",
-              },
-              headerTitle: () => (
-                <HeaderTitleWithIcon
-                  title="duble"
-                  iconName="menu"
-                  navigateToTeamProfile={navigateToTeamProfile}
-                />
-              ),
-              // headerTitle: isEditVisible
-              //   ? () => <HeaderTitleWithIcon title="duble" iconName="menu" />
-              //   : null,
-              headerTitleAlign: "center",
-            }}
-          />
-        )}
+        <Tab.Screen
+          name="Profile"
+          component={ProfileStack}
+          initialParams={{
+            navigation,
+            profile: individualProfile,
+            dispatch,
+          }}
+          options={{
+            tabBarIcon: ({ focused, color, size }) => (
+              <Ionicons
+                name={focused ? "person" : "person-outline"}
+                size={size}
+                color={color}
+              />
+            ),
+            tabBarLabelStyle: {
+              marginBottom: 20, // Adjust as needed to decrease the gap
+              fontWeight: "bold",
+            },
+            headerTitle: () => (
+              <HeaderTitleWithIcon
+                title="duble"
+                iconName="menu"
+                navigateToTeamProfile={navigateToTeamProfile}
+              />
+            ),
+            // headerTitle: isEditVisible
+            //   ? () => <HeaderTitleWithIcon title="duble" iconName="menu" />
+            //   : null,
+            headerTitleAlign: "center",
+          }}
+        />
 
         <Tab.Screen
-          name="HiddenScreen"
+          name="Team Profile"
+          component={TeamProfileStack}
+          initialParams={{
+            navigation,
+            profile,
+            dispatch,
+          }}
+          options={({ navigation }) => ({
+            tabBarButton: () => null, // Hide the tab from the tab bar
+            headerTitleAlign: "center",
+            // headerShown: true, // Enable the header
+            headerLeft: () => (
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={{ marginLeft: 10 }}
+              >
+                <Ionicons4 name="arrow-back" size={24} color="black" />
+              </TouchableOpacity>
+            ),
+          })}
+        />
+
+        <Tab.Screen
+          name="Notifications"
           component={Notification}
           initialParams={{
             navigation,
@@ -532,13 +602,14 @@ const HomeTab = ({ route, navigation }) => {
           }}
           options={({ navigation }) => ({
             tabBarButton: () => null, // Hide the tab from the tab bar
-            headerShown: true, // Enable the header
+            headerTitleAlign: "center",
+            // headerShown: true, // Enable the header
             headerLeft: () => (
               <TouchableOpacity
                 onPress={() => navigation.goBack()}
                 style={{ marginLeft: 10 }}
               >
-                <Text style={{ color: "#007AFF", fontSize: 18 }}>Back</Text>
+                <Ionicons4 name="arrow-back" size={24} color="black" />
               </TouchableOpacity>
             ),
           })}

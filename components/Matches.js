@@ -27,15 +27,16 @@ const Matches = ({ route, navigation }) => {
           component={MatchScreen}
           initialParams={{ yourTeamProfile, navigation, dispatch }}
           options={{
-            headerTitle: () => (
-              <HeaderTitleWithIcon1
-                title="duble"
-                iconName="swap-horiz"
-                iconName1="menu"
-              /> // Use the HeaderTitleWithIcon component
-            ),
-            headerTitleAlign: "center",
-            headerLeft: () => null,
+            headerShown: false,
+            // headerTitle: () => (
+            //   <HeaderTitleWithIcon1
+            //     title="duble"
+            //     iconName="swap-horiz"
+            //     iconName1="menu"
+            //   /> // Use the HeaderTitleWithIcon component
+            // ),
+            // headerTitleAlign: "center",
+            // headerLeft: () => null,
           }}
         />
 

@@ -264,13 +264,14 @@ const HomeScreen = ({ route, navigation }) => {
     if (yourTeamProfile) {
       getSavedData();
       const currentProfile = profiles[currentProfileIndex];
-      console.log(currentProfile, "VG");
+      // console.log(currentProfile, "VG");
     } else {
       //getAllTeams();
     }
   }, []);
 
   useEffect(() => {
+    console.log("RUN");
     getSavedData();
   }, [yourTeamProfile]);
 

@@ -28,15 +28,16 @@ export const LikeStack = ({ route, navigation }) => {
           component={Likes}
           initialParams={{ yourTeamProfile, navigation }}
           options={{
-            headerTitle: () => (
-              <HeaderTitleWithIcon1
-                title="duble"
-                iconName="swap-horiz"
-                iconName1="menu"
-              /> // Use the HeaderTitleWithIcon component
-            ),
-            headerTitleAlign: "center",
-            headerLeft: () => null,
+            headerShown: false,
+            // headerTitle: () => (
+            //   <HeaderTitleWithIcon1
+            //     title="duble"
+            //     iconName="swap-horiz"
+            //     iconName1="menu"
+            //   /> // Use the HeaderTitleWithIcon component
+            // ),
+            // headerTitleAlign: "center",
+            // headerLeft: () => null,
           }}
         />
         <Stack.Screen

@@ -6,7 +6,12 @@ import { useDispatch } from "react-redux";
 import { toggleEditButtonAndBio } from "../components/Redux/Actions";
 import { useNavigation } from "@react-navigation/native";
 
-const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
+const HeaderTitleWithIcon3 = ({
+  title,
+  iconName1,
+  navigateToTeamProfile,
+  navigateToNotifScreen,
+}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -27,38 +32,17 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
       <TouchableOpacity
         style={{
           position: "absolute",
-          left: "-130%",
-          top: "-25%",
+          right: 150,
+          // top: -1,
         }}
-        onPress={() => navigation.navigate("Team Profile")}
+        onPress={handleMenuClick}
       >
-        <View
-          style={{
-            padding: 4,
-            borderRadius: 22,
-            backgroundColor: "#EFE0E4",
-            flexDirection: "row",
-            borderWidth: 1,
-            borderColor: "black",
-          }}
-        >
-          <Image
-            source={{
-              uri: "https://images.unsplash.com/photo-1582481960493-26179ea458e0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDEyfHx8ZW58MHx8fHx8",
-            }} // Replace with your image source
-            style={{
-              width: 26,
-              height: 26,
-              borderRadius: 13,
-              marginLeft: 2,
-            }} // Adjust width, height, and border-radius as needed
-          />
-          <MaterialIcons
-            name="keyboard-arrow-right" // Right arrow icon
-            size={24}
-            color="black"
-          />
-        </View>
+        {/* Your button icon or text */}
+        <MaterialIcons
+          name={iconName1} // Example icon name
+          size={30}
+          color="black"
+        />
       </TouchableOpacity>
 
       <Image
@@ -106,7 +90,7 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
           right: -80, // Adjust the position as needed
           bottom: 6,
         }}
-        onPress={() => navigation.navigate("Notifications")}
+        onPress={navigateToNotifScreen}
       >
         <MaterialIcons name="notifications" size={24} color="black" />
       </TouchableOpacity>
@@ -114,4 +98,4 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
   );
 };
 
-export default HeaderTitleWithIcon;
+export default HeaderTitleWithIcon3;
