@@ -145,7 +145,7 @@ const HomeScreen = ({ route, navigation }) => {
       (_, index) => index !== currentProfileIndex
     );
     setProfiles(updatedProfiles);
-    console.log(updatedProfiles, "UPDATED");
+    //  console.log(updatedProfiles, "UPDATED");
     if (updatedProfiles.length > 0) {
       updateCurrentIndex(currentProfileIndex); // Keep current index within bounds
     } else {
@@ -337,7 +337,7 @@ const HomeScreen = ({ route, navigation }) => {
   useEffect(() => {
     if (profiles.length > 0) {
       const currentProfile = profiles[currentProfileIndex];
-      console.log(currentProfile, "VG");
+      // console.log(currentProfile, "VG");
       // setImages(currentProfile.selectedImages || []);
       const formattedImages = (currentProfile.selectedImages || []).map(
         (imagePath) => ({ uri: `${imagePath}` })

@@ -43,8 +43,8 @@ const Tab = createBottomTabNavigator();
 const socket = io(serverIP);
 
 const HomeTab = ({ route, navigation }) => {
-  const { mobileNumber } = route.params;
-  // const mobileNumber = "8074964497";
+  //const { mobileNumber } = route.params;
+  const mobileNumber = "6305148607";
   const dispatch = useDispatch();
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
   const [userId, setUserId] = useState(null);
@@ -81,8 +81,9 @@ const HomeTab = ({ route, navigation }) => {
     socket.on("teamCreated", async (data) => {
       console.log("TEAM-MSG");
       const userId = await AsyncStorage.getItem("userId");
-      fetchTeams(userId);
-      getYourIndividualTeam(userId);
+      // fetchTeams(userId);
+      getUserId();
+      // getYourIndividualTeam(userId);
       Alert.alert(data.message);
     });
     getUserId();
@@ -153,7 +154,7 @@ const HomeTab = ({ route, navigation }) => {
 
       const responseData = await response.json();
       const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
-      console.log(savedIndex, responseData, "SAVED-7");
+      // console.log(savedIndex, responseData, "SAVED-7");
       //setProfile(responseData[displayIndex.current]);
       dispatch(setProfile(responseData[savedIndex]));
     } catch (error) {
@@ -220,7 +221,7 @@ const HomeTab = ({ route, navigation }) => {
       }
 
       const responseData = await response.json();
-      console.log(responseData, "YOUR_TEAMS");
+      //    console.log(responseData, "YOUR_TEAMS");
       dispatch(setTeams(responseData));
       // Set the index to the last added team (last in the list)
       const lastTeamIndex = responseData.length - 1;

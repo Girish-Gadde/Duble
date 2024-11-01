@@ -44,8 +44,10 @@ const Notification = ({ route, navigation }) => {
   };
 
   useEffect(() => {
+    console.log("DEF");
     if (individualProfile?.notifications) {
-      setNotifications(individualProfile.notifications);
+      console.log("JKL");
+      setNotifications(individualProfile?.notifications);
     }
   }, [individualProfile]);
 
