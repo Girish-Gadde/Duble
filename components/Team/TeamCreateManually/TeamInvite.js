@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import axios from "axios";
 import * as Sharing from "expo-sharing";
@@ -20,6 +21,8 @@ export default function CreateTeam({
 }) {
   console.log("Mobilen No7 ---->", mobileNumber);
   const [teamName, setTeamName] = useState("");
+  const [loading, setLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("");
   const [inviteLink, setInviteLink] = useState("");
   const [otp, setOtp] = useState(""); // State to store OTP
   const [teamateMobileNumber, setTeamateMobileNumber] = useState(null);
@@ -48,6 +51,9 @@ export default function CreateTeam({
     }
 
     try {
+      setLoading(true);
+      setErrorMessage('')
+      setError
       const response = await axios.post(
         `${serverIP}/auth/request-to-create-a-team`,
         {
@@ -84,6 +90,8 @@ export default function CreateTeam({
           : "Failed to create team";
 
       Alert.alert("Error", errorMessage);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -119,19 +127,35 @@ export default function CreateTeam({
       <TextInput
         style={styles.input}
         placeholder="Enter Team Name"
+        placeholderTextColor='grey'
         value={teamName}
         onChangeText={setTeamName}
       />
       <Text style={styles.label}>Team mate's Mobile number</Text>
       <TextInput
         style={styles.input}
+        placeholderTextColor='grey'
         placeholder="Enter your team mate's mobile number"
         value={teamateMobileNumber}
         onChangeText={setTeamateMobileNumber}
       />
 
-      <TouchableOpacity style={styles.button} onPress={createATeam}>
+      {/* <TouchableOpacity style={styles.button} onPress={createATeam}>
         <Text style={styles.buttonText}>Create Team</Text>
+      </TouchableOpacity> */}
+
+      <TouchableOpacity
+      style={[styles.button, loading && styles.buttonDisabled]}
+        onPress={createATeam}
+        disabled={loading}
+      >
+        {
+          loading ? (
+            <ActivityIndicator size="small" color="#fff"/>
+          ) : (
+            <Text style={styles.buttonText}>Create Team</Text>
+          )
+        }
       </TouchableOpacity>
 
       {inviteLink ? (
@@ -150,7 +174,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     padding: "10%",
-    marginTop: "5%",
+    marginTop: "2%",
   },
   title: {
     fontSize: 24,
@@ -177,6 +201,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
     marginVertical: 10,
+  },
+  buttonDisabled:{
+    backgroundColor:"#9a73ef"
   },
   buttonText: {
     color: "#fff",

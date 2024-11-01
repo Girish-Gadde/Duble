@@ -7,12 +7,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import { serverIP } from "../config";
 
 const PhoneLogin = ({ navigation }) => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   //const navigation = useNavigation();
 
   const handleMobileNumberChange = (text) => {
@@ -24,6 +26,8 @@ const PhoneLogin = ({ navigation }) => {
   };
 
   const sendPhoneNumberForOtp = async () => {
+    setLoading(true);
+    setErrorMessage('')
     try {
       const response = await fetch(`${serverIP}/auth/sendOtp`, {
         method: "POST",
@@ -47,6 +51,8 @@ const PhoneLogin = ({ navigation }) => {
       console.log("Response: ", data);
     } catch (error) {
       console.error("Error: ", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -75,8 +81,16 @@ const PhoneLogin = ({ navigation }) => {
       {errorMessage ? (
         <Text style={styles.errorText}>{errorMessage}</Text>
       ) : null}
-      <TouchableOpacity style={styles.button} onPress={sendPhoneNumberForOtp}>
+      <TouchableOpacity
+        style={[styles.button, loading && styles.buttonDisabled]}
+        onPress={sendPhoneNumberForOtp}
+        disabled={loading}
+      >
+      {loading ? (
+        <ActivityIndicator size="small" color="#fff"/>
+      ) : (
         <Text style={styles.buttonText}>Verify</Text>
+      )}
       </TouchableOpacity>
       <Text style={styles.messageText}>
         Your number is safe with us and is stored in encrypted form
@@ -129,6 +143,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 35,
+  },
+  buttonDisabled:{
+    backgroundColor:"#9a73ef"
   },
   buttonText: {
     color: "#fff",
