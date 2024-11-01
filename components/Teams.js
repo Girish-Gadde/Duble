@@ -697,7 +697,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1, // Allow the ScrollView's content to expand beyond the view height
-    marginTop:'-10%',
+    marginTop:'-15%',
     
   },
   itemsContainer: {
@@ -836,7 +836,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   popup: {
-    height: "62%",
+    height: "88%",
     backgroundColor: "#fff",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -845,8 +845,8 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     position: "absolute",
-    top: 10,
-    right: 10,
+    top: '1%',
+    right: '1%',
     // backgroundColor: '#ff0000',
     borderRadius: 15,
     padding: 5,
@@ -872,6 +872,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+
 
 
 export default Teams;

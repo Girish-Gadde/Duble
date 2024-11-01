@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   TextInput,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import OTPTextInput from "react-native-otp-textinput";
@@ -18,6 +19,7 @@ const OTPScreen = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false)
   //const navigation = useNavigation();
 
   const sendPhoneNumberForOtp = async () => {
@@ -58,6 +60,8 @@ const OTPScreen = ({ route, navigation }) => {
   };
 
   const verifyUserOtp = async (otp) => {
+    setLoading(true);
+    setErrorMessage("");
     try {
       const response = await fetch(`${serverIP}/auth/verifyUserOtp`, {
         method: "POST",
@@ -91,6 +95,8 @@ const OTPScreen = ({ route, navigation }) => {
     } catch (error) {
       setErrorMessage("Please enter a valid OTP");
       console.error("Error: ", error);
+    } finally{
+      setLoading(false)
     }
   };
 
@@ -102,6 +108,12 @@ const OTPScreen = ({ route, navigation }) => {
       verifyUserOtp(enteredOtp);
     }
   };
+
+  const handleDonePress = () => {
+    if(!loading){
+      verifyUserOtp(otp)
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -129,8 +141,16 @@ const OTPScreen = ({ route, navigation }) => {
         <Text style={styles.errorText}>{errorMessage}</Text>
       ) : null}
 
-      <TouchableOpacity style={styles.button} onPress={verifyUserOtp}>
+      <TouchableOpacity 
+      style={[styles.button, loading && styles.buttonDisables]}
+      onPress={{handleDonePress}}
+      disabled={loading}
+      >
+      {loading ? (
+        <ActivityIndicator color="#fff"/>
+      ) : (
         <Text style={styles.buttonText}>Done</Text>
+      )}
       </TouchableOpacity>
       <TouchableOpacity onPress={sendPhoneNumberForOtp}>
         <Text style={styles.sendText}>Send again</Text>
@@ -200,6 +220,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 35,
+  },
+  buttonDisables:{
+    backgroundColor:"#9a73ef"
   },
   buttonText: {
     color: "#fff",
