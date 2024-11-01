@@ -303,7 +303,8 @@ const HomeScreen = ({ route, navigation }) => {
         setProfiles(responseData); // Set the filtered profiles from the back-end
       }
     } catch (error) {
-      console.error("Fetching data failed:", error);
+      setProfiles([]);
+      console.error("Fetching data failed-5:", error);
       //Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
     }
   }
