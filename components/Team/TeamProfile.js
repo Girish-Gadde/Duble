@@ -43,9 +43,11 @@ const TeamProfile = ({ route, navigation }) => {
   };
 
   useEffect(() => {
-    const formattedImages = (profile.selectedImages || []).map((imagePath) => ({
-      uri: `${imagePath}`,
-    }));
+    const formattedImages = (profile?.selectedImages || []).map(
+      (imagePath) => ({
+        uri: `${imagePath}`,
+      })
+    );
     console.log(formattedImages, "IMAGE-7777777");
     setImages(formattedImages);
   }, []);
@@ -102,11 +104,11 @@ const TeamProfile = ({ route, navigation }) => {
         </View> */}
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.nameText}>{profile.name1},</Text>
-            <Text style={styles.ageText}>{profile.age1}</Text>
+            <Text style={styles.nameText}>{profile?.name1},</Text>
+            <Text style={styles.ageText}>{profile?.age1}</Text>
             <View style={styles.divider} />
-            <Text style={styles.nameText}>{profile.name2},</Text>
-            <Text style={styles.ageText}>{profile.age2}</Text>
+            <Text style={styles.nameText}>{profile?.name2},</Text>
+            <Text style={styles.ageText}>{profile?.age2}</Text>
           </View>
           <View style={styles.locationContainer}>
             <MaterialIcons
@@ -115,14 +117,14 @@ const TeamProfile = ({ route, navigation }) => {
               color="white"
               style={styles.locationIcon}
             />
-            <Text style={styles.locationText}>{profile.location}</Text>
+            <Text style={styles.locationText}>{profile?.location}</Text>
           </View>
           <Text style={styles.descriptionText}>
-            "{profile.user1Description}""
+            "{profile?.user1Description}""
           </Text>
         </View>
 
-        {profile.dynamicContent?.length > 0 ? (
+        {profile?.dynamicContent?.length > 0 ? (
           profile.dynamicContent.map((content, index) => (
             <View key={index} style={styles.viewContainer}>
               <View style={styles.searchContainer}>
@@ -142,14 +144,14 @@ const TeamProfile = ({ route, navigation }) => {
         <View style={styles.singleBioContainer}>
           <Image
             source={{
-              uri: profile.user1ProfilePic,
+              uri: profile?.user1ProfilePic,
             }}
             style={styles.singleImage}
           />
           <View style={styles.bioDataContainer}>
             <View style={styles.singleNameContainer}>
-              <Text style={styles.nameText1}>{profile.name1},</Text>
-              <Text style={styles.ageText1}>{profile.age1}</Text>
+              <Text style={styles.nameText1}>{profile?.name1},</Text>
+              <Text style={styles.ageText1}>{profile?.age1}</Text>
             </View>
             <View style={styles.rowContainer}>
               <View style={styles.iconContainer}>
@@ -159,7 +161,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.user1Place}</Text>
+                <Text style={styles.cell}>{profile?.user1Place}</Text>
               </View>
 
               <View style={styles.iconContainer}>
@@ -169,7 +171,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.user1Occupation}</Text>
+                <Text style={styles.cell}>{profile?.user1Occupation}</Text>
               </View>
             </View>
 
@@ -181,7 +183,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.user1Height}</Text>
+                <Text style={styles.cell}>{profile?.user1Height}</Text>
               </View>
               <View style={styles.iconContainer}>
                 <AntDesign
@@ -190,23 +192,25 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.user1gender}</Text>
+                <Text style={styles.cell}>{profile?.user1gender}</Text>
               </View>
             </View>
-            <Text style={styles.singleBioText}>{profile.user1Description}</Text>
+            <Text style={styles.singleBioText}>
+              {profile?.user1Description}
+            </Text>
           </View>
         </View>
         <View style={styles.singleBioContainer}>
           <Image
             source={{
-              uri: profile.user2ProfilePic,
+              uri: profile?.user2ProfilePic,
             }}
             style={styles.singleImage}
           />
           <View style={styles.bioDataContainer}>
             <View style={styles.singleNameContainer}>
-              <Text style={styles.nameText1}>{profile.name2},</Text>
-              <Text style={styles.ageText1}>{profile.age2}</Text>
+              <Text style={styles.nameText1}>{profile?.name2},</Text>
+              <Text style={styles.ageText1}>{profile?.age2}</Text>
             </View>
             <View style={styles.rowContainer}>
               <View style={styles.iconContainer}>
@@ -216,7 +220,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.user2Place}</Text>
+                <Text style={styles.cell}>{profile?.user2Place}</Text>
               </View>
 
               <View style={styles.iconContainer}>
@@ -226,7 +230,7 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.user2Occupation}</Text>
+                <Text style={styles.cell}>{profile?.user2Occupation}</Text>
               </View>
             </View>
 
@@ -247,10 +251,12 @@ const TeamProfile = ({ route, navigation }) => {
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.user2gender}</Text>
+                <Text style={styles.cell}>{profile?.user2gender}</Text>
               </View>
             </View>
-            <Text style={styles.singleBioText}>{profile.user2Description}</Text>
+            <Text style={styles.singleBioText}>
+              {profile?.user2Description}
+            </Text>
           </View>
         </View>
       </View>

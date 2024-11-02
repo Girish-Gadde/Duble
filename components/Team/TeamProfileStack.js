@@ -6,6 +6,7 @@ import TeamProfileDetails from "./TeamProfileDetails";
 import HeaderTitleWithIcon2 from "@/Icon-functions/HeaderTitle2";
 import HeaderTitleWithIcon1 from "@/Icon-functions/HeaderTitle1";
 import { useSelector } from "react-redux";
+import { Alert } from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,21 @@ export const TeamProfileStack = ({ route, navigation }) => {
     navigation.goBack();
     // dispatch(toggleEditButtonAndBio());
   };
+  if (!profile) {
+    Alert.alert(
+      "No Team found",
+      "Please create your team",
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            navigation.navigate("Teams");
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  }
   return (
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="TeamProfile">

@@ -155,8 +155,8 @@ const HomeScreen = ({ route, navigation }) => {
   };
 
   const toggleHeart = async () => {
-    setLoading(true);
-    setErrorMessage('')
+    //  setLoading(true);
+    //  setErrorMessage('')
     if (!yourTeamProfile) {
       Alert.alert(
         "Your team is not created",
@@ -171,7 +171,7 @@ const HomeScreen = ({ route, navigation }) => {
         ],
         { cancelable: true }
       );
-      setLoading(false)
+      //   setLoading(false)
     }
 
     setIsHeartActive(!isHeartActive);
@@ -413,7 +413,6 @@ const HomeScreen = ({ route, navigation }) => {
       </View>
 
       <View style={styles.actionContainer1}>
-      
         <TouchableOpacity style={styles.actionButton1} onPress={toggleDislike}>
           <View
             style={{
@@ -715,7 +714,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
     position: "absolute",
-    gap:20,
+    gap: 20,
     top: "36%",
     marginBottom: "2%",
   },
@@ -731,8 +730,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   actionButton1: { flex: 1, alignItems: "flex-end", marginHorizontal: 15 },
-  buttonDisabled:{
-    backgroundColor:"#9a73ef"
+  buttonDisabled: {
+    backgroundColor: "#9a73ef",
   },
   actionButton2: { flex: 1, alignItems: "flex-start", marginHorizontal: 15 },
   heartButton: {

@@ -19,7 +19,7 @@ const OTPScreen = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   //const navigation = useNavigation();
 
   const sendPhoneNumberForOtp = async () => {
@@ -95,8 +95,8 @@ const OTPScreen = ({ route, navigation }) => {
     } catch (error) {
       setErrorMessage("Please enter a valid OTP");
       console.error("Error: ", error);
-    } finally{
-      setLoading(false)
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,10 +110,10 @@ const OTPScreen = ({ route, navigation }) => {
   };
 
   const handleDonePress = () => {
-    if(!loading){
-      verifyUserOtp(otp)
+    if (!loading) {
+      verifyUserOtp(otp);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -141,16 +141,16 @@ const OTPScreen = ({ route, navigation }) => {
         <Text style={styles.errorText}>{errorMessage}</Text>
       ) : null}
 
-      <TouchableOpacity 
-      style={[styles.button, loading && styles.buttonDisables]}
-      onPress={{handleDonePress}}
-      disabled={loading}
+      <TouchableOpacity
+        style={[styles.button, loading && styles.buttonDisables]}
+        onPress={{ handleDonePress }}
+        disabled={loading}
       >
-      {loading ? (
-        <ActivityIndicator color="#fff"/>
-      ) : (
-        <Text style={styles.buttonText}>Done</Text>
-      )}
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text style={styles.buttonText}>Done</Text>
+        )}
       </TouchableOpacity>
       <TouchableOpacity onPress={sendPhoneNumberForOtp}>
         <Text style={styles.sendText}>Send again</Text>
@@ -221,8 +221,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 35,
   },
-  buttonDisables:{
-    backgroundColor:"#9a73ef"
+  buttonDisables: {
+    backgroundColor: "#9a73ef",
   },
   buttonText: {
     color: "#fff",
