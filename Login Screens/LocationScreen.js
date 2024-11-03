@@ -83,10 +83,19 @@ const LocationScreen = ({ route, navigation }) => {
         </View>
       )}
       {!location && (
-        <Image
-          source={require("../assets/location.png")} // Replace with your image path
-          style={styles.locationImage}
-        />
+        <View style={styles.locationContainer}>
+          {/* Base map image */}
+          <Image
+            source={require("../assets/world-map.png")} // Base image path
+            style={styles.locationImage}
+          />
+
+          {/* Overlay image */}
+          <Image
+            source={require("../assets/Vector3.png")} // Replace with overlay image path
+            style={styles.overlayImage}
+          />
+        </View>
       )}
 
       {/* {mapRegion && (
@@ -150,7 +159,6 @@ const styles = StyleSheet.create({
     height: 650,
     marginBottom: 20,
   },
-
   button: {
     width: "90%",
     height: 49,
@@ -158,7 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 35,
-    marginVertical: 10,
+    marginVertical: 13,
   },
   button1: {
     width: "90%",
@@ -180,10 +188,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   locationImage: {
-    width: "90%",
-    height: 380,
+    width: "75%",
+    height: 307,
     paddingVertical: 10,
     marginVertical: 20,
+  },
+  locationContainer: {
+    position: "relative",
+    width: "110%", // Adjust to match locationImage dimensions
+    height: 360, // Adjust to match locationImage dimensions
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  overlayImage: {
+    position: "absolute",
+    width: 53.13, // Set dimensions of the overlay image
+    height: 76.29, // Adjust as needed
+    top: "7%",
+    right: "17%",
   },
 });
 

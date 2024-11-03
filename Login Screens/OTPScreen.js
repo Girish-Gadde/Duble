@@ -143,7 +143,7 @@ const OTPScreen = ({ route, navigation }) => {
 
       <TouchableOpacity
         style={[styles.button, loading && styles.buttonDisables]}
-        onPress={{ handleDonePress }}
+        onPress={handleDonePress}
         disabled={loading}
       >
         {loading ? (
@@ -153,7 +153,10 @@ const OTPScreen = ({ route, navigation }) => {
         )}
       </TouchableOpacity>
       <TouchableOpacity onPress={sendPhoneNumberForOtp}>
-        <Text style={styles.sendText}>Send again</Text>
+        <Text style={styles.sendText}>
+          Didn’t receive a call?{" "}
+          <Text style={styles.underlineText}>Call again</Text>
+        </Text>
       </TouchableOpacity>
       <Text style={styles.loginText}>
         You will get a call from Duble to verify your number and this helps us
@@ -199,8 +202,11 @@ const styles = StyleSheet.create({
     marginBottom: 25,
     lineHeight: 16.77,
     color: "#121212",
-    textDecorationLine: "underline", // Adds underline
     marginTop: 12,
+  },
+  underlineText: {
+    textDecorationLine: "underline",
+    color: "#121212",
   },
   otpContainer: {
     marginBottom: 20,

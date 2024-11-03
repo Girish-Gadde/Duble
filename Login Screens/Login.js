@@ -24,15 +24,32 @@ const Login = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Image
+          source={require("../assets/Duble-cover.png")}
+          style={styles.headerImage}
+        />
+        <View style={styles.coffeeView}>
+          <Text style={styles.coffeeText}>Coffee for four?</Text>
+        </View>
+        <View style={styles.saturdayView}>
+          <Text style={styles.coffeeText}>Saturday afternoon!</Text>
+        </View>
+        <View style={styles.smallImageView}>
+          <Image
+            source={require("../assets/smile-eyes.png")} // Replace with actual image path
+            style={styles.smallImage}
+          />
+        </View>
+      </View>
       <Text style={styles.headerText}>
-        Team up with your best friend. Meet new pairs. Have real fun!
+        Meet new friends with Duble. It’s easy and safe!
       </Text>
-      <Image
-        source={{
-          uri: `https://s3-alpha-sig.figma.com/img/7889/0d42/087188931516e3df55030265bce6448a?Expires=1730073600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=i9OX0hcPfjiUZGoOVAA4wSgDg08l-KJT5UztBW4T~c-RRJOQY54YIvjHimu~WsOoS3pgywGn6JUpyVitAnbKvfOGrcBksJgOTETQ6Fr3ttwkrHplb-syKgbBHOMVBfa5oVK0~A4fC0g55kXBPjGD4DKvSfzVgfO7phmir7cy2cyHNBjsVxnFCkrZMCbIkLLmwnKdU9k-O1GJIT9gugPSLVPhXYWciRS38CupIj3XecUHZZWldPvLFrimoEdp-xt18b1aV22jJsAoraB90rliIKPtDZ3XHtCfEBrdFOWAkbCH5CNb178vxtrEYM32SIBziB4hCGJjz57fbnSnIjX6RQ__`,
-        }}
-        style={styles.headerImage}
-      />
+      <Text style={styles.dubleText}>
+        Team up with your best friend on Duble and find your new friends. Match,
+        Chat and Meetup!
+      </Text>
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[
@@ -131,18 +148,86 @@ const styles = StyleSheet.create({
     marginRight: "4%", // Space between the image and text
   },
   headerImage: {
-    width: "104%",
-    height: "60%",
+    width: 278.09,
+    height: 305,
     marginBottom: 20,
   },
   headerText: {
-    fontWeight: "700",
-    fontSize: 20,
+    fontWeight: "400",
+    fontSize: 28,
     textAlign: "center",
-    width: "85%",
-    lineHeight: 24.2,
-    paddingVertical: 10,
-    marginVertical: 12,
+    width: 337,
+    lineHeight: 33.54,
+    paddingTop: 10,
+    paddingBottom: 4,
+    marginTop: 16,
+    marginBottom: 6,
+    color: "#121212",
+  },
+  dubleText: {
+    fontWeight: "400",
+    fontSize: 16,
+    textAlign: "center",
+    width: 324,
+    lineHeight: 19.17,
+    paddingVertical: 3,
+    marginTop: 4,
+    marginBottom: 20,
+    color: "#121212",
+  },
+  headerContainer: {
+    position: "relative",
+    width: "100%",
+    height: 330, // Set this height based on your image
+    alignItems: "center",
+  },
+  coffeeView: {
+    position: "absolute",
+    top: "13%",
+    left: "80%",
+    transform: [{ translateX: -72.5 }, { translateY: -20 }], // Center the 145x40 view
+    width: 145,
+    height: 40,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+  },
+  coffeeText: {
+    fontSize: 16,
+    color: "#000",
+    fontWeight: "400",
+    lineHeight: 19.17,
+    color: "#121212",
+  },
+  saturdayView: {
+    position: "absolute",
+    top: "79%",
+    left: "18%",
+    transform: [{ translateX: -72.5 }, { translateY: -20 }], // Center the 145x40 view
+    width: 180,
+    height: 40,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+  },
+  smallImageView: {
+    position: "absolute",
+    top: "14%", // Adjust positioning as needed
+    left: "11%",
+    transform: [{ translateX: -26.5 }, { translateY: -20 }], // Center the 53x40 view
+    width: 53,
+    height: 40,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+  },
+  smallImage: {
+    width: 25,
+    height: 25,
+    resizeMode: "contain",
   },
 });
 

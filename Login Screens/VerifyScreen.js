@@ -31,7 +31,7 @@ const VerifyScreen = ({ route, navigation }) => {
       </View>
       <Text style={styles.verifiedText}>You're verified!</Text>
       <Text style={styles.headerText}>
-        Time to tell us about yourself and get matched with the perfect pairs!
+        Next, set up your profile in just 6 quick steps!
       </Text>
     </View>
   );
@@ -58,11 +58,11 @@ const styles = StyleSheet.create({
     color: "#121212",
   },
   headerText: {
-    fontWeight: "700",
-    fontSize: 20,
+    fontWeight: "400",
+    fontSize: 16,
     textAlign: "center",
-    width: "85%",
-    lineHeight: 24.2,
+    width: "80%",
+    lineHeight: 19.17,
     paddingVertical: 12,
     marginVertical: 12,
   },

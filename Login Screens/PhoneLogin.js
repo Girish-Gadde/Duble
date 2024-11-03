@@ -27,7 +27,7 @@ const PhoneLogin = ({ navigation }) => {
 
   const sendPhoneNumberForOtp = async () => {
     setLoading(true);
-    setErrorMessage('')
+    setErrorMessage("");
     try {
       const response = await fetch(`${serverIP}/auth/sendOtp`, {
         method: "POST",
@@ -52,7 +52,7 @@ const PhoneLogin = ({ navigation }) => {
     } catch (error) {
       console.error("Error: ", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -62,10 +62,10 @@ const PhoneLogin = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Log in</Text>
-      <Text style={styles.loginText}>
+      {/* <Text style={styles.loginText}>
         Enter your phone number to team up with your best friend and meet new
         people!
-      </Text>
+      </Text> */}
       <View style={styles.textLogin}>
         <Text style={styles.subtitle}>Enter phone number</Text>
         <TextInput
@@ -86,14 +86,14 @@ const PhoneLogin = ({ navigation }) => {
         onPress={sendPhoneNumberForOtp}
         disabled={loading}
       >
-      {loading ? (
-        <ActivityIndicator size="small" color="#fff"/>
-      ) : (
-        <Text style={styles.buttonText}>Verify</Text>
-      )}
+        {loading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text style={styles.buttonText}>Verify</Text>
+        )}
       </TouchableOpacity>
       <Text style={styles.messageText}>
-        Your number is safe with us and is stored in encrypted form
+        Don't worry! Your number is safe with us and is stored in encrypted form
       </Text>
     </SafeAreaView>
   );
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     lineHeight: 53.91,
     fontWeight: "700",
     marginTop: "10%",
-    marginBottom: "2%",
+    marginBottom: "16%",
   },
   textLogin: {
     marginBottom: "4%",
@@ -144,22 +144,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 35,
   },
-  buttonDisabled:{
-    backgroundColor:"#9a73ef"
+  buttonDisabled: {
+    backgroundColor: "#9a73ef",
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
   },
-  loginText: {
-    fontWeight: "400",
-    fontSize: 15,
-    textAlign: "center",
-    width: "80%",
-    lineHeight: 18.15,
-    paddingVertical: 7,
-    marginBottom: 17,
-  },
+  // loginText: {
+  //   fontWeight: "400",
+  //   fontSize: 15,
+  //   textAlign: "center",
+  //   width: "80%",
+  //   lineHeight: 18.15,
+  //   paddingVertical: 7,
+  //   marginBottom: 17,
+  // },
   messageText: {
     fontWeight: "400",
     fontSize: 12,
