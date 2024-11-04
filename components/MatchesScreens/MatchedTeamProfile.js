@@ -244,7 +244,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                 alignItems: "center",
               }}
             >
-              <AntDesign name="close" size={30} color="white" />
+              <AntDesign name="message1" size={30} color="white" />
             </View>
           </TouchableOpacity>
         </View>

@@ -7,11 +7,11 @@ import UnlikedMatch from "./MatchesScreens/UnlikedMatch";
 import MatchedTeamProfile from "./MatchesScreens/MatchedTeamProfile";
 import HeaderTitleWithIcon2 from "../Icon-functions/HeaderTitle2";
 import { menuClickAction, menuClickAction1 } from "./Redux/Actions";
-import ChatScreen from './ChatScreens/ChatScreen'
+import ChatScreen from "./ChatScreens/ChatScreen";
 const Stack = createStackNavigator();
 
 const Matches = ({ route, navigation }) => {
-  const { yourTeamProfile, refreshYourTeam, dispatch } = route.params;
+  const { yourTeamProfile, userName, refreshYourTeam, dispatch } = route.params;
   const handleMenuClick = () => {
     console.log("DF");
     dispatch(menuClickAction());
@@ -24,7 +24,7 @@ const Matches = ({ route, navigation }) => {
         <Stack.Screen
           name="MatchScreen"
           component={MatchScreen}
-          initialParams={{ yourTeamProfile, navigation, dispatch }}
+          initialParams={{ yourTeamProfile, userName, navigation, dispatch }}
           options={{
             headerShown: false,
             // headerTitle: () => (

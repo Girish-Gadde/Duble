@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   TextInput,
@@ -8,58 +8,58 @@ import {
   Keyboard,
   TouchableOpacity,
   Text,
-  ScrollView
-} from 'react-native';
-import io from 'socket.io-client';
-import Icon1 from 'react-native-vector-icons/Feather';
-import { serverIP } from '@/config';
+  ScrollView,
+} from "react-native";
+import io from "socket.io-client";
+import Icon1 from "react-native-vector-icons/Feather";
+import { serverIP } from "@/config";
 
 const ChatScreen = ({ route }) => {
- const { roomId } = route.params;
+  const { roomId, username } = route.params;
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
   const socket = io(serverIP);
-  const username = "Prashik"; // Adjust this if needed
+  //  const username = "Prashik"; // Adjust this if needed
 
   const scrollViewRef = useRef();
 
   useEffect(() => {
-    socket.emit('joinRoom', roomId);
+    socket.emit("joinRoom", roomId);
 
-    socket.on('message', (message) => {
+    socket.on("message", (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
     const fetchMessages = async () => {
       try {
         const response = await fetch(`${serverIP}/api/messages/${roomId}`);
-        
+
         // Log the status and response text
-        console.log('Response status:', response.status);
+        console.log("Response status:", response.status);
         const text = await response.text(); // Read the response as text
-        console.log('Response text:', text); // Log the raw response text
-    
+        console.log("Response text:", text); // Log the raw response text
+
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
-    
+
         const data = JSON.parse(text); // Parse the text as JSON
-        console.log('Fetched messages:', data); // Log the fetched messages
-    
+        console.log("Fetched messages:", data); // Log the fetched messages
+
         if (data.messages && Array.isArray(data.messages)) {
           setMessages(data.messages);
         } else {
-          console.error('No messages found or incorrect data format:', data);
+          console.error("No messages found or incorrect data format:", data);
         }
       } catch (error) {
-        console.error('Error fetching messages:', error);
+        console.error("Error fetching messages:", error);
       }
     };
 
     fetchMessages();
 
     return () => {
-      socket.off('message');
+      socket.off("message");
       socket.disconnect();
     };
   }, [roomId]);
@@ -68,12 +68,12 @@ const ChatScreen = ({ route }) => {
     if (!newMessage) return;
 
     const message = { sender: username, message: newMessage };
-    
+
     // Emit the message to the server
-    socket.emit('sendMessage', { roomId, ...message });
+    socket.emit("sendMessage", { roomId, ...message });
 
     // Clear the input field and dismiss the keyboard
-    setNewMessage('');
+    setNewMessage("");
     Keyboard.dismiss();
   };
 
@@ -86,7 +86,9 @@ const ChatScreen = ({ route }) => {
         key={index}
         style={[
           styles.messageContainer,
-          isMyMessage ? styles.myMessageContainer : styles.theirMessageContainer,
+          isMyMessage
+            ? styles.myMessageContainer
+            : styles.theirMessageContainer,
           isLastMessage && styles.lastMessageContainer, // Apply margin for last message
         ]}
       >
@@ -96,7 +98,9 @@ const ChatScreen = ({ route }) => {
             isMyMessage ? styles.myMessageBubble : styles.theirMessageBubble,
           ]}
         >
-          <Text style={styles.senderName}>{isMyMessage ? "You" : message.sender}</Text>
+          <Text style={styles.senderName}>
+            {isMyMessage ? "You" : message.sender}
+          </Text>
           <Text style={styles.messageText}>{message.message}</Text>
         </View>
       </View>
@@ -113,7 +117,9 @@ const ChatScreen = ({ route }) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           ref={scrollViewRef}
-          onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
+          onContentSizeChange={() =>
+            scrollViewRef.current.scrollToEnd({ animated: true })
+          }
           style={styles.messageList}
           keyboardShouldPersistTaps="handled" // This allows taps to register even when the keyboard is open
         >

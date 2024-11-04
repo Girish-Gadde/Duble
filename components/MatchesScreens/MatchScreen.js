@@ -20,7 +20,7 @@ import { menuClickAction, menuClickAction1 } from "../Redux/Actions";
 const MatchScreen = ({ route, navigation }) => {
   // **HOOKS AND STATE DECLARATIONS**
   // Make sure all hooks are declared at the top level
-  const { dispatch } = route.params;
+  const { userName, dispatch } = route.params;
   const yourTeamProfile = useSelector((state) => state.profile);
   const [teams, setTeams] = useState([]);
   const [rooms, setRooms] = useState([]);
@@ -123,7 +123,7 @@ const MatchScreen = ({ route, navigation }) => {
     console.log("Room selected:", roomId);
     console.log("Members:", team ? team.members : "No members");
     dispatch(menuClickAction());
-    navigation.navigate("Chat", { roomId, username: memberName });
+    navigation.navigate("Chat", { roomId, username: userName });
   };
 
   // **RENDER FUNCTIONS**
