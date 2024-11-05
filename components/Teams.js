@@ -342,7 +342,7 @@ const Teams = ({ route, navigation }) => {
                   <Text style={styles.errorText}>{error}</Text>
                 ) : (
                   <View style={[styles.scrollContainer, { height: "20%" }]}> 
-  <ScrollView
+                  <ScrollView
     contentContainerStyle={[styles.scrollContent, { paddingBottom: 20 }]} // Padding to avoid cutting off bottom content
     keyboardShouldPersistTaps="handled"
     showsVerticalScrollIndicator={false}

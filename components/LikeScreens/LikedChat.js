@@ -1,148 +1,98 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
-  Text,
   TextInput,
-  FlatList,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
   TouchableOpacity,
-  TouchableWithoutFeedback,
+  Text,
+  ScrollView,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import io from "socket.io-client";
 import Icon1 from "react-native-vector-icons/Feather";
-import axios from "axios";
-import { serverIP } from "../../config";
+import { serverIP } from "@/config";
 import { useSelector } from "react-redux";
 
-const socket = io(`${serverIP}/chat-room`);
-
-const LikedChat = ({ route }) => {
-  const { roomId } = route.params;
-  console.log(roomId, "ROOOM---->>>>>ID");
+const ChatScreen = ({ route }) => {
+  const { roomId} = route.params;
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const socket = io(serverIP);
   const individualProfile = useSelector((state) => state.individualProfile);
   const [username, setUsername] = useState(individualProfile.name);
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [participants, setParticipants] = useState([]);
-  const flatListRef = useRef(null);
-  //  const username = "Shivani";
+  //  const username = "Prashik"; // Adjust this if needed
+
+  const scrollViewRef = useRef();
 
   useEffect(() => {
-    console.log(`Joining room: ${roomId} as ${username}`);
-    socket.emit("setUsername", username);
     socket.emit("joinRoom", roomId);
 
-    const fetchChatHistory = async () => {
+    socket.on("message", (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
+    const fetchMessages = async () => {
       try {
-        const storedMessages = await AsyncStorage.getItem(roomId);
-        if (storedMessages) {
-          setMessages(JSON.parse(storedMessages));
-          console.log(`Loaded messages from AsyncStorage for room: ${roomId}`);
+        const response = await fetch(`${serverIP}/api/messages/${roomId}`);
+
+        // Log the status and response text
+        console.log("Response status:", response.status);
+        const text = await response.text(); // Read the response as text
+        console.log("Response text:", text); // Log the raw response text
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = JSON.parse(text); // Parse the text as JSON
+        console.log("Fetched messages:", data); // Log the fetched messages
+
+        if (data.messages && Array.isArray(data.messages)) {
+          setMessages(data.messages);
         } else {
-          const response = await axios.get(
-            `${serverIP}/chat-room/chat-history/${roomId}`
-          );
-          if (response.data && response.data.messages) {
-            setMessages(response.data.messages);
-            await AsyncStorage.setItem(
-              roomId,
-              JSON.stringify(response.data.messages)
-            );
-            console.log(
-              `Fetched and stored messages from server for room: ${roomId}`
-            );
-          }
+          console.error("No messages found or incorrect data format:", data);
         }
       } catch (error) {
-        console.error("Failed to fetch messages:", error);
+        console.error("Error fetching messages:", error);
       }
     };
 
-    fetchChatHistory();
-
-    socket.on("receiveMessage", ({ sender, message }) => {
-      console.log(`Received message from ${sender}: "${message}"`);
-      if (sender !== username) {
-        const newMessage = { sender, message };
-        setMessages((prevMessages) => [...prevMessages, newMessage]);
-        saveMessageToStorage(roomId, newMessage);
-      }
-      scrollToBottom();
-    });
-
-    socket.on("updateParticipants", (participants) => {
-      console.log(`Participants updated: ${participants.join(", ")}`);
-      setParticipants(participants);
-    });
+    fetchMessages();
 
     return () => {
-      console.log(`Leaving room: ${roomId}`);
-      socket.off("receiveMessage");
-      socket.off("updateParticipants");
+      socket.off("message");
+      socket.disconnect();
     };
-  }, [roomId, username]);
+  }, [roomId]);
 
-  const scrollToBottom = () => {
-    if (flatListRef.current) {
-      flatListRef.current.scrollToEnd({ animated: true });
-    }
+  const sendMessage = () => {
+    if (!newMessage) return;
+
+    const message = { sender: username, message: newMessage };
+
+    // Emit the message to the server
+    socket.emit("sendMessage", { roomId, ...message });
+
+    // Clear the input field and dismiss the keyboard
+    setNewMessage("");
+    Keyboard.dismiss();
   };
 
-  const sendMessage = async () => {
-    if (message.trim()) {
-      console.log(`Sending message: "${message}" as ${username}`);
-      const newMessage = { sender: username, message };
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-      socket.emit("sendMessage", { room: roomId, message });
-      saveMessageToStorage(roomId, newMessage);
-      await saveMessageToDatabase(roomId, newMessage);
-      setMessage("");
-      Keyboard.dismiss();
-    } else {
-      console.log("Cannot send empty message");
-    }
-  };
-
-  const saveMessageToStorage = async (roomId, message) => {
-    try {
-      const existingMessages = await AsyncStorage.getItem(roomId);
-      const messagesArray = existingMessages
-        ? JSON.parse(existingMessages)
-        : [];
-      messagesArray.push(message);
-      await AsyncStorage.setItem(roomId, JSON.stringify(messagesArray));
-      console.log(`Message saved to AsyncStorage for room: ${roomId}`);
-    } catch (error) {
-      console.error("Failed to save message to storage:", error);
-    }
-  };
-
-  const saveMessageToDatabase = async (roomId, message) => {
-    try {
-      await axios.post(`${serverIP}/chat-room/save-message`, {
-        roomId,
-        message,
-      });
-      console.log("Message successfully saved to MongoDB:", message);
-    } catch (error) {
-      console.error("Failed to save message to MongoDB:", error);
-    }
-  };
-
-  const renderItem = ({ item }) => {
-    const isMyMessage = item.sender === username;
+  const renderMessage = (message, index) => {
+    const isMyMessage = message.sender === username;
+    const isLastMessage = index === messages.length - 1; // Check if this is the last message
 
     return (
       <View
+        key={index}
         style={[
           styles.messageContainer,
           isMyMessage
             ? styles.myMessageContainer
             : styles.theirMessageContainer,
+          isLastMessage && styles.lastMessageContainer, // Apply margin for last message
         ]}
       >
         <View
@@ -152,9 +102,9 @@ const LikedChat = ({ route }) => {
           ]}
         >
           <Text style={styles.senderName}>
-            {isMyMessage ? "You" : item.sender}
+            {isMyMessage ? "You" : message.sender}
           </Text>
-          <Text style={styles.messageText}>{item.message}</Text>
+          <Text style={styles.messageText}>{message.message}</Text>
         </View>
       </View>
     );
@@ -164,41 +114,32 @@ const LikedChat = ({ route }) => {
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 102 : 0}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0} // Adjust this offset if necessary
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.innerContainer}>
-          <View style={styles.participantsContainer}>
-            <Text style={styles.participantsText}>
-              Participants: {participants.join(", ")}
-            </Text>
-          </View>
-          <FlatList
-            ref={flatListRef}
-            data={messages}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderItem}
-            contentContainerStyle={styles.messageList}
-            onContentSizeChange={scrollToBottom}
+      <View style={styles.innerContainer}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          ref={scrollViewRef}
+          onContentSizeChange={() =>
+            scrollViewRef.current.scrollToEnd({ animated: true })
+          }
+          style={styles.messageList}
+          keyboardShouldPersistTaps="handled" // This allows taps to register even when the keyboard is open
+        >
+          {messages.map((message, index) => renderMessage(message, index))}
+        </ScrollView>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={newMessage}
+            onChangeText={setNewMessage}
+            placeholder="Type your message..."
           />
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              value={message}
-              onChangeText={setMessage}
-              placeholder="Type your message..."
-            />
-            <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
-              <Icon1
-                name="send"
-                size={24}
-                color="#fff"
-                style={styles.sendIcon}
-              />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
+            <Icon1 name="send" size={24} color="#fff" />
+          </TouchableOpacity>
         </View>
-      </TouchableWithoutFeedback>
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -210,16 +151,9 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     flex: 1,
-    justifyContent: "space-between",
-  },
-  participantsContainer: {
-    padding: 10,
-    backgroundColor: "#e0e0e0",
-  },
-  participantsText: {
-    fontSize: 16,
   },
   messageList: {
+    flexGrow: 1,
     padding: 10,
   },
   messageContainer: {
@@ -228,11 +162,9 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   myMessageContainer: {
-    justifyContent: "flex-end",
     alignSelf: "flex-end",
   },
   theirMessageContainer: {
-    justifyContent: "flex-end",
     alignSelf: "flex-start",
   },
   messageBubble: {
@@ -241,20 +173,18 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
   },
   myMessageBubble: {
-    backgroundColor: "#FF3156", // Green for sender
-    alignSelf: "flex-end",
+    backgroundColor: "#FF3156",
   },
   theirMessageBubble: {
-    backgroundColor: "#d3d3d3", // Gray for receiver
-    alignSelf: "flex-start",
+    backgroundColor: "#d3d3d3",
   },
   messageText: {
     color: "#fff",
   },
   senderName: {
     fontWeight: "bold",
-    fontSize: 12, // Adjusted font size for the username
-    color: "#ffffff", // Color for the username
+    fontSize: 12,
+    color: "#ffffff",
     marginBottom: 5,
   },
   inputContainer: {
@@ -278,275 +208,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#007bff",
     marginLeft: 10,
   },
-  sendIcon: {
-    fontSize: 24,
+  lastMessageContainer: {
+    marginBottom: 20, // Adjust this value as needed for your design
   },
 });
 
-export default LikedChat;
-
-// // ChatScreen.js
-// import React, { useState, useEffect, useRef } from "react";
-// import {
-//   View,
-//   Text,
-//   TextInput,
-//   Button,
-//   FlatList,
-//   StyleSheet,
-//   Image,
-//   TouchableOpacity,
-// } from "react-native";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-// import Icon from "react-native-vector-icons/MaterialIcons";
-// import Icon1 from "react-native-vector-icons/Feather";
-// import Icon2 from "react-native-vector-icons/Octicons";
-
-// const LikedChat = ({ route, navigation }) => {
-//   const { profile } = route.params;
-//   const [messages, setMessages] = useState([]);
-//   const [inputText, setInputText] = useState("");
-//   const flatListRef = useRef(null);
-
-//   console.log("PRO", profile);
-
-//   useEffect(() => {
-//     const loadMessages = async () => {
-//       try {
-//         const storedMessages = await AsyncStorage.getItem(
-//           `messages_${profile.id}`
-//         );
-//         if (storedMessages) {
-//           setMessages(JSON.parse(storedMessages));
-//         }
-//       } catch (error) {
-//         console.error("Failed to load messages from storage", error);
-//       }
-//     };
-//     loadMessages();
-//   }, []);
-
-//   const navigateToTeamProfile = () => {
-//     navigation.navigate("TeamProfile", { profile });
-//   };
-
-//   useEffect(() => {
-//     navigation.setOptions({
-//       headerTitle: () => (
-//         <View style={styles.headerContainer}>
-//           <Image
-//             source={profile.imageSource}
-//             style={{
-//               width: 49,
-//               height: 49,
-//               borderRadius: 55.87,
-//               marginHorizontal: 10,
-//             }}
-//           />
-//           <TouchableOpacity onPress={navigateToTeamProfile}>
-//             <View style={styles.headerProfile}>
-//               <Text style={styles.nameContainer}>
-//                 {profile.name1} & {profile.name2}
-//               </Text>
-//               <Text style={styles.matchTextContainer}>Matched 3 days ago</Text>
-//             </View>
-//           </TouchableOpacity>
-//           <View style={styles.iconContainer}>
-//             <Icon1 name="phone" size={24} style={styles.icon} />
-//             <Icon2
-//               name="device-camera-video"
-//               size={30}
-//               color="#000"
-//               style={styles.icon1}
-//             />
-//             <Icon name="more-vert" size={30} style={styles.icon} />
-//           </View>
-//         </View>
-//       ),
-//       headerTitleAlign: "center",
-//     });
-//   }, [navigation, profile]);
-
-//   useEffect(() => {
-//     if (flatListRef.current) {
-//       flatListRef.current.scrollToEnd({ animated: true });
-//     }
-//   }, [messages]);
-
-//   const sendMessage = async () => {
-//     if (inputText.trim()) {
-//       const newMessage = {
-//         text: inputText,
-//         sender: true,
-//         id: Date.now().toString(),
-//       };
-//       const updatedMessages = [...messages, newMessage];
-//       setMessages(updatedMessages);
-//       setInputText("");
-//       try {
-//         await AsyncStorage.setItem(
-//           `messages_${profile.id}`,
-//           JSON.stringify(updatedMessages)
-//         );
-//       } catch (error) {
-//         console.error("Failed to save message", error);
-//       }
-//     }
-//   };
-
-//   const receiveMessage = async () => {
-//     const receivedMessage = {
-//       text: inputText,
-//       sender: false,
-//       id: Date.now().toString(),
-//     };
-//     const updatedMessages = [...messages, receivedMessage];
-//     setMessages(updatedMessages);
-//     setInputText("");
-//     try {
-//       await AsyncStorage.setItem(
-//         `messages_${profile.id}`,
-//         JSON.stringify(updatedMessages)
-//       );
-//     } catch (error) {
-//       console.error("Failed to save message", error);
-//     }
-//   };
-
-//   const renderItem = ({ item }) => (
-//     <View
-//       style={[
-//         styles.messageContainer,
-//         item.sender ? styles.sent : styles.received,
-//       ]}
-//     >
-//       <Text style={styles.messageText}>{item.text}</Text>
-//     </View>
-//   );
-
-//   return (
-//     <View style={styles.container}>
-//       <FlatList
-//         ref={flatListRef}
-//         data={messages}
-//         renderItem={renderItem}
-//         keyExtractor={(item) => item.id}
-//         style={styles.chatContainer}
-//       />
-//       <View style={styles.inputContainer}>
-//         <TextInput
-//           style={styles.input}
-//           value={inputText}
-//           onChangeText={setInputText}
-//           placeholder="Start tying.."
-//         />
-//         <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
-//           <Icon1 name="send" size={24} color="#fff" style={styles.sendIcon} />
-//         </TouchableOpacity>
-//         <TouchableOpacity onPress={receiveMessage} style={styles.receiveButton}>
-//           <Text style={styles.receiveText}>Rec</Text>
-//         </TouchableOpacity>
-//       </View>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-//   chatContainer: {
-//     flex: 1,
-//   },
-//   inputContainer: {
-//     flexDirection: "row",
-//     padding: 2,
-//     borderTopWidth: 1,
-//     borderColor: "#ccc",
-//     backgroundColor: "#D3D5D7",
-//   },
-//   input: {
-//     flex: 1,
-//     width: 356,
-//     height: 40,
-//     borderWidth: 1,
-//     borderColor: "#ccc",
-//     borderRadius: 21.17,
-//     padding: 10,
-//     marginRight: 10,
-//     backgroundColor: "#F9F7F7",
-//   },
-//   messageContainer: {
-//     padding: 10,
-//     borderRadius: 5,
-//     marginVertical: 5,
-//     maxWidth: "70%",
-//   },
-//   sent: {
-//     alignSelf: "flex-end",
-//     backgroundColor: "#FFFFFF",
-//   },
-//   received: {
-//     alignSelf: "flex-start",
-//     backgroundColor: "#FFFFFF",
-//   },
-//   messageText: {
-//     fontSize: 16,
-//   },
-//   iconContainer: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     justifyContent: "space-between",
-//     marginLeft: 35,
-//   },
-//   icon: {
-//     backgroundColor: "#fff",
-//     borderRadius: 12,
-//     color: "#000",
-//     marginHorizontal: 10,
-//   },
-//   icon1: {
-//     backgroundColor: "#fff",
-//     borderRadius: 12,
-//     color: "#000",
-//     marginLeft: 6,
-//   },
-//   headerContainer: {
-//     flexDirection: "row",
-//     alignItems: "center",
-//     justifyContent: "space-between",
-//     // height: 70,
-//   },
-//   nameContainer: {
-//     // marginRight: 0,
-//     fontSize: 18,
-//     color: "#121212",
-//   },
-//   matchTextContainer: {
-//     fontSize: 12,
-//   },
-//   sendButton: {
-//     backgroundColor: "#FFFFFF", // Black background for the send button
-//     borderRadius: 999,
-//     padding: 10,
-//     marginLeft: 10,
-//   },
-//   sendIcon: {
-//     color: "#121212", // White icon color
-//   },
-//   receiveButton: {
-//     backgroundColor: "#000", // Black background for the receive button
-//     borderRadius: 20,
-//     padding: 10,
-//     marginLeft: 10,
-//   },
-//   receiveText: {
-//     color: "#fff", // White text color
-//   },
-//   headerProfile: {
-//     flexDirection: "column",
-//     width: 123,
-//   },
-// });
-
-// export default LikedChat;
+export default ChatScreen;
