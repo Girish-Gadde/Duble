@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   button: {
-    width: 356,
+    width: 340,
     height: 49,
     backgroundColor: "#6420AA",
     justifyContent: "center",

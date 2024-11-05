@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
     color: "#121212",
   },
   input: {
-    width: 356,
-    height: 49,
+    width: 340,
+    height: 40,
     borderWidth: 2,
     borderColor: "#6420AA",
     marginBottom: 10,
@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
     color: "black",
   },
   button: {
-    width: 356,
-    height: 49,
+    width: 340,
+    height: 40,
     backgroundColor: "#6420AA",
     justifyContent: "center",
     alignItems: "center",

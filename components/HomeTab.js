@@ -44,7 +44,7 @@ const socket = io(serverIP);
 
 const HomeTab = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
-  //const mobileNumber = "9112446365";
+  //const mobileNumber = "8074964497";
   const dispatch = useDispatch();
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
   const [userId, setUserId] = useState(null);
@@ -325,7 +325,7 @@ const HomeTab = ({ route, navigation }) => {
               display: "flex",
               paddingHorizontal: 12,
               paddingVertical: 20,
-              height: "13%",
+              height: "12%",
               justifyContent: "center",
               //marginBottom: 10,
             },

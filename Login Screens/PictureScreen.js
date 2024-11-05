@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { serverIP } from "@/config";
@@ -26,6 +27,8 @@ const PictureScreen = ({ route, navigation }) => {
   );
   const [images, setImages] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const pickImages = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -75,6 +78,8 @@ const PictureScreen = ({ route, navigation }) => {
     });
 
     setIsUploading(true);
+    setLoading(true);
+    setErrorMessage("");
     try {
       const response = await fetch(`${serverIP}/auth/save-user-data`, {
         method: "POST",
@@ -97,6 +102,7 @@ const PictureScreen = ({ route, navigation }) => {
       Alert.alert("Upload Failed", "Failed to upload data, please try again.");
     } finally {
       setIsUploading(false);
+      setLoading(false)
     }
   };
 
@@ -139,9 +145,18 @@ const PictureScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       )}
 
-      <TouchableOpacity style={styles.button} onPress={uploadData}>
+      <TouchableOpacity 
+      style={[styles.button, loading && styles.buttonDisabled]} onPress={uploadData}
+      disabled={loading}
+      >
+      {loading ? (
+        <ActivityIndicator size="Small" color="#fff"/>
+      ) : (
         <Text style={styles.buttonText}>Done</Text>
-      </TouchableOpacity>
+       )}
+       </TouchableOpacity>
+
+      
     </SafeAreaView>
   );
 };
@@ -172,12 +187,15 @@ const styles = StyleSheet.create({
   },
   button: {
     width: 340,
-    height: 40,
+    height: 49,
     backgroundColor: "#6420AA",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 35,
     marginTop: 40,
+  },
+  buttonDisabled: {
+    backgroundColor: "#9a73ef",
   },
   buttonText: {
     color: "#fff",

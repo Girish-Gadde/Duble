@@ -66,18 +66,8 @@ const Matches = ({ route, navigation }) => {
           name="TeamProfile"
           component={MatchedTeamProfile}
           initialParams={{ navigation, refreshYourTeam }}
-          options={{
-            headerTitle: () => (
-              <HeaderTitleWithIcon2
-                title="duble"
-                iconName="swap-horiz"
-                iconName1="arrow-back"
-                handleMenuClick={handleMenuClick}
-              /> // Use the HeaderTitleWithIcon component
-            ),
-            headerTitleAlign: "center",
-            headerLeft: () => null,
-          }}
+          options={{ headerShown: false }}
+          
         />
       </Stack.Navigator>
     </NavigationContainer>

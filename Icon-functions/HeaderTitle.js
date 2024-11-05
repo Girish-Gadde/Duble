@@ -27,7 +27,7 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
       <TouchableOpacity
         style={{
           position: "absolute",
-          left: "-130%",
+          left: "-120%",
           top: "-25%",
         }}
         onPress={() => navigation.navigate("Team Profile")}

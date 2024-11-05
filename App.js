@@ -28,7 +28,7 @@ import { UserProvider } from "./components/Team Switch/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, Text, View } from "react-native";
 import Notification from "./components/Team/TeamUpRequest/Notification";
-import Toast from "react-native-toast-message";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -37,8 +37,8 @@ export default function App() {
   const [mobileNumber, setMobileNumber] = useState(null);
   useEffect(() => {
     const checkMobileNumber = async () => {
-      // await AsyncStorage.removeItem("selectedTeamIndex");
-      // await AsyncStorage.removeItem("mobileNumber");
+      //await AsyncStorage.removeItem("selectedTeamIndex");
+      //await AsyncStorage.removeItem("mobileNumber");
       try {
         const mobileNo = await AsyncStorage.getItem("mobileNumber");
         // Check if mobileNumber is not null and a string

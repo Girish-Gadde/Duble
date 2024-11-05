@@ -405,7 +405,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   image: {
     width: "92%",
-    height: 600,
+    height: 550,
     alignSelf: "center",
     borderRadius: 12,
     marginRight: 3,
@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
     position: "absolute",
-    top: 565,
+    top: '34%',
     marginBottom: 20,
   },
   actionContainer2: {
@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
     lineHeight: 19.36,
   },
   carouselContainer: {
-    marginVertical: 10,
+    marginVertical: '2%',
   },
 });
 

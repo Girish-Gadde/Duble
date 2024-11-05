@@ -533,7 +533,7 @@ const styles = StyleSheet.create({
     paddingLeft: '5%',
     paddingVertical:'4%',
     position: "relative",
-    bottom: "6%",
+    bottom: "10%",
     // left: 0,
     // right: 0,
     marginTop: '53%',
@@ -697,7 +697,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1, // Allow the ScrollView's content to expand beyond the view height
-    marginTop:'-15%',
+    marginTop:'-12%',
     
   },
   itemsContainer: {
