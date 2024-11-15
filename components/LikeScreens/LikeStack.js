@@ -10,6 +10,7 @@ import HeaderTitleWithIcon1 from "../../Icon-functions/HeaderTitle1";
 import HeaderTitleWithIcon2 from "../../Icon-functions/HeaderTitle2";
 import { useDispatch } from "react-redux";
 import { menuClickAction } from "../Redux/Actions";
+import ChatScreen from "../ChatScreens/ChatScreen";
 
 const Stack = createStackNavigator();
 
@@ -65,7 +66,7 @@ export const LikeStack = ({ route, navigation }) => {
         />
         <Stack.Screen
           name="LikedChat"
-          component={LikedChat}
+          component={ChatScreen}
           initialParams={{ navigation }}
           // options={{ headerShown: false }}
         />
