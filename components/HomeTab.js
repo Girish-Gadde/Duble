@@ -44,7 +44,7 @@ const socket = io(serverIP);
 
 const HomeTab = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
-  //  const mobileNumber = "6305148607";
+  // const mobileNumber = "9112446365";
   const dispatch = useDispatch();
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
   const [userId, setUserId] = useState(null);
@@ -83,14 +83,20 @@ const HomeTab = ({ route, navigation }) => {
       const userId = await AsyncStorage.getItem("userId");
       fetchTeams(userId);
       // getUserId();
-      // getYourIndividualTeam(userId);
+      //   getYourIndividualTeam(userId);
+      Alert.alert(data.message);
+    });
+
+    socket.on("teamUpRequest", async (data) => {
+      const userId = await AsyncStorage.getItem("userId");
+      getYourIndividualTeam(userId);
       Alert.alert(data.message);
     });
 
     socket.on("teamLikedNotification", async (data) => {
       console.log("COME");
-      // refreshYourTeam();
-      refreshYourInidividualTeam();
+      refreshYourTeam();
+      //  refreshYourInidividualTeam();
       //   Alert.alert(data.message);
     });
     getUserId();
@@ -188,9 +194,8 @@ const HomeTab = ({ route, navigation }) => {
 
       const responseData = await response.json();
       //setProfile(responseData[displayIndex.current]);
-      const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
-      console.log(savedIndex, "SAVED");
-      setSelectedTeamIndex(savedIndex);
+      //  const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
+      // setSelectedTeamIndex(savedIndex);
       dispatch(setIndividualProfile(responseData));
     } catch (error) {
       console.error("Failed to fetch your team:", error);

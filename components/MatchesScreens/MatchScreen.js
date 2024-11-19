@@ -168,7 +168,7 @@ const MatchScreen = ({ route, navigation }) => {
   // **MAIN RETURN**
   return (
     <View style={styles.container}>
-      <TextInput style={styles.searchBar} placeholder="Search matches" />
+      {/*  <TextInput style={styles.searchBar} placeholder="Search matches" /> */}
       <Text style={styles.headerText}>New Matches</Text>
       <View style={styles.scrollViewWrapper}>
         <ScrollView
