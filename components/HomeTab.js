@@ -79,18 +79,24 @@ const HomeTab = ({ route, navigation }) => {
 
     // Listen for 'teamCreated' event
     socket.on("teamCreated", async (data) => {
-      console.log("TEAM-MSG");
       const userId = await AsyncStorage.getItem("userId");
       fetchTeams(userId);
-      // getUserId();
+      console.log("TEAM-MSG", userId);
+      //  getUserId();
       // getYourIndividualTeam(userId);
+      Alert.alert(data.message);
+    });
+
+    socket.on("teamUpRequest", async (data) => {
+      const userId = await AsyncStorage.getItem("userId");
+      getYourIndividualTeam(userId);
       Alert.alert(data.message);
     });
 
     socket.on("teamLikedNotification", async (data) => {
       console.log("COME", data);
-      //  refreshYourTeam();
-      refreshYourInidividualTeam();
+      refreshYourTeam();
+      //  refreshYourInidividualTeam();
       // Alert.alert(data.message);
     });
     getUserId();
@@ -161,7 +167,7 @@ const HomeTab = ({ route, navigation }) => {
 
       const responseData = await response.json();
       const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
-      console.log(savedIndex, responseData, "SAVED-7");
+      //  console.log(savedIndex, responseData, "SAVED-7");
       //setProfile(responseData[displayIndex.current]);
       dispatch(setTeams(responseData));
       dispatch(setProfile(responseData[savedIndex]));
@@ -188,10 +194,11 @@ const HomeTab = ({ route, navigation }) => {
 
       const responseData = await response.json();
       //setProfile(responseData[displayIndex.current]);
-      const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
-      console.log(savedIndex, "SAVED");
-      setSelectedTeamIndex(savedIndex);
+      // const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
+
+      // setSelectedTeamIndex(savedIndex);
       dispatch(setIndividualProfile(responseData));
+      console.log(responseData, "-----------> WON");
     } catch (error) {
       console.error("Failed to fetch your team:", error);
     }
