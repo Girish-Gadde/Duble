@@ -17,6 +17,10 @@ const LocationScreen = ({ route, navigation }) => {
   const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    requestLocationPermission();
+  }, []);
+
   const requestLocationPermission = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {

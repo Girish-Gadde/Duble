@@ -29,7 +29,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, Text, View } from "react-native";
 import Notification from "./components/Team/TeamUpRequest/Notification";
 
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {

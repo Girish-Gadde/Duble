@@ -26,7 +26,7 @@ const width = Dimensions.get("window").width;
 const LikedProfile = ({ route, navigation }) => {
   const { profile, yourTeamProfile, refreshYourTeam, handleMenuClick } =
     route.params;
-  console.log(profile, yourTeamProfile, "NAME");
+  // console.log(profile, yourTeamProfile, "NAME");
   const menuClicked = useSelector((state) => state.menuClicked);
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);

@@ -26,7 +26,7 @@ const width = Dimensions.get("window").width;
 
 const MatchedTeamProfile = ({ route, navigation }) => {
   const { profile, yourTeamProfile, refreshYourTeam } = route.params;
-  console.log("NAME", profile, "UR", yourTeamProfile);
+  //  console.log("NAME", profile, "UR", yourTeamProfile);
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [images, setImages] = useState([]);
@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
     position: "absolute",
-    top: '34%',
+    top: "34%",
     marginBottom: 20,
   },
   actionContainer2: {
@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
     lineHeight: 19.36,
   },
   carouselContainer: {
-    marginVertical: '2%',
+    marginVertical: "2%",
   },
 });
 

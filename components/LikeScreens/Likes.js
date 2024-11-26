@@ -14,7 +14,8 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { menuClickAction } from "../Redux/Actions";
-//import LinearGradient from "react-native-linear-gradient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LinearGradient } from "expo-linear-gradient";
 
 const profiles = [
   {
@@ -219,6 +220,7 @@ const Likes = ({ route, navigation }) => {
   //const { yourTeamProfile } = route.params;
   const yourTeamProfile = useSelector((state) => state.profile);
   const [teams, setTeams] = useState([]);
+  const [clickStatuses, setClickStatuses] = useState({});
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   // console.log(yourTeamProfile, "HOME_LIKE");
@@ -247,6 +249,14 @@ const Likes = ({ route, navigation }) => {
       const data = await response.json();
       console.log(data, "LIKED_TEAMS-0887");
       setTeams(data);
+
+      // Load click statuses from AsyncStorage
+      const storedStatuses = await AsyncStorage.getItem(
+        `clickStatuses_${yourTeamProfile._id}`
+      );
+      const statuses = storedStatuses ? JSON.parse(storedStatuses) : {};
+      console.log(statuses, "CLICK -ST");
+      setClickStatuses(statuses);
     } catch (error) {
       console.error("Error fetching teams:", error);
     } finally {
@@ -266,9 +276,27 @@ const Likes = ({ route, navigation }) => {
     fetchTeams();
   }, [yourTeamProfile]);
 
-  const navigateToLikedProfile = (item) => {
-    dispatch(menuClickAction());
-    navigation.navigate("LikedProfile", { profile: item, yourTeamProfile });
+  const navigateToLikedProfile = async (item) => {
+    try {
+      // Check if the item has already been clicked
+      if (!clickStatuses[item._id]) {
+        // Update the click status
+        const updatedStatuses = { ...clickStatuses, [item._id]: true };
+        await AsyncStorage.setItem(
+          `clickStatuses_${yourTeamProfile._id}`,
+          JSON.stringify(updatedStatuses)
+        );
+        setClickStatuses(updatedStatuses);
+        console.log(clickStatuses, updatedStatuses, "AFTER CLICK");
+      }
+
+      // Navigate to the liked profile
+      dispatch(menuClickAction());
+      navigation.navigate("LikedProfile", { profile: item, yourTeamProfile });
+    } catch (error) {
+      console.error("Error updating click status:", error);
+      Alert.alert("Error", "Failed to update click status. Please try again.");
+    }
   };
 
   if (loading) {
@@ -296,22 +324,35 @@ const Likes = ({ route, navigation }) => {
       <Text style={styles.headerText}>People who liked you</Text>
       <FlatList
         data={teams}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.profileContainer}
-            onPress={() => navigateToLikedProfile(item)}
-          >
-            {/* <View> */}
-            <Image
-              source={{ uri: `${item.selectedImages[0]}` }}
-              style={styles.profileImage}
-            />
-            <Text
-              style={styles.profileText}
-            >{`${item.name1} & ${item.name2}`}</Text>
-            {/* </View> */}
-          </TouchableOpacity>
-        )}
+        renderItem={({ item }) => {
+          const showBorder = !clickStatuses[item._id];
+          return (
+            <TouchableOpacity
+              style={styles.profileContainer}
+              onPress={() => navigateToLikedProfile(item)}
+            >
+              {showBorder ? (
+                <LinearGradient
+                  colors={["#6420AA", "#FF3EA5"]}
+                  style={styles.gradientBorder}
+                >
+                  <Image
+                    source={{ uri: `${item.selectedImages[0]}` }}
+                    style={styles.profileImage}
+                  />
+                </LinearGradient>
+              ) : (
+                <Image
+                  source={{ uri: `${item.selectedImages[0]}` }}
+                  style={styles.profileImage}
+                />
+              )}
+              <Text
+                style={styles.profileText}
+              >{`${item.name1} & ${item.name2}`}</Text>
+            </TouchableOpacity>
+          );
+        }}
         keyExtractor={(item) => item._id.toString()}
         numColumns={3}
         contentContainerStyle={styles.flatListContent}
@@ -354,8 +395,24 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 110,
     height: 169,
-    borderRadius: 11.64,
-    marginBottom: 5,
+    borderRadius: 10,
+    marginVertical: 2,
+    marginHorizontal: 2,
+    // borderColor: "#6420AA", // Red border
+    // borderWidth: 2, // Visible border
+    // borderRadius: 11.64, // Match the image's border radius for consistency
+  },
+  // clickedProfileImage: {
+  //   // width: 110,
+  //   // height: 169,
+  //   // borderRadius: 11.64,
+  //   //  marginBottom: 5,
+  //   borderWidth: 3, // Border width for initial render
+  //   borderColor: "#FF3EA5", // Color of the border
+  // },
+  gradientBorder: {
+    padding: 2, // Thickness of the gradient border
+    borderRadius: 10, // Make sure it matches the shape of the image
   },
   profileText: {
     textAlign: "center",
@@ -363,6 +420,7 @@ const styles = StyleSheet.create({
     lineHeight: 14.52,
     color: "#45474B",
     fontWeight: "400",
+    paddingVertical: 4,
   },
   loadingContainer: {
     flex: 1,

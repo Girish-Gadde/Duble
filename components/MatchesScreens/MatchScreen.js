@@ -15,6 +15,8 @@ import {
 import axios from "axios"; // Make sure to import axios if you're using it
 import { useSelector } from "react-redux";
 import { menuClickAction, menuClickAction1 } from "../Redux/Actions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LinearGradient } from "expo-linear-gradient";
 // import { useUserContext } from 'path-to-your-context'; // Uncomment and adjust the path if you have a UserContext
 
 const MatchScreen = ({ route, navigation }) => {
@@ -24,6 +26,7 @@ const MatchScreen = ({ route, navigation }) => {
   const yourTeamProfile = useSelector((state) => state.profile);
   const [teams, setTeams] = useState([]);
   const [rooms, setRooms] = useState([]);
+  const [clickStatuses, setClickStatuses] = useState({});
   const [loading, setLoading] = useState(true);
 
   // **TEAM ID**
@@ -62,6 +65,13 @@ const MatchScreen = ({ route, navigation }) => {
         const data = await response.json();
         console.log(data, "MATCHED_TEAMS");
         setTeams(data);
+        // Load click statuses from AsyncStorage
+        const storedStatuses = await AsyncStorage.getItem(
+          `clickStatuses_${yourTeamProfile._id}`
+        );
+        const statuses = storedStatuses ? JSON.parse(storedStatuses) : {};
+        setClickStatuses(statuses);
+        console.log(statuses, clickStatuses, "CLICK-MATCH");
       } catch (error) {
         console.error("Error fetching teams:", error);
       }
@@ -107,9 +117,23 @@ const MatchScreen = ({ route, navigation }) => {
   }, [yourTeamProfile]); // Fetch rooms when component mounts
 
   // **NAVIGATION FUNCTIONS**
-  const navigateToMatchedTeam = (profile) => {
-    dispatch(menuClickAction());
-    navigation.navigate("TeamProfile", { profile, yourTeamProfile });
+  const navigateToMatchedTeam = async (profile) => {
+    try {
+      if (!clickStatuses[profile._id]) {
+        const updatedStatuses = { ...clickStatuses, [profile._id]: true };
+        await AsyncStorage.setItem(
+          `clickStatuses_${yourTeamProfile._id}`,
+          JSON.stringify(updatedStatuses)
+        );
+        setClickStatuses(updatedStatuses);
+        console.log(updatedStatuses, clickStatuses, "AFTER CLICK");
+      }
+      dispatch(menuClickAction());
+      navigation.navigate("TeamProfile", { profile, yourTeamProfile });
+    } catch (error) {
+      console.error("Error updating click status:", error);
+      Alert.alert("Error", "Failed to update click status. Please try again.");
+    }
   };
 
   const handleRoomPress = (room) => {
@@ -176,22 +200,37 @@ const MatchScreen = ({ route, navigation }) => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.scrollView}
         >
-          {teams.map((profile, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => navigateToMatchedTeam(profile)}
-            >
-              <View style={styles.imageContainer}>
-                <Image
-                  source={{ uri: `${profile.selectedImages[0]}` }}
-                  style={styles.image}
-                />
-                <Text style={styles.imageText}>
-                  {profile.name1} & {profile.name2}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
+          {teams.map((profile) => {
+            const showBorder = !clickStatuses[profile._id];
+            return (
+              <TouchableOpacity
+                key={profile._id}
+                onPress={() => navigateToMatchedTeam(profile)}
+              >
+                <View style={styles.imageContainer}>
+                  {showBorder ? (
+                    <LinearGradient
+                      colors={["#6420AA", "#FF3EA5"]}
+                      style={styles.gradientBorder}
+                    >
+                      <Image
+                        source={{ uri: profile.selectedImages[0] }}
+                        style={styles.image}
+                      />
+                    </LinearGradient>
+                  ) : (
+                    <Image
+                      source={{ uri: profile.selectedImages[0] }}
+                      style={styles.image}
+                    />
+                  )}
+                  <Text style={styles.imageText}>
+                    {profile.name1} & {profile.name2}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
       </View>
       <Text style={styles.headerText}>Chats</Text>
@@ -235,7 +274,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   imageContainer: {
-    width: 102,
+    width: 120,
     height: 190,
     alignItems: "center",
     marginRight: 10,
@@ -243,6 +282,13 @@ const styles = StyleSheet.create({
   image: {
     width: 102,
     height: 146,
+    marginVertical: 2,
+    marginHorizontal: 2,
+    borderRadius: 10,
+  },
+  gradientBorder: {
+    padding: 2, // Thickness of the gradient border
+    borderRadius: 10, // Make sure it matches the shape of the image
   },
   imageText: {
     textAlign: "center",
