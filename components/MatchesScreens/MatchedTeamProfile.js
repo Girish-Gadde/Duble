@@ -26,7 +26,7 @@ const width = Dimensions.get("window").width;
 
 const MatchedTeamProfile = ({ route, navigation }) => {
   const { profile, yourTeamProfile, refreshYourTeam } = route.params;
-  console.log("NAME", profile, "UR", yourTeamProfile);
+  //  console.log("NAME", profile, "UR", yourTeamProfile);
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [images, setImages] = useState([]);
