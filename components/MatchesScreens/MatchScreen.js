@@ -66,8 +66,8 @@ const MatchScreen = ({ route, navigation }) => {
         console.log(data, "MATCHED_TEAMS");
         setTeams(data);
 
-        const storedStatuses = await AsyncStorage.removeItem(
-          `clickStatuses_${yourTeamProfile._id}`
+        const storedStatuses = await AsyncStorage.getItem(
+          `clickStatuses_${yourTeamProfile._id}_Match`
         );
         const statuses = storedStatuses ? JSON.parse(storedStatuses) : {};
         setClickStatuses(statuses);
@@ -122,7 +122,7 @@ const MatchScreen = ({ route, navigation }) => {
       if (!clickStatuses[profile._id]) {
         const updatedStatuses = { ...clickStatuses, [profile._id]: true };
         await AsyncStorage.setItem(
-          `clickStatuses_${yourTeamProfile._id}`,
+          `clickStatuses_${yourTeamProfile._id}_Match`,
           JSON.stringify(updatedStatuses)
         );
         setClickStatuses(updatedStatuses);

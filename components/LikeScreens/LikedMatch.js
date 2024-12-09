@@ -24,10 +24,12 @@ const LikedMatch = ({ route, navigation }) => {
       teamA: {
         teamId: `${yourTeamProfile._id}`,
         members: [`${yourTeamProfile.name1}`, `${yourTeamProfile.name2}`],
+        teamMembers: [`${yourTeamProfile.teamMembers}`],
       },
       teamB: {
         teamId: `${profile._id}`,
         members: [`${profile.name1}`, `${profile.name2}`],
+        teamMembers: [`${profile.teamMembers}`],
       },
     };
 
@@ -46,7 +48,7 @@ const LikedMatch = ({ route, navigation }) => {
         setRoomId(responseData.roomId);
         let roomId1 = responseData.roomId;
         console.log(responseData, "Response Data-1---->:", roomId1);
-        refreshYourTeam();
+        // refreshYourTeam();
         navigation.navigate("LikedChat", { profile, roomId: roomId1 });
 
         // Alert.alert("Success", "Chat room created successfully", [
