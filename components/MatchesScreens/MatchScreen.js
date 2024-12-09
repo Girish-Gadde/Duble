@@ -67,7 +67,7 @@ const MatchScreen = ({ route, navigation }) => {
         setTeams(data);
         // Load click statuses from AsyncStorage
         const storedStatuses = await AsyncStorage.getItem(
-          `clickStatuses_${yourTeamProfile._id}`
+          `clickStatuses_${yourTeamProfile._id}_Match`
         );
         const statuses = storedStatuses ? JSON.parse(storedStatuses) : {};
         setClickStatuses(statuses);
@@ -122,7 +122,7 @@ const MatchScreen = ({ route, navigation }) => {
       if (!clickStatuses[profile._id]) {
         const updatedStatuses = { ...clickStatuses, [profile._id]: true };
         await AsyncStorage.setItem(
-          `clickStatuses_${yourTeamProfile._id}`,
+          `clickStatuses_${yourTeamProfile._id}_Match`,
           JSON.stringify(updatedStatuses)
         );
         setClickStatuses(updatedStatuses);
