@@ -103,255 +103,108 @@ const HomeScreen = ({ route, navigation }) => {
   const { refreshYourTeam, dispatch } = route.params;
   const yourTeamProfile = useSelector((state) => state.profile);
   // console.log(yourTeamProfile, "HOME");
-  const [yourTeam, setYourTeam] = useState(yourTeamProfile);
-  const [isHeartActive, setIsHeartActive] = useState(false);
-  // const [showIcons, setShowIcons] = useState(true);
+  const [currentProfile, setCurrentProfile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [profiles, setProfiles] = useState([]);
-  const [currentProfileIndex, setCurrentProfileIndex] = useState(
-    profiles.length - 1
-  );
-  //const navigation = useNavigation();
-  const [lastDirection, setLastDirection] = useState();
   const [images, setImages] = useState([]);
-  const currentIndexRef = useRef(currentProfileIndex);
-  const scrollViewRef = useRef(null);
-
-  //const dispatch = useDispatch();
-  const showIcons = useSelector((state) => state.showIcons);
 
   // useEffect(() => {
-  //   if (profiles.length <= 0) {
-  //     Alert.alert(
-  //       "No new profiles to show",
-  //       "Please re-load the app to get new profiles.",
-  //       [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-  //     );
+  //   if (yourTeamProfile) {
+  //   fetchInitialProfile();
   //   }
-  // }, [profiles]);
-
-  const updateCurrentIndex = (val) => {
-    if (val < profiles.length) {
-      setCurrentProfileIndex(val);
-      currentIndexRef.current = val;
-    } else {
-      // Optional: You could handle stopping behavior here, like disabling buttons or showing a "No more profiles" message.
-      console.log("Reached the last profile");
-    }
-  };
-  // Function to remove profile from the array once liked or disliked
-  const removeProfile = () => {
-    const updatedProfiles = profiles.filter(
-      (_, index) => index !== currentProfileIndex
-    );
-    setProfiles(updatedProfiles);
-    //  console.log(updatedProfiles, "UPDATED");
-    if (updatedProfiles.length > 0) {
-      updateCurrentIndex(currentProfileIndex); // Keep current index within bounds
-    } else {
-      setImages([]);
-      dispatch(toggleShowIcons(false));
-    }
-  };
-
-  const toggleHeart = async () => {
-    //  setLoading(true);
-    //  setErrorMessage('')
-    if (!yourTeamProfile) {
-      Alert.alert(
-        "Your team is not created",
-        "Please create your team to proceed further.",
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              //navigation.navigate("Teams");
-            },
-          },
-        ],
-        { cancelable: true }
-      );
-      //   setLoading(false)
-    }
-
-    setIsHeartActive(!isHeartActive);
-    // updateCurrentIndex(
-    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-    // );
-    // getSavedData();
-    const likedTeamId = profiles[currentProfileIndex]._id; // The team being liked
-    const likingTeamId = yourTeamProfile._id; // The user's team profile
-    console.log(likedTeamId, "IsD", likingTeamId);
-    try {
-      const response = await fetch(`${serverIP}/like/saving-like-id`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ likedTeamId, likingTeamId }),
-      });
-
-      const responseData = await response.json();
-
-      // if (!response.ok) {
-      //   throw new Error("Failed to update like status");
-      // }
-      console.log(responseData.message, "MSG");
-      if (responseData.message === "Teams are Matched") {
-        Alert.alert(
-          "Teams Matched",
-          "Teams are Matched",
-          [
-            {
-              text: "OK",
-              onPress: () => {
-                // Call refreshYourTeam when "OK" is pressed
-                removeProfile();
-                refreshYourTeam();
-              },
-            },
-          ],
-          { cancelable: false }
-        );
-      } else {
-        // If teams are not matched, continue with the usual logic
-        removeProfile(); // Proceed with removing profile
-      }
-    } catch (error) {
-      console.error("Error updating like status:", error);
-    }
-  };
-
-  const toggleDislike = async () => {
-    // setIsDislikeActive(!isDislikeActive);
-    // updateCurrentIndex(
-    //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
-    // );
-
-    const dislikedTeamId = profiles[currentProfileIndex]._id; // The team being disliked
-    const dislikingTeamId = yourTeamProfile._id; // The user's team profile
-
-    try {
-      const response = await fetch(`${serverIP}/like/saving-dislike-id`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ dislikedTeamId, dislikingTeamId }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update dislike status");
-      }
-      removeProfile();
-      refreshYourTeam();
-    } catch (error) {
-      console.error("Error updating dislike status:", error);
-    }
-  };
-
-  const handleScroll = (event) => {
-    // const currentOffset = event.nativeEvent.contentOffset.y;
-    // const show = currentOffset <= 0;
-    // if (show !== showIcons) {
-    //   dispatch(toggleShowIcons());
-    // }
-  };
-
-  const renderCarouselItem = ({ item }) => {
-    //  console.log(item, "PATH");
-    return <Image source={item} style={styles.image} resizeMode="cover" />;
-  };
+  // }, []);
 
   useEffect(() => {
-    if (yourTeamProfile) {
-      getSavedData();
-      const currentProfile = profiles[currentProfileIndex];
-      // console.log(currentProfile, "VG");
-    } else {
-      //getAllTeams();
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log("RUN");
-    getSavedData();
+    if (yourTeamProfile) fetchInitialProfile();
   }, [yourTeamProfile]);
 
-  const teamName = "Dream Team";
-
-  async function getSavedData() {
+  const fetchInitialProfile = async () => {
+    setLoading(true);
     try {
       const response = await fetch(`${serverIP}/auth/get-saved-teams`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          yourTeamProfile, // Send your team profile in the request body
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ yourTeamProfile }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch saved data");
-      }
-
       const responseData = await response.json();
-
-      //  console.log(responseData, "RES0");
-
-      if (responseData.length > 0) {
-        // console.log(responseData, "FILTERED PROFILES FROM BACK-END");
-        setCurrentProfileIndex(0); // Set to the first profile by default
-        setProfiles(responseData); // Set the filtered profiles from the back-end
+      if (response.ok) {
+        console.log(responseData, "TM--------->>>>>");
+        setCurrentProfile(responseData);
+        setImages(formatImages(responseData.selectedImages));
+      } else {
+        setCurrentProfile(null);
       }
     } catch (error) {
-      setProfiles([]);
-      console.error("Fetching data failed-5:", error);
-      //Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
+      console.error("Error fetching profile:", error);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-  async function getAllTeams() {
+  const formatImages = (imagePaths) =>
+    imagePaths.map((imagePath) => ({ uri: imagePath }));
+
+  const handleAction = async (url, payload) => {
+    setLoading(true);
     try {
-      const response = await fetch(`${serverIP}/auth/get-all-teams`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch saved data");
-      }
-
       const responseData = await response.json();
+      if (response.ok && responseData.nextProfile) {
+        console.log(responseData, "NEXT-------------------->>>>>>>>>");
+        setCurrentProfile(responseData.nextProfile);
+        setImages(formatImages(responseData.nextProfile.selectedImages));
 
-      if (responseData.length > 0) {
-        console.log(responseData, " PROFILES FROM BACK-END");
-        setCurrentProfileIndex(0); // Set to the first profile by default
-        setProfiles(responseData); // Set the filtered profiles from the back-end
+        if (responseData.message === "Teams are Matched") {
+          Alert.alert("Teams Matched", "Teams are Matched", [
+            {
+              text: "OK",
+              onPress: refreshYourTeam,
+            },
+          ]);
+        }
+      } else {
+        setCurrentProfile(null); // No more profiles
+        setImages([]);
       }
     } catch (error) {
-      console.error("Fetching data failed:", error);
-      //Alert.alert("Fetch Failed", "Failed to fetch data, please try again.");
+      console.error("Error updating status:", error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const toggleHeart = () => {
+    if (!currentProfile) return;
+    const payload = {
+      likedTeamId: currentProfile._id,
+      likingTeamId: yourTeamProfile._id,
+    };
+    handleAction(`${serverIP}/like/saving-like-id`, payload);
+  };
+
+  const toggleDislike = () => {
+    if (!currentProfile) return;
+    const payload = {
+      dislikedTeamId: currentProfile._id,
+      dislikingTeamId: yourTeamProfile._id,
+    };
+    handleAction(`${serverIP}/like/saving-dislike-id`, payload);
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
   }
 
-  useEffect(() => {
-    if (profiles.length > 0) {
-      const currentProfile = profiles[currentProfileIndex];
-      // console.log(currentProfile, "VG");
-      // setImages(currentProfile.selectedImages || []);
-      const formattedImages = (currentProfile.selectedImages || []).map(
-        (imagePath) => ({ uri: `${imagePath}` })
-      );
-      setImages(formattedImages);
-    }
-    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
-  }, [currentProfileIndex, profiles]);
-
-  if (!profiles || profiles.length === 0) {
+  if (!currentProfile) {
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>No teams available</Text>
@@ -359,9 +212,13 @@ const HomeScreen = ({ route, navigation }) => {
     );
   }
 
+  const renderCarouselItem = ({ item }) => {
+    //  console.log(item, "PATH");
+    return <Image source={item} style={styles.image} resizeMode="cover" />;
+  };
+
   return (
     <ScrollView
-      ref={scrollViewRef}
       contentContainerStyle={{ flexGrow: 1 }}
       // onScroll={handleScroll}
       scrollEventThrottle={16}
@@ -381,19 +238,11 @@ const HomeScreen = ({ route, navigation }) => {
         </View>
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.nameText}>
-              {profiles[currentProfileIndex]?.name1},
-            </Text>
-            <Text style={styles.ageText}>
-              {profiles[currentProfileIndex]?.age1}
-            </Text>
+            <Text style={styles.nameText}>{currentProfile?.name1},</Text>
+            <Text style={styles.ageText}>{currentProfile?.age1}</Text>
             <View style={styles.divider} />
-            <Text style={styles.nameText}>
-              {profiles[currentProfileIndex]?.name2},
-            </Text>
-            <Text style={styles.ageText}>
-              {profiles[currentProfileIndex]?.age2}
-            </Text>
+            <Text style={styles.nameText}>{currentProfile?.name2},</Text>
+            <Text style={styles.ageText}>{currentProfile?.age2}</Text>
           </View>
           <View style={styles.locationContainer}>
             <MaterialIcons
@@ -402,12 +251,10 @@ const HomeScreen = ({ route, navigation }) => {
               color="white"
               style={styles.locationIcon}
             />
-            <Text style={styles.locationText}>
-              {profiles[currentProfileIndex]?.location}
-            </Text>
+            <Text style={styles.locationText}>{currentProfile?.location}</Text>
           </View>
           <Text style={styles.descriptionText}>
-            "{profiles[currentProfileIndex]?.user1Description}"
+            "{currentProfile?.user1Description}"
           </Text>
         </View>
       </View>
@@ -428,21 +275,14 @@ const HomeScreen = ({ route, navigation }) => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton2} onPress={toggleHeart}>
-          <View
-            style={[
-              styles.heartButton,
-              {
-                backgroundColor: isHeartActive ? "#FF3156" : "#FF3156",
-              },
-            ]}
-          >
+          <View style={styles.heartButton}>
             <AntDesign name="heart" size={30} color="white" />
           </View>
         </TouchableOpacity>
       </View>
 
-      {profiles[currentProfileIndex]?.dynamicContent?.length > 0 ? (
-        profiles[currentProfileIndex].dynamicContent.map((content, index) => (
+      {currentProfile?.dynamicContent?.length > 0 ? (
+        currentProfile.dynamicContent.map((content, index) => (
           <View key={index} style={styles.viewContainer}>
             <View style={styles.searchContainer}>
               {/* <Ionicons name="star" size={16} color="#FFFF66" /> */}
@@ -462,18 +302,14 @@ const HomeScreen = ({ route, navigation }) => {
       <View style={styles.singleBioContainer}>
         <Image
           source={{
-            uri: profiles[currentProfileIndex]?.user1ProfilePic,
+            uri: currentProfile?.user1ProfilePic,
           }}
           style={styles.singleImage}
         />
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>
-              {profiles[currentProfileIndex]?.name1},
-            </Text>
-            <Text style={styles.ageText1}>
-              {profiles[currentProfileIndex]?.age1}
-            </Text>
+            <Text style={styles.nameText1}>{currentProfile?.name1},</Text>
+            <Text style={styles.ageText1}>{currentProfile?.age1}</Text>
           </View>
           <View style={styles.rowContainer}>
             <View style={styles.iconContainer}>
@@ -483,9 +319,7 @@ const HomeScreen = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.user1Place}
-              </Text>
+              <Text style={styles.cell}>{currentProfile?.user1Place}</Text>
             </View>
 
             <View style={styles.iconContainer}>
@@ -495,9 +329,7 @@ const HomeScreen = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.user1Occupation}
-              </Text>
+              <Text style={styles.cell}>{currentProfile?.user1Occupation}</Text>
             </View>
           </View>
 
@@ -509,9 +341,7 @@ const HomeScreen = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.user1Height}
-              </Text>
+              <Text style={styles.cell}>{currentProfile?.user1Height}</Text>
             </View>
             <View style={styles.iconContainer}>
               <AntDesign
@@ -520,31 +350,25 @@ const HomeScreen = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.user1gender}
-              </Text>
+              <Text style={styles.cell}>{currentProfile?.user1gender}</Text>
             </View>
           </View>
           <Text style={styles.singleBioText}>
-            {profiles[currentProfileIndex]?.user1Description}
+            {currentProfile?.user1Description}
           </Text>
         </View>
       </View>
       <View style={styles.singleBioContainer}>
         <Image
           source={{
-            uri: profiles[currentProfileIndex]?.user2ProfilePic,
+            uri: currentProfile?.user2ProfilePic,
           }}
           style={styles.singleImage}
         />
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>
-              {profiles[currentProfileIndex]?.name2},
-            </Text>
-            <Text style={styles.ageText1}>
-              {profiles[currentProfileIndex]?.age2}
-            </Text>
+            <Text style={styles.nameText1}>{currentProfile?.name2},</Text>
+            <Text style={styles.ageText1}>{currentProfile?.age2}</Text>
           </View>
           <View style={styles.rowContainer}>
             <View style={styles.iconContainer}>
@@ -554,9 +378,7 @@ const HomeScreen = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.user2Place}
-              </Text>
+              <Text style={styles.cell}>{currentProfile?.user2Place}</Text>
             </View>
 
             <View style={styles.iconContainer}>
@@ -566,22 +388,20 @@ const HomeScreen = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.user2Occupation}
-              </Text>
+              <Text style={styles.cell}>{currentProfile?.user2Occupation}</Text>
             </View>
           </View>
 
           <View style={styles.rowContainer}>
             {/* <View style={styles.iconContainer3}>
-                <FontAwesome5
-                  name="ruler-vertical"
-                  size={18}
-                  color="#121212"
-                  style={styles.locationIcon}
-                />
-                <Text style={styles.cell}>155 cm</Text>
-              </View> */}
+              <FontAwesome5
+                name="ruler-vertical"
+                size={18}
+                color="#121212"
+                style={styles.locationIcon}
+              />
+              <Text style={styles.cell}>155 cm</Text>
+            </View> */}
             <View style={styles.iconContainer}>
               <AntDesign
                 name="hearto"
@@ -589,30 +409,23 @@ const HomeScreen = ({ route, navigation }) => {
                 color="#121212"
                 style={styles.locationIcon}
               />
-              <Text style={styles.cell}>
-                {profiles[currentProfileIndex]?.user2gender}
-              </Text>
+              <Text style={styles.cell}>{currentProfile?.user2gender}</Text>
             </View>
           </View>
           <Text style={styles.singleBioText}>
-            {profiles[currentProfileIndex]?.user2Description}
+            {currentProfile?.user2Description}
           </Text>
         </View>
       </View>
 
       <View style={styles.actionContainer2}>
         <TouchableOpacity style={styles.actionButton} onPress={toggleDislike}>
-          <View style={styles.buttonContainer}>
+          <View style={styles.buttonContainer1}>
             <Text style={styles.buttonText}>Reject</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} onPress={toggleHeart}>
-          <View
-            style={[
-              styles.buttonContainer,
-              { backgroundColor: isHeartActive ? "#FF3156" : "#FF3156" },
-            ]}
-          >
+          <View style={styles.buttonContainer}>
             <Text style={styles.buttonText}>Like</Text>
           </View>
         </TouchableOpacity>
@@ -740,6 +553,7 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#FF3156",
   },
   searchContainer: {
     flexDirection: "row",
@@ -779,6 +593,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   buttonContainer: {
+    backgroundColor: "#FF3156",
+    borderRadius: 35,
+    paddingVertical: 13,
+    paddingHorizontal: 10,
+    alignItems: "center",
+    width: "100%",
+    height: 49,
+  },
+  buttonContainer1: {
     backgroundColor: "#6420AA",
     borderRadius: 35,
     paddingVertical: 13,
