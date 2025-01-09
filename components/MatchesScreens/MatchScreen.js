@@ -19,7 +19,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { useUserContext } from 'path-to-your-context'; // Uncomment and adjust the path if you have a UserContext
 
-const MatchScreen = ({ route, navigation }) => {
+const MatchScreen = ({ route, navigation,onRoomSelect }) => {
   // **HOOKS AND STATE DECLARATIONS**
   // Make sure all hooks are declared at the top level
   const { userName, dispatch } = route.params;
@@ -147,7 +147,10 @@ const MatchScreen = ({ route, navigation }) => {
     console.log("Room selected:", roomId);
     console.log("Members:", team ? team.members : "No members");
     dispatch(menuClickAction());
-    navigation.navigate("Chat", { roomId, username: userName });
+ //   navigation.navigate("Chat", { roomId, username: userName });
+ if (onRoomSelect) {
+  onRoomSelect(roomId, userName);
+}
   };
 
   // **RENDER FUNCTIONS**
