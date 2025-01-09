@@ -28,6 +28,7 @@ import { UserProvider } from "./components/Team Switch/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, Text, View } from "react-native";
 import Notification from "./components/Team/TeamUpRequest/Notification";
+import ChatScreen from "./components/ChatScreens/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -155,6 +156,11 @@ export default function App() {
                 mobileNumber,
               }}
               options={{ headerShown: false }}
+            />
+               <Stack.Screen
+              name="Chat"
+              component={ChatScreen}
+              options={{headerTitleAlign: "center"  }}
             />
             <Stack.Screen
               name="TeamProfileStack"

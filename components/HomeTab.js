@@ -311,6 +311,11 @@ const HomeTab = ({ route, navigation }) => {
     }
   };
 
+  const navigateToChatScreen = (roomId, username)=>{
+    console.log("Navigating to Chat with:", roomId, username);
+    navigation.navigate("Chat", { roomId, username });
+  }
+
   if (loading) {
     // Show loading indicator while data is being fetched
     return (
@@ -505,7 +510,9 @@ const HomeTab = ({ route, navigation }) => {
 
         <Tab.Screen
           name="Matches"
-          component={Matches}
+          component={(props) => (
+            <Matches {...props} onRoomSelect={navigateToChatScreen} />
+          )}
           initialParams={{
             navigation,
             yourTeamProfile: profile,

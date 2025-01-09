@@ -10,7 +10,7 @@ import { menuClickAction, menuClickAction1 } from "./Redux/Actions";
 import ChatScreen from "./ChatScreens/ChatScreen";
 const Stack = createStackNavigator();
 
-const Matches = ({ route, navigation }) => {
+const Matches = ({ route, navigation, onRoomSelect }) => {
   const { yourTeamProfile, userName, refreshYourTeam, dispatch } = route.params;
   const handleMenuClick = () => {
     console.log("DF");
@@ -23,7 +23,9 @@ const Matches = ({ route, navigation }) => {
       <Stack.Navigator initialRouteName="MatchScreen">
         <Stack.Screen
           name="MatchScreen"
-          component={MatchScreen}
+          component={(props) => (
+            <MatchScreen {...props} onRoomSelect={onRoomSelect} />
+          )}
           initialParams={{ yourTeamProfile, userName, navigation, dispatch }}
           options={{
             headerShown: false,
@@ -49,18 +51,6 @@ const Matches = ({ route, navigation }) => {
           component={ChatScreen}
           initialParams={{ navigation, refreshYourTeam }}
           options={{ headerShown: false }}
-          // options={{
-          //   headerTitle: () => (
-          //     <HeaderTitleWithIcon2
-          //       title="duble"
-          //       iconName="swap-horiz"
-          //       iconName1="arrow-back"
-          //       handleMenuClick={handleMenuClick}
-          //     />
-          //   ),
-          //   headerTitleAlign: "center",
-          //   headerLeft: () => null,
-          // }}
         />
         <Stack.Screen
           name="TeamProfile"

@@ -357,13 +357,13 @@ const Teams = ({ route, navigation }) => {
           >
             <Image
               source={{
-                uri: "https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+                uri: team.selectedImages[0]
               }}
               style={styles.itemImage}
             />
             <View style={styles.teamItemTeam}>
               <Text style={styles.teamTextTeam}>
-                {team.name1} and {team.name2}
+                You and {userName === team.name1 ? team.name2 : team.name1}
               </Text>
               <RadioButton
                 selected={selectedTeamIndex === index}
