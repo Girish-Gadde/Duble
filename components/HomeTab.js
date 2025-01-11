@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Teams from "./Teams";
+import Teams from "../components/TeamUp";
 import Likes from "./LikeScreens/Likes";
 import Home from "./Home";
 import Matches from "./Matches";
