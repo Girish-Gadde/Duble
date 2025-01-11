@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Teams from "./Teams";
+import Teams from "./TeamUp";
 import Likes from "./LikeScreens/Likes";
 import Home from "./Home";
 import Matches from "./Matches";
@@ -37,6 +37,8 @@ import { io } from "socket.io-client";
 import parseErrorStack from "react-native/Libraries/Core/Devtools/parseErrorStack";
 import Ionicons4 from "react-native-vector-icons/Ionicons";
 import { TeamProfileStack } from "./Team/TeamProfileStack";
+
+import ChatScreen from "../components/ChatScreens/ChatScreen";
 
 const Tab = createBottomTabNavigator();
 
