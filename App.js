@@ -163,7 +163,7 @@ export default function App() {
                 <Stack.Screen
               name="Chat"
               component={ChatScreen}
-              options={{headerTitleAlign: "center"  }}
+              options={{headerTitleAlign: "center",headerShown: false  }}
             />
             <Stack.Screen
               name="TeamProfileStack"
