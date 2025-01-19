@@ -54,13 +54,13 @@ export default function TeamUp({ route, navigation }) {
         >
           <Image
             source={{
-              uri: "https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+              uri: item.selectedImages[0],
             }}
             style={styles.itemImage}
           />
           <View style={styles.teamItemTeam}>
             <Text style={styles.teamTextTeam}>
-              {item.name1} & {item.name2}
+            You and {userName === item.name1 ? item.name2 : item.name1}
             </Text>
             <RadioButton
               selected={selectedTeamIndex === index}

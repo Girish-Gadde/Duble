@@ -336,6 +336,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
   const handleDelete = () => {
     setPromptText(null);
     setInputText("");
+    setSelectedPrompt(null);
   };
   const handlePromptEdit = () => {
     setIsPromptEditing(false);
@@ -747,7 +748,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
               <View style={styles.editView}>
                 <TouchableOpacity
                   style={styles.deleteButton}
-                  onPress={handleLiking}
+                  onPress={handleDelete}
                 >
                   <Text style={styles.doneText}>Delete</Text>
                 </TouchableOpacity>
@@ -830,7 +831,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
             <Text style={styles.ageText1}>{profile.age1}</Text>
           </View>
           <View style={styles.rowContainer}>
-            <View style={styles.iconContainer}>
+            {/* <View style={styles.iconContainer}>
               <MaterialIcons
                 name="location-on"
                 size={18}
@@ -838,7 +839,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>{profile.user1Place}</Text>
-            </View>
+            </View> */}
 
             <View style={styles.iconContainer}>
               <SimpleLineIcons
@@ -852,7 +853,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
           </View>
 
           <View style={styles.rowContainer}>
-            <View style={styles.iconContainer3}>
+            {/* <View style={styles.iconContainer3}>
               <FontAwesome5
                 name="ruler-vertical"
                 size={18}
@@ -860,7 +861,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>{profile.user1Height}</Text>
-            </View>
+            </View> */}
             <View style={styles.iconContainer}>
               <AntDesign
                 name="hearto"
@@ -887,7 +888,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
             <Text style={styles.ageText1}>{profile.age2}</Text>
           </View>
           <View style={styles.rowContainer}>
-            <View style={styles.iconContainer}>
+            {/* <View style={styles.iconContainer}>
               <MaterialIcons
                 name="location-on"
                 size={18}
@@ -895,7 +896,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>{profile.user2Place}</Text>
-            </View>
+            </View> */}
 
             <View style={styles.iconContainer}>
               <SimpleLineIcons
@@ -1061,7 +1062,8 @@ const styles = StyleSheet.create({
     //marginLeft: 0,
     fontWeight: "bold",
     lineHeight: 23.96,
-    marginRight: 80,
+    marginRight: "25%",
+    width: '64%'
   },
   searchText1: {
     fontSize: 20,
@@ -1069,7 +1071,8 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontWeight: "bold",
     lineHeight: 23.96,
-    marginRight: 80,
+      marginRight: "25%",
+    width: '64%'
   },
   searchText2: {
     fontSize: 20,
@@ -1077,6 +1080,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     fontWeight: "bold",
     lineHeight: 23.96,
+    marginRight: "5%",
+    width: '94%'
   },
   editIcon: {
     marginLeft: "20%",
@@ -1107,6 +1112,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     borderRadius: 6,
     paddingBottom: 10,
+    width:'90%'
   },
   actionButton: {
     flex: 1,
@@ -1126,7 +1132,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 7, // Adjust the spacing between icon and text as needed
   },
   doneButton1: {
-    width: 340,
+    width: '90%',
     height: 49,
     margin: 20,
     backgroundColor: "#FFFFFF",
@@ -1157,7 +1163,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
   basicContainer: {
-    width: 340,
+    width: '90%',
     height: 200,
     flexDirection: "column",
 
@@ -1274,7 +1280,7 @@ const styles = StyleSheet.create({
     color: "#45474B",
     backgroundColor: "#EDEEF1",
     borderRadius: 22,
-    width: 330,
+    width: '94%',
     height: 40,
     alignSelf: "center",
   },
@@ -1288,7 +1294,7 @@ const styles = StyleSheet.create({
     color: "#121212",
     backgroundColor: "#EDEEF1",
     borderRadius: 4,
-    width: 314,
+    width: '95%',
     height: 54,
     alignSelf: "center",
   },
@@ -1302,7 +1308,7 @@ const styles = StyleSheet.create({
     color: "#121212",
     backgroundColor: "#EDEEF1",
     borderRadius: 7,
-    width: 330,
+    width: '92%',
     height: 72,
     alignSelf: "center",
     lineHeight: 19.12,
@@ -1310,7 +1316,7 @@ const styles = StyleSheet.create({
   },
 
   promptContainer: {
-    width: 342,
+    width: '90%',
     height: 60,
     borderRadius: 11,
     backgroundColor: "#FFFFFF",
@@ -1324,7 +1330,7 @@ const styles = StyleSheet.create({
     color: "#FFDDEE",
   },
   doneButton: {
-    width: 150,
+    width: '54%',
     height: 40,
     backgroundColor: "#FF3156",
     borderRadius: 27,
@@ -1333,9 +1339,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
+    marginLeft: '1%'
   },
   deleteButton: {
-    width: 150,
+    width: '54%',
     height: 40,
     backgroundColor: "#6420AA",
     borderRadius: 27,
@@ -1344,6 +1351,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
+    marginRight: '1%'
   },
   editView: {
     flex: 1,
@@ -1352,7 +1360,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 17,
   },
   selectedPromptContainer: {
-    width: "89%",
+    width: "90%",
     backgroundColor: "#FFFFFF",
     borderRadius: 10,
     padding: 15,
@@ -1484,8 +1492,8 @@ const styles = StyleSheet.create({
   //   zIndex: 1000, // Ensure it's above other content
   // },
   singleImage: {
-    height: 110,
-    width: 117,
+    height: 145,
+    width: '40%',
     marginHorizontal: 10,
     marginTop: 15,
     borderRadius: 5,

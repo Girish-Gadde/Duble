@@ -157,7 +157,7 @@ const ProfileScreen1 = ({ route, navigation }) => {
             <Text style={styles.nameText}>{profile.name},</Text>
             <Text style={styles.ageText}>{age}</Text>
           </View>
-          <View style={styles.locationContainer}>
+          {/* <View style={styles.locationContainer}>
             <MaterialIcons
               name="location-on"
               size={18}
@@ -167,9 +167,9 @@ const ProfileScreen1 = ({ route, navigation }) => {
             <Text style={styles.locationText}>
               {profiles[currentProfileIndex].location}
             </Text>
-          </View>
+          </View> */}
           <Text style={styles.descriptionText}>
-            "{profiles[currentProfileIndex].description}"
+            "{profile.aboutMe}"
           </Text>
         </View>
         {/*
@@ -293,6 +293,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     padding: 20,
+    width: '90%'
   },
   nameContainer: {
     flexDirection: "row",
@@ -387,6 +388,7 @@ const styles = StyleSheet.create({
     marginBottom: "4.5%",
     borderRadius: 6,
     paddingBottom: "3%",
+    width: '90%'
   },
   actionButton: {
     flex: 1,

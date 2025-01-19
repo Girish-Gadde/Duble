@@ -17,7 +17,7 @@ import { serverIP } from "@/config";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 
 const ChatScreen = ({ route, navigation }) => {
-  const { roomId, username } = route.params;
+  const { roomId, username, teaMembers } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const socket = io(serverIP);
@@ -135,7 +135,7 @@ const ChatScreen = ({ route, navigation }) => {
             }}
             style={styles.itemImage}
           />
-          <Text style={styles.headerText}>Rahul & Rishi</Text>
+          <Text style={styles.headerText}>{teaMembers[0]} & {teaMembers[1]}</Text>
           <TouchableOpacity>
             <Entypo name="dots-three-vertical" size={28} color="#000000" />
           </TouchableOpacity>

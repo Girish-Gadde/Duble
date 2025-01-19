@@ -155,7 +155,7 @@ const LikedProfile = ({ route, navigation }) => {
             <Text style={styles.nameText}>{profile.name2},</Text>
             <Text style={styles.ageText}>{profile.age2}</Text>
           </View>
-          <View style={styles.locationContainer}>
+          {/* <View style={styles.locationContainer}>
             <MaterialIcons
               name="location-on"
               size={18}
@@ -163,7 +163,7 @@ const LikedProfile = ({ route, navigation }) => {
               style={styles.locationIcon}
             />
             <Text style={styles.locationText}>{profile.location}</Text>
-          </View>
+          </View> */}
           <Text style={styles.descriptionText}>
             "{profile.user1Description}""
           </Text>
@@ -241,7 +241,7 @@ const LikedProfile = ({ route, navigation }) => {
               <Text style={styles.ageText1}>{profile.age1}</Text>
             </View>
             <View style={styles.rowContainer}>
-              <View style={styles.iconContainer}>
+              {/* <View style={styles.iconContainer}>
                 <MaterialIcons
                   name="location-on"
                   size={18}
@@ -249,7 +249,7 @@ const LikedProfile = ({ route, navigation }) => {
                   style={styles.locationIcon}
                 />
                 <Text style={styles.cell}>{profile.user1Place}</Text>
-              </View>
+              </View> */}
 
               <View style={styles.iconContainer}>
                 <SimpleLineIcons
@@ -263,7 +263,7 @@ const LikedProfile = ({ route, navigation }) => {
             </View>
 
             <View style={styles.rowContainer}>
-              <View style={styles.iconContainer3}>
+              {/* <View style={styles.iconContainer3}>
                 <FontAwesome5
                   name="ruler-vertical"
                   size={18}
@@ -271,7 +271,7 @@ const LikedProfile = ({ route, navigation }) => {
                   style={styles.locationIcon}
                 />
                 <Text style={styles.cell}>{profile.user1Height}</Text>
-              </View>
+              </View> */}
               <View style={styles.iconContainer}>
                 <AntDesign
                   name="hearto"
@@ -298,7 +298,7 @@ const LikedProfile = ({ route, navigation }) => {
               <Text style={styles.ageText1}>{profile.age2}</Text>
             </View>
             <View style={styles.rowContainer}>
-              <View style={styles.iconContainer}>
+              {/* <View style={styles.iconContainer}>
                 <MaterialIcons
                   name="location-on"
                   size={18}
@@ -306,7 +306,7 @@ const LikedProfile = ({ route, navigation }) => {
                   style={styles.locationIcon}
                 />
                 <Text style={styles.cell}>{profile.user2Place}</Text>
-              </View>
+              </View> */}
 
               <View style={styles.iconContainer}>
                 <SimpleLineIcons
@@ -379,6 +379,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     padding: 20,
+    width: "90%"
   },
   nameContainer: {
     flexDirection: "row",
@@ -449,6 +450,7 @@ const styles = StyleSheet.create({
     // left: 0,
     // right: 0,
     marginVertical: 10,
+     width: "98%"
   },
   actionButton1: { flex: 1, alignItems: "flex-end", marginHorizontal: 15 },
   actionButton2: { flex: 1, alignItems: "flex-start", marginHorizontal: 15 },
@@ -484,6 +486,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 6,
     paddingBottom: 13,
+     width: '90%'
   },
   viewContainer: {
     backgroundColor: "#FFFFFF",
@@ -491,10 +494,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 6,
     paddingBottom: 13,
+    width: '90%'
   },
   actionButton: {
     flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: 12,
   },
   buttonContainer: {
     backgroundColor: "#6420AA",
@@ -502,7 +506,7 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     paddingHorizontal: 10,
     alignItems: "center",
-    width: 170,
+    width: 165,
     height: 49,
   },
   buttonText: {
@@ -512,8 +516,8 @@ const styles = StyleSheet.create({
     // marginTop: 5,
   },
   singleImage: {
-    height: 110,
-    width: 117,
+    height: 145,
+    width: '40%',
     marginHorizontal: 10,
     marginTop: 15,
     borderRadius: 5,

@@ -129,7 +129,7 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
         console.log(updatedStatuses, clickStatuses, "AFTER CLICK");
       }
       dispatch(menuClickAction());
-      navigation.navigate("TeamProfile", { profile, yourTeamProfile });
+      navigation.navigate("TeamProfile", { profile, yourTeamProfile, userName });
     } catch (error) {
       console.error("Error updating click status:", error);
       Alert.alert("Error", "Failed to update click status. Please try again.");
@@ -137,9 +137,10 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
   };
 
   const handleRoomPress = (room) => {
+    console.log(room, 'RM-TEAM')
     const { roomId, teams } = room;
     // Find the team that matches the teamId and get its members
-    const team = teams.find((t) => t.teamId === yourTeamProfile._id);
+    const team = teams.find((t) => t.teamId !== yourTeamProfile._id);
     const memberName =
       team && team.members && team.members.length > 0
         ? team.members[0]
@@ -148,8 +149,9 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
     console.log("Members:", team ? team.members : "No members");
     dispatch(menuClickAction());
  //   navigation.navigate("Chat", { roomId, username: userName });
- if (onRoomSelect) {
-  onRoomSelect(roomId, userName);
+ if (team) {
+  const teaMembers = team.members
+  onRoomSelect(roomId, userName, teaMembers);
 }
   };
 

@@ -25,8 +25,8 @@ import { useSelector } from "react-redux";
 const width = Dimensions.get("window").width;
 
 const TeamProfile = ({ route, navigation }) => {
-  ///const { profile } = route.params;
-  // console.log(profile, "NAME");
+const { userName } = route.params;
+   console.log(userName, "NAME");
   const profile = useSelector((state) => state.profile);
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
@@ -104,13 +104,13 @@ const TeamProfile = ({ route, navigation }) => {
         </View> */}
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.nameText}>{profile?.name1},</Text>
+            <Text style={styles.nameText}>{profile?.name1 === userName ? 'You' : profile?.name1},</Text>
             <Text style={styles.ageText}>{profile?.age1}</Text>
             <View style={styles.divider} />
-            <Text style={styles.nameText}>{profile?.name2},</Text>
+            <Text style={styles.nameText}>{profile?.name2 === userName ? 'You' : profile?.name2},</Text>
             <Text style={styles.ageText}>{profile?.age2}</Text>
           </View>
-          <View style={styles.locationContainer}>
+          {/* <View style={styles.locationContainer}>
             <MaterialIcons
               name="location-on"
               size={18}
@@ -118,7 +118,7 @@ const TeamProfile = ({ route, navigation }) => {
               style={styles.locationIcon}
             />
             <Text style={styles.locationText}>{profile?.location}</Text>
-          </View>
+          </View> */}
           <Text style={styles.descriptionText}>
             "{profile?.user1Description}""
           </Text>
@@ -154,7 +154,7 @@ const TeamProfile = ({ route, navigation }) => {
               <Text style={styles.ageText1}>{profile?.age1}</Text>
             </View>
             <View style={styles.rowContainer}>
-              <View style={styles.iconContainer}>
+              {/* <View style={styles.iconContainer}>
                 <MaterialIcons
                   name="location-on"
                   size={18}
@@ -162,7 +162,7 @@ const TeamProfile = ({ route, navigation }) => {
                   style={styles.locationIcon}
                 />
                 <Text style={styles.cell}>{profile?.user1Place}</Text>
-              </View>
+              </View> */}
 
               <View style={styles.iconContainer}>
                 <SimpleLineIcons
@@ -176,7 +176,7 @@ const TeamProfile = ({ route, navigation }) => {
             </View>
 
             <View style={styles.rowContainer}>
-              <View style={styles.iconContainer3}>
+              {/* <View style={styles.iconContainer3}>
                 <FontAwesome5
                   name="ruler-vertical"
                   size={18}
@@ -184,7 +184,7 @@ const TeamProfile = ({ route, navigation }) => {
                   style={styles.locationIcon}
                 />
                 <Text style={styles.cell}>{profile?.user1Height}</Text>
-              </View>
+              </View> */}
               <View style={styles.iconContainer}>
                 <AntDesign
                   name="hearto"
@@ -213,7 +213,7 @@ const TeamProfile = ({ route, navigation }) => {
               <Text style={styles.ageText1}>{profile?.age2}</Text>
             </View>
             <View style={styles.rowContainer}>
-              <View style={styles.iconContainer}>
+              {/* <View style={styles.iconContainer}>
                 <MaterialIcons
                   name="location-on"
                   size={18}
@@ -221,7 +221,7 @@ const TeamProfile = ({ route, navigation }) => {
                   style={styles.locationIcon}
                 />
                 <Text style={styles.cell}>{profile?.user2Place}</Text>
-              </View>
+              </View> */}
 
               <View style={styles.iconContainer}>
                 <SimpleLineIcons
@@ -308,6 +308,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     padding: 20,
+     width: "90%"
   },
   nameContainer: {
     flexDirection: "row",

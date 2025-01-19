@@ -15,7 +15,7 @@ import ChatScreen from "../ChatScreens/ChatScreen";
 const Stack = createStackNavigator();
 
 export const LikeStack = ({ route, navigation }) => {
-  const { yourTeamProfile, refreshYourTeam } = route.params;
+  const { yourTeamProfile,userName, refreshYourTeam } = route.params;
   const dispatch = useDispatch();
   const handleMenuClick = () => {
     dispatch(menuClickAction());
@@ -61,14 +61,14 @@ export const LikeStack = ({ route, navigation }) => {
         <Stack.Screen
           name="LikedMatch"
           component={LikedMatch}
-          initialParams={{ navigation, refreshYourTeam }}
+          initialParams={{ navigation,userName, refreshYourTeam }}
           options={{ headerShown: false }}
         />
         <Stack.Screen
           name="LikedChat"
           component={ChatScreen}
           initialParams={{ navigation }}
-          // options={{ headerShown: false }}
+           options={{ headerShown: false }}
         />
         <Stack.Screen
           name="TeamProfile"

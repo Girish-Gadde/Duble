@@ -124,7 +124,7 @@ const HomeTab = ({ route, navigation }) => {
       // setIndividualProfile(responseData);
       dispatch(setIndividualProfile(responseData));
       //  setUserId(responseData.userId);
-      console.log(responseData._id, "User ID");
+      console.log(responseData._id,responseData.name, "User ID");
       setUserId(responseData._id);
       setUserName(responseData.name);
       // const userId = responseData._id;
@@ -283,6 +283,7 @@ const HomeTab = ({ route, navigation }) => {
       navigation.navigate("TeamProfileStack", {
         navigation,
         profile,
+        userName,
         dispatch,
       });
     } else {
@@ -312,9 +313,9 @@ const HomeTab = ({ route, navigation }) => {
   };
 
 
-  const navigateToChatScreen = (roomId, username)=>{
-    console.log("Navigating to Chat with:", roomId, username);
-    navigation.navigate("Chat", { roomId, username });
+  const navigateToChatScreen = (roomId, username, teaMembers)=>{
+    console.log("Navigating to Chat with:", roomId, username, teaMembers);
+    navigation.navigate("Chat", { roomId, username, teaMembers });
   }
 
   if (loading) {
@@ -411,6 +412,7 @@ const HomeTab = ({ route, navigation }) => {
           initialParams={{
             navigation,
             yourTeamProfile: profile,
+            userName,
             refreshYourTeam,
           }}
           listeners={({ navigation }) => ({

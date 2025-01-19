@@ -25,12 +25,12 @@ import { useSelector } from "react-redux";
 const width = Dimensions.get("window").width;
 
 const MatchedTeamProfile = ({ route, navigation }) => {
-  const { profile, yourTeamProfile, refreshYourTeam } = route.params;
-  //  console.log("NAME", profile, "UR", yourTeamProfile);
+  const { profile, yourTeamProfile,userName,refreshYourTeam } = route.params;
+    console.log("NAME", profile, "UR", yourTeamProfile, userName);
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [images, setImages] = useState([]);
-  const [roomId, setRoomId] = useState(null);
+  const [roomId1, setRoomId] = useState(null);
   const menuClicked = useSelector((state) => state.menuClicked);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
   //const navigation = useNavigation();
@@ -152,11 +152,12 @@ const MatchedTeamProfile = ({ route, navigation }) => {
 
       if (response.ok) {
         setRoomId(responseData.roomId);
-        let roomId1 = responseData.roomId;
-        console.log(responseData, "Response Data-1---->:", roomId1);
+        let roomId = responseData.roomId;
+        const teaMembers = [profile.name1, profile.name2]
+        console.log(responseData, roomId, teaMembers, userName,"Response Data-1---->:");
         //  refreshYourTeam();
-        navigation.navigate("Chat", { profile, roomId: roomId1 });
-
+        navigation.navigate("Chat", { roomId, username: userName, teaMembers });
+      // onRoomSelect(roomId, userName, teaMembers);
         // Alert.alert("Success", "Chat room created successfully", [
         //   {
         //     text: "OK",
@@ -217,7 +218,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
             <Text style={styles.nameText}>{profile.name2},</Text>
             <Text style={styles.ageText}>{profile.age2}</Text>
           </View>
-          <View style={styles.locationContainer}>
+          {/* <View style={styles.locationContainer}>
             <MaterialIcons
               name="location-on"
               size={18}
@@ -225,7 +226,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
               style={styles.locationIcon}
             />
             <Text style={styles.locationText}>{profile.location}</Text>
-          </View>
+          </View> */}
           <Text style={styles.descriptionText}>
             "{profile.user1Description}""
           </Text>
@@ -246,7 +247,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                 alignItems: "center",
               }}
             >
-              <AntDesign name="message1" size={30} color="white" />
+              <AntDesign name="message1" size={35} color="white" />
             </View>
           </TouchableOpacity>
         </View>
@@ -281,7 +282,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
               <Text style={styles.ageText1}>{profile.age1}</Text>
             </View>
             <View style={styles.rowContainer}>
-              <View style={styles.iconContainer}>
+              {/* <View style={styles.iconContainer}>
                 <MaterialIcons
                   name="location-on"
                   size={18}
@@ -289,7 +290,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                   style={styles.locationIcon}
                 />
                 <Text style={styles.cell}>{profile.user1Place}</Text>
-              </View>
+              </View> */}
 
               <View style={styles.iconContainer}>
                 <SimpleLineIcons
@@ -303,7 +304,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
             </View>
 
             <View style={styles.rowContainer}>
-              <View style={styles.iconContainer3}>
+              {/* <View style={styles.iconContainer3}>
                 <FontAwesome5
                   name="ruler-vertical"
                   size={18}
@@ -311,7 +312,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                   style={styles.locationIcon}
                 />
                 <Text style={styles.cell}>{profile.user1Height}</Text>
-              </View>
+              </View> */}
               <View style={styles.iconContainer}>
                 <AntDesign
                   name="hearto"
@@ -338,7 +339,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
               <Text style={styles.ageText1}>{profile.age2}</Text>
             </View>
             <View style={styles.rowContainer}>
-              <View style={styles.iconContainer}>
+              {/* <View style={styles.iconContainer}>
                 <MaterialIcons
                   name="location-on"
                   size={18}
@@ -346,7 +347,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
                   style={styles.locationIcon}
                 />
                 <Text style={styles.cell}>{profile.user2Place}</Text>
-              </View>
+              </View> */}
 
               <View style={styles.iconContainer}>
                 <SimpleLineIcons
@@ -419,6 +420,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     padding: 20,
+     width: "90%"
   },
   nameContainer: {
     flexDirection: "row",
@@ -524,6 +526,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 6,
     paddingBottom: 13,
+     width: "90%"
   },
   viewContainer: {
     backgroundColor: "#FFFFFF",
@@ -531,6 +534,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 6,
     paddingBottom: 13,
+     width: "90%"
   },
   actionButton: {
     flex: 1,
@@ -553,8 +557,8 @@ const styles = StyleSheet.create({
     // marginTop: 5,
   },
   singleImage: {
-    height: 110,
-    width: 117,
+    height: 145,
+    width: '40%',
     marginHorizontal: 10,
     marginTop: 15,
     borderRadius: 5,

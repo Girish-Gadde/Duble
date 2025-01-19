@@ -11,7 +11,7 @@ import { Alert } from "react-native";
 const Stack = createStackNavigator();
 
 export const TeamProfileStack = ({ route, navigation }) => {
-  const { dispatch } = route.params;
+  const { dispatch,userName } = route.params;
   const profile = useSelector((state) => state.profile);
   const handleMenuClick = () => {
     // Dispatch action to toggle the state
@@ -39,7 +39,7 @@ export const TeamProfileStack = ({ route, navigation }) => {
         <Stack.Screen
           name="TeamProfile"
           component={TeamProfile}
-          initialParams={{ navigation, profile }}
+          initialParams={{ navigation, userName, profile }}
           options={{
             // headerTitle: () => (
             //   <HeaderTitleWithIcon2
@@ -56,7 +56,7 @@ export const TeamProfileStack = ({ route, navigation }) => {
         <Stack.Screen
           name="TeamProfileDetails"
           component={TeamProfileDetails}
-          initialParams={{ navigation, dispatch }}
+          initialParams={{ navigation, userName, dispatch }}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

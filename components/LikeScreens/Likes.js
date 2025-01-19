@@ -258,6 +258,24 @@ const Likes = ({ route, navigation }) => {
       const statuses = storedStatuses ? JSON.parse(storedStatuses) : {};
       console.log(statuses, "ST");
       setClickStatuses(statuses);
+
+         // Store the first image URL of each team in AsyncStorage
+         data.forEach(async (team) => {
+          if (team.selectedImages && team.selectedImages.length > 0) {
+            const firstImageUrl = team.selectedImages[0];
+            const storageKey = `teamImage_${team._id}`;
+    
+            // Check if the URL is already stored
+            const existingUrl = await AsyncStorage.getItem(storageKey);
+            if (!existingUrl) {
+              console.log(`Storing image URL for team ${team._id}: ${firstImageUrl}`);
+              await AsyncStorage.setItem(storageKey, firstImageUrl);
+            } else {
+              console.log(`URL for team ${team._id} is already stored: ${existingUrl}`);
+            }
+          }
+        });
+    
     } catch (error) {
       console.error("Error fetching teams:", error);
     } finally {

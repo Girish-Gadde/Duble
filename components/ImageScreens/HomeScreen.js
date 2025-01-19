@@ -208,6 +208,9 @@ const HomeScreen = ({ route, navigation }) => {
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>No teams available</Text>
+        <TouchableOpacity style={styles.newTeamButton} onPress={refreshYourTeam}>
+        <Text style={styles.emptyText1}>Get new teams</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -244,7 +247,7 @@ const HomeScreen = ({ route, navigation }) => {
             <Text style={styles.nameText}>{currentProfile?.name2},</Text>
             <Text style={styles.ageText}>{currentProfile?.age2}</Text>
           </View>
-          <View style={styles.locationContainer}>
+          {/* <View style={styles.locationContainer}>
             <MaterialIcons
               name="location-on"
               size={18}
@@ -252,7 +255,7 @@ const HomeScreen = ({ route, navigation }) => {
               style={styles.locationIcon}
             />
             <Text style={styles.locationText}>{currentProfile?.location}</Text>
-          </View>
+          </View> */}
           <Text style={styles.descriptionText}>
             "{currentProfile?.user1Description}"
           </Text>
@@ -312,7 +315,7 @@ const HomeScreen = ({ route, navigation }) => {
             <Text style={styles.ageText1}>{currentProfile?.age1}</Text>
           </View>
           <View style={styles.rowContainer}>
-            <View style={styles.iconContainer}>
+            {/* <View style={styles.iconContainer}>
               <MaterialIcons
                 name="location-on"
                 size={18}
@@ -320,7 +323,7 @@ const HomeScreen = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>{currentProfile?.user1Place}</Text>
-            </View>
+            </View> */}
 
             <View style={styles.iconContainer}>
               <SimpleLineIcons
@@ -334,7 +337,7 @@ const HomeScreen = ({ route, navigation }) => {
           </View>
 
           <View style={styles.rowContainer}>
-            <View style={styles.iconContainer3}>
+            {/* <View style={styles.iconContainer3}>
               <FontAwesome5
                 name="ruler-vertical"
                 size={18}
@@ -342,7 +345,7 @@ const HomeScreen = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>{currentProfile?.user1Height}</Text>
-            </View>
+            </View> */}
             <View style={styles.iconContainer}>
               <AntDesign
                 name="hearto"
@@ -371,7 +374,7 @@ const HomeScreen = ({ route, navigation }) => {
             <Text style={styles.ageText1}>{currentProfile?.age2}</Text>
           </View>
           <View style={styles.rowContainer}>
-            <View style={styles.iconContainer}>
+            {/* <View style={styles.iconContainer}>
               <MaterialIcons
                 name="location-on"
                 size={18}
@@ -379,7 +382,7 @@ const HomeScreen = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>{currentProfile?.user2Place}</Text>
-            </View>
+            </View> */}
 
             <View style={styles.iconContainer}>
               <SimpleLineIcons
@@ -445,8 +448,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#EDEEF1",
   },
   emptyText: {
+    fontSize: 24,
+    color: "#333",
+    marginBottom: '2%'
+  },
+  emptyText1: {
     fontSize: 20,
     color: "#333",
+  },
+  newTeamButton:{
+    margin: '3%',
+    padding:'3%',
+    backgroundColor: '#fffff7',
+    borderRadius:10
   },
   image: {
     width: "92%",
@@ -470,6 +484,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     padding: 20,
+    width: '90%'
   },
   nameContainer: {
     flexDirection: "row",
@@ -580,6 +595,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 6,
     paddingBottom: 13,
+    width: '90%'
   },
   viewContainer: {
     backgroundColor: "#FFFFFF",
@@ -587,6 +603,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 6,
     paddingBottom: 13,
+    width: '90%'
   },
   actionButton: {
     flex: 1,
@@ -646,8 +663,8 @@ const styles = StyleSheet.create({
   //   zIndex: 1000, // Ensure it's above other content
   // },
   singleImage: {
-    height: 110,
-    width: 117,
+    height: 145,
+    width: '40%',
     marginHorizontal: 10,
     marginTop: 15,
     borderRadius: 5,
