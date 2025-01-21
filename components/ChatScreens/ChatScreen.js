@@ -17,7 +17,7 @@ import { serverIP } from "@/config";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 
 const ChatScreen = ({ route, navigation }) => {
-  const { roomId, username, teaMembers } = route.params;
+  const { roomId, username, teaMembers, imageUrl } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const socket = io(serverIP);
@@ -130,21 +130,19 @@ const ChatScreen = ({ route, navigation }) => {
             <Ionicons name="arrow-back-outline" size={20} color="#121212" />
           </TouchableOpacity>
           <Image
-            source={{
-              uri: "https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-            }}
+            source={{ uri: imageUrl }}
             style={styles.itemImage}
           />
           <Text style={styles.headerText}>{teaMembers[0]} & {teaMembers[1]}</Text>
           <TouchableOpacity>
             <Entypo name="dots-three-vertical" size={28} color="#000000" />
           </TouchableOpacity>
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <Ionicons name="call-outline" size={28} color="#000000" />
           </TouchableOpacity>
           <TouchableOpacity>
             <Ionicons name="videocam-outline" size={28} color="#000000" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <View style={styles.innerContainer}>

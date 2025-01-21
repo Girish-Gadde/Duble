@@ -313,9 +313,9 @@ const HomeTab = ({ route, navigation }) => {
   };
 
 
-  const navigateToChatScreen = (roomId, username, teaMembers)=>{
-    console.log("Navigating to Chat with:", roomId, username, teaMembers);
-    navigation.navigate("Chat", { roomId, username, teaMembers });
+  const navigateToChatScreen = (roomId, username, teaMembers, imageUrl)=>{
+    console.log("Navigating to Chat with:", roomId, username, teaMembers, imageUrl);
+    navigation.navigate("Chat", { roomId, username, teaMembers, imageUrl });
   }
 
   if (loading) {

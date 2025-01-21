@@ -131,11 +131,13 @@ const MatchedTeamProfile = ({ route, navigation }) => {
         teamId: `${yourTeamProfile._id}`,
         members: [`${yourTeamProfile.name1}`, `${yourTeamProfile.name2}`],
         teamMembers: [`${yourTeamProfile.teamMembers}`],
+        imageUrl: `${yourTeamProfile.selectedImages[0]}`
       },
       teamB: {
         teamId: `${profile._id}`,
         members: [`${profile.name1}`, `${profile.name2}`],
         teamMembers: [`${profile.teamMembers}`],
+        imageUrl: `${profile.selectedImages[0]}`
       },
     };
 
@@ -156,7 +158,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
         const teaMembers = [profile.name1, profile.name2]
         console.log(responseData, roomId, teaMembers, userName,"Response Data-1---->:");
         //  refreshYourTeam();
-        navigation.navigate("Chat", { roomId, username: userName, teaMembers });
+        navigation.navigate("Chat", { roomId, username: userName, teaMembers, imageUrl: profile.selectedImages[0] });
       // onRoomSelect(roomId, userName, teaMembers);
         // Alert.alert("Success", "Chat room created successfully", [
         //   {

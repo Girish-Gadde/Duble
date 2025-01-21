@@ -150,8 +150,9 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
     dispatch(menuClickAction());
  //   navigation.navigate("Chat", { roomId, username: userName });
  if (team) {
-  const teaMembers = team.members
-  onRoomSelect(roomId, userName, teaMembers);
+  const teaMembers = team.members;
+  const imageUrl = team.imageUrl;
+  onRoomSelect(roomId, userName, teaMembers, imageUrl);
 }
   };
 
@@ -160,20 +161,26 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
     console.log("Rendering room item:", item); // Debugging log
 
     // Ensure teams is an array before flattening its members
-    const allMembers = Array.isArray(item.teams)
-      ? item.teams.flatMap((team) => team.members).join("   ") // Adding spaces between names
-      : "No members available";
+    const matchedTeam = Array.isArray(item.teams)
+    ? item.teams.find((team) => team.teamId !== yourTeamProfile._id) // Find the matched team
+    : null;
+  
+  const matchedTeamMembers = matchedTeam
+    ? matchedTeam.members.join("  &  ") // Join members with spaces
+    : "No members available";
+  
+  console.log("Matched Team: ", matchedTeam);
 
     return (
       <TouchableOpacity onPress={() => handleRoomPress(item)}>
         <View style={styles.chatContainer}>
           {/* Placeholder image, replace with actual image if available */}
           <Image
-            source={require("../../assets/profile-1.jpg")}
+            source={matchedTeam?.imageUrl ? { uri: matchedTeam.imageUrl } : require("../../assets/profile-1.jpg")}
             style={styles.chatImage}
           />
           <View style={styles.chatTextContainer}>
-            <Text style={styles.chatText}>{allMembers}</Text>
+            <Text style={styles.chatText}>{matchedTeamMembers}</Text>
             <Text style={styles.chatMessage}>
               Chat description or last message
             </Text>
