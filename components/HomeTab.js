@@ -85,20 +85,20 @@ const HomeTab = ({ route, navigation }) => {
       const userId = await AsyncStorage.getItem("userId");
       fetchTeams(userId);
       // getUserId();
-      //   getYourIndividualTeam(userId);
+      //   getYourIndividualProfile(userId);
       Alert.alert(data.message);
     });
 
     socket.on("teamUpRequest", async (data) => {
       const userId = await AsyncStorage.getItem("userId");
-      getYourIndividualTeam(userId);
+      getYourIndividualProfile(userId);
       Alert.alert(data.message);
     });
 
     socket.on("teamLikedNotification", async (data) => {
       console.log("COME");
-      refreshYourTeam();
-      //  refreshYourInidividualTeam();
+      //refreshYourTeam();
+      refreshYourSelectedTeam()
       //   Alert.alert(data.message);
     });
     getUserId();
@@ -130,7 +130,7 @@ const HomeTab = ({ route, navigation }) => {
       // const userId = responseData._id;
       await AsyncStorage.setItem("userId", responseData._id);
       // Once the user ID is fetched, get the associated teams
-      getYourTeam(responseData._id);
+      getYourTeams(responseData._id);
       //fetchTeams(responseData._id);
       setLoading(false);
     } catch (error) {
@@ -138,7 +138,7 @@ const HomeTab = ({ route, navigation }) => {
     }
   }
 
-  async function getYourTeam(userId) {
+  async function getYourTeams(userId) {
     try {
       const response = await fetch(
         `${serverIP}/auth/get-your-team?userId=${userId}`,
@@ -178,10 +178,10 @@ const HomeTab = ({ route, navigation }) => {
     }
   }
 
-  async function getYourIndividualTeam(userId) {
+  async function getYourIndividualProfile(userId) {
     try {
       const response = await fetch(
-        `${serverIP}/auth/get-your-individual-team?userId=${userId}`,
+        `${serverIP}/auth/get-your-individual-profile?userId=${userId}`,
         {
           method: "GET",
           headers: {
@@ -204,18 +204,65 @@ const HomeTab = ({ route, navigation }) => {
     }
   }
 
+  async function getYourSelectedTeam(teamId) {
+    console.log(teamId, 'ID------>>>>>>')
+    try {
+      const response = await fetch(
+        `${serverIP}/auth/get-your-selected-team?teamId=${teamId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        //throw new Error("Failed to fetch your team-1");
+        Alert.alert(
+          "Your selected team updation failed",
+          "Press Ok",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                //navigation.navigate("Teams");
+              },
+            },
+          ],
+          { cancelable: true }
+        );
+      }
+
+      const responseData = await response.json();
+      //const savedIndex = await AsyncStorage.getItem("selectedTeamIndex");
+     // dispatch(setTeams(responseData));
+      dispatch(setProfile(responseData));
+      console.log(responseData, 'Your Selected Team-------->>>>>>>')
+    } catch (error) {
+      console.error("Failed to fetch your team:", error);
+    }
+  }
+
   useEffect(() => {
     refreshYourTeam();
   }, [selectedTeamIndex]);
 
   const refreshYourTeam = async () => {
     const userId = await AsyncStorage.getItem("userId");
-    await getYourTeam(userId);
+    await getYourTeams(userId);
   };
+
+  const refreshYourSelectedTeam = () => {
+    if(profile){
+      getYourSelectedTeam(profile._id)
+    }
+  };
+
 
   const refreshYourInidividualTeam = async () => {
     const userId = await AsyncStorage.getItem("userId");
-    await getYourIndividualTeam(userId);
+    await getYourIndividualProfile(userId);
   };
 
   const fetchTeams = async (userId) => {
@@ -254,7 +301,7 @@ const HomeTab = ({ route, navigation }) => {
     }
   };
 
-  // async function getYourTeam() {
+  // async function getYourTeams() {
   //   try {
   //     const response = await fetch(
   //       `${serverIP}/auth/get-your-team?mobileNumber=${mobileNumber}`,
