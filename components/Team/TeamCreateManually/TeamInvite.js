@@ -38,7 +38,7 @@ export default function CreateTeam({
 
   const createATeam = async () => {
     if (!teamateMobileNumber && !teamName) {
-      Alert.alert("Error", "Please provide the Team Name");
+      Alert.alert("Error", "Please provide any random Team Name");
       return;
     }
 

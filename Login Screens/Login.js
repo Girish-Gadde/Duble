@@ -75,7 +75,7 @@ const Login = () => {
             Login with Phone Number
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={[
             styles.button,
             activeButton === "gmail"
@@ -96,7 +96,7 @@ const Login = () => {
           >
             Login with Gmail
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );

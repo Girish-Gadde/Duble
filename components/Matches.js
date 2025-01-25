@@ -24,7 +24,10 @@ const Matches = ({ route, navigation, onRoomSelect }) => {
         <Stack.Screen
           name="MatchScreen"
           component={(props) => (
-            <MatchScreen {...props} onRoomSelect={onRoomSelect} />
+            <MatchScreen 
+            {...props} 
+            onRoomSelect={onRoomSelect}
+            />
           )}
           initialParams={{ yourTeamProfile, userName, navigation, dispatch }}
           options={{
@@ -66,7 +69,13 @@ const Matches = ({ route, navigation, onRoomSelect }) => {
         />
         <Stack.Screen
           name="TeamProfile"
-          component={MatchedTeamProfile}
+          //component={MatchedTeamProfile}
+          component={(props) => (
+            <MatchedTeamProfile 
+            {...props} 
+            onRoomSelect={onRoomSelect}
+            />
+          )}
           initialParams={{ navigation, refreshYourTeam }}
           options={{
             headerTitle: () => (

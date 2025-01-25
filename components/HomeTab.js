@@ -97,8 +97,8 @@ const HomeTab = ({ route, navigation }) => {
 
     socket.on("teamLikedNotification", async (data) => {
       console.log("COME");
-      //refreshYourTeam();
-      refreshYourSelectedTeam()
+      refreshYourTeam();
+     // refreshYourSelectedTeam()
       //   Alert.alert(data.message);
     });
     getUserId();

@@ -77,11 +77,6 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
       }
     };
 
-    fetchTeams();
-  }, [yourTeamProfile]);
-
-  // **EFFECT TO FETCH CHAT ROOMS**
-  useEffect(() => {
     const fetchRooms = async () => {
       if (!yourTeamProfile._id) {
         console.warn("No team ID provided");
@@ -113,8 +108,13 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
       }
     };
 
+    fetchTeams();
     fetchRooms();
-  }, [yourTeamProfile]); // Fetch rooms when component mounts
+  }, [yourTeamProfile]);
+
+  // **EFFECT TO FETCH CHAT ROOMS**
+  // useEffect(() => {
+  // }, [yourTeamProfile]); // Fetch rooms when component mounts
 
   // **NAVIGATION FUNCTIONS**
   const navigateToMatchedTeam = async (profile) => {

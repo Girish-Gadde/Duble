@@ -24,7 +24,7 @@ import { useSelector } from "react-redux";
 
 const width = Dimensions.get("window").width;
 
-const MatchedTeamProfile = ({ route, navigation }) => {
+const MatchedTeamProfile = ({ route, navigation, onRoomSelect }) => {
   const { profile, yourTeamProfile,userName,refreshYourTeam } = route.params;
     console.log("NAME", profile, "UR", yourTeamProfile, userName);
   const [isHeartActive, setIsHeartActive] = useState(false);
@@ -159,7 +159,7 @@ const MatchedTeamProfile = ({ route, navigation }) => {
         console.log(responseData, roomId, teaMembers, userName,"Response Data-1---->:");
         //  refreshYourTeam();
         navigation.navigate("Chat", { roomId, username: userName, teaMembers, imageUrl: profile.selectedImages[0] });
-      // onRoomSelect(roomId, userName, teaMembers);
+       onRoomSelect(roomId, userName, teaMembers,profile.selectedImages[0]);
         // Alert.alert("Success", "Chat room created successfully", [
         //   {
         //     text: "OK",
