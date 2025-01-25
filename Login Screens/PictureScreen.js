@@ -78,6 +78,9 @@ const PictureScreen = ({ route, navigation }) => {
     });
 
     setIsUploading(true);
+    setLoading(true);
+    setErrorMessage("");
+
     try {
       const response = await fetch(`${serverIP}/auth/save-user-data`, {
         method: "POST",
@@ -93,13 +96,14 @@ const PictureScreen = ({ route, navigation }) => {
 
       const responseData = await response.json();
       console.log("Response:", responseData);
-      Alert.alert("Success", "Data uploaded successfully!");
+      Alert.alert("Success", "Signed up for Duble successfully!");
       navigateToSetUpScreen();
     } catch (error) {
       console.error("Upload failed:", error);
       Alert.alert("Upload Failed", "Failed to upload data, please try again.");
     } finally {
       setIsUploading(false);
+      setLoading(false)
     }
   };
 
