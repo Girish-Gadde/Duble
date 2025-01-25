@@ -158,8 +158,8 @@ const MatchedTeamProfile = ({ route, navigation, onRoomSelect }) => {
         const teaMembers = [profile.name1, profile.name2]
         console.log(responseData, roomId, teaMembers, userName,"Response Data-1---->:");
         //  refreshYourTeam();
-        navigation.navigate("Chat", { roomId, username: userName, teaMembers, imageUrl: profile.selectedImages[0] });
-       onRoomSelect(roomId, userName, teaMembers,profile.selectedImages[0]);
+       // navigation.navigate("Chat", { roomId, username: userName, teaMembers, imageUrl: profile.selectedImages[0] });
+       onRoomSelect(roomId, userName, teaMembers, profile.selectedImages[0]);
         // Alert.alert("Success", "Chat room created successfully", [
         //   {
         //     text: "OK",
