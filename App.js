@@ -31,6 +31,8 @@ import Notification from "./components/Team/TeamUpRequest/Notification";
 import Toast from "react-native-toast-message";
 import ChatScreen from "./components/ChatScreens/ChatScreen";
 
+import CountryCode from './Login Screens/CountrySelect'
+
 
 
 const Stack = createNativeStackNavigator();
@@ -87,14 +89,21 @@ export default function App() {
               component={DubleStart}
               options={{ headerShown: false }}
             />
+           
             <Stack.Screen
               name="Login"
               component={Login}
               options={{ headerShown: false }}
             />
+           
             <Stack.Screen
               name="PhoneLogin"
               component={PhoneLogin}
+              options={{ headerShown: false }}
+            />
+              <Stack.Screen
+              name="CountryCode"
+              component={CountryCode}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -160,8 +169,8 @@ export default function App() {
               }}
               options={{ headerShown: false }}
             />
-                <Stack.Screen
-              name="Chat"
+            <Stack.Screen
+              name="ChatScreen"
               component={ChatScreen}
               options={{headerTitleAlign: "center",headerShown: false  }}
             />
