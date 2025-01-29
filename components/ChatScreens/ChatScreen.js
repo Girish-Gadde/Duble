@@ -15,13 +15,48 @@ import io from "socket.io-client";
 import Icon1 from "react-native-vector-icons/Feather";
 import { serverIP } from "@/config";
 import { Ionicons, Entypo } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatScreen = ({ route, navigation }) => {
-  const { roomId, username, teaMembers } = route.params;
+  const { roomId, username, teaMembers,teamId } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const socket = io(serverIP);
   const scrollViewRef = useRef();
+
+
+
+  
+
+  console.log("Members--->",teamId)
+
+
+
+ // const [inputTeamId, setInputTeamId] = useState(''); // Input for fetching
+    const [fetchedImage, setFetchedImage] = useState(null); // Image to display
+
+    const inputTeamId = "6787ad589f0c6fce06ff679d";
+  const fetchImage = async () => {
+    if (!teamId) {
+      Alert.alert('Error', 'Please enter a Team ID');
+      return;
+    }
+
+    try {
+      const existingData = JSON.parse(await AsyncStorage.getItem('images')) || {};
+      const imageUrl = existingData[teamId];
+
+      if (imageUrl) {
+        setFetchedImage(imageUrl); // Display the fetched image
+      } else {
+        Alert.alert('No Image Found', `No image stored for Team ID: ${teamId}`);
+        setFetchedImage(null);
+      }
+    } catch (error) {
+      console.error('Error fetching image from AsyncStorage:', error);
+      Alert.alert('Error', 'Failed to fetch image');
+    }
+  };
 
   useEffect(() => {
     socket.emit("joinRoom", roomId);
@@ -56,6 +91,10 @@ const ChatScreen = ({ route, navigation }) => {
       socket.disconnect();
     };
   }, [roomId]);
+
+  useEffect(() => {
+    fetchImage();
+  }, [inputTeamId]);
 
   const sendMessage = () => {
     if (!newMessage) return;
@@ -130,9 +169,7 @@ const ChatScreen = ({ route, navigation }) => {
             <Ionicons name="arrow-back-outline" size={20} color="#121212" />
           </TouchableOpacity>
           <Image
-            source={{
-              uri: "https://images.pexels.com/photos/5642024/pexels-photo-5642024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-            }}
+            source={{ uri: fetchedImage }}
             style={styles.itemImage}
           />
           <Text style={styles.headerText}>{teaMembers[0]} & {teaMembers[1]}</Text>

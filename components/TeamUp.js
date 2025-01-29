@@ -675,12 +675,13 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end",
       },
       popup: {
-        height: "88%",
+        height: "100%",
         backgroundColor: "#fff",
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         padding: 20,
         elevation: 10,
+        paddingTop:'-10%'
       },
       closeButton: {
         position: "absolute",

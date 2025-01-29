@@ -249,7 +249,8 @@ const MatchScreen = ({ navigation }) => {
 
       try {
         const response = await axios.get(`${serverIP}/chat-room/api/rooms/${teamId}`);
-        console.log('Fetched rooms data:', response.data);
+        console.log('Fetched rooms datas:', response.data);
+        console.log('Fetched rooms data:------> Teams', response.data.teams);
 
         if (!response.data || response.data.length === 0) {
           console.warn('No rooms found for the provided team ID.');
@@ -280,7 +281,8 @@ const MatchScreen = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
-    console.log('Rendering room item:', item); // Debugging log
+    console.log('Rendering room items:', item); // Debugging log
+    console.log('Rendering room item ------> index 1:', item.teams); // Debugging log
 
     // Ensure teams is an array before flattening its members
     const allMembers = Array.isArray(item.teams)

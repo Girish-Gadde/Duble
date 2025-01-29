@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import {
   View,
@@ -9,63 +8,83 @@ import {
   SafeAreaView,
   ActivityIndicator,
 } from "react-native";
-import { serverIP } from "../config";
+import axios from "axios";
 
-const PhoneLogin = ({ navigation }) => {
+const PhoneLogin = ({ route, navigation }) => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  //const navigation = useNavigation();
+
+  const { countryCode } = route.params;
 
   const handleMobileNumberChange = (text) => {
-    // Allow only numeric input and limit the length to 10 digits
     const formattedText = text.replace(/[^0-9]/g, "");
     if (formattedText.length <= 10) {
       setMobileNumber(formattedText);
     }
   };
 
-  const sendPhoneNumberForOtp = async () => {
+  // const sendOTP = async () => {
+  //   if (!mobileNumber) {
+  //     setErrorMessage("Phone number is required");
+  //     return;
+  //   }
+  //   setLoading(true);
+  //   setErrorMessage("");
+  //   try {
+  //     const response = await axios.post("http://192.168.1.12:4002/auth/send-otp", {
+  //       phone: countryCode + mobileNumber,
+  //     });
+  //     alert("OTP sent to your phone!");
+  //     navigation.navigate("OTPScreen", { mobileNumber: countryCode + mobileNumber });
+  //   } catch (error) {
+  //     console.error("Error sending OTP:", error);
+  //     setErrorMessage("Failed to send OTP");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const sendOTP = async () => {
+    if (!mobileNumber) {
+      setErrorMessage("Phone number is required");
+      return;
+    }
     setLoading(true);
     setErrorMessage("");
+  
     try {
-      const response = await fetch(`${serverIP}/auth/sendOtp`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          mobileNumber,
-          newUser: false,
-        }),
+      const response = await axios.post("http://192.168.1.11:4002/auth/send-otp", {
+        phone: countryCode + mobileNumber,
       });
-
-      if (!response.ok) {
-        setErrorMessage("Please enter a valid mobile number");
-        throw new Error(`Error: ${response.status}`);
+  
+      // Extract serviceSid from the response
+      const { serviceSid } = response.data;
+      console.log(serviceSid);
+  
+      if (serviceSid) {
+        alert("OTP sent to your phone!");
+        // Pass both mobileNumber and serviceSid to the OTPScreen
+        navigation.navigate("OTPScreen", {
+          mobileNumber: countryCode + mobileNumber,
+          serviceSid,
+          countryCode
+        });
+      } else {
+        setErrorMessage("Service ID is missing in the response.");
       }
-
-      const data = await response.json();
-      navigation.navigate("OTPScreen", { mobileNumber, navigation });
-      console.log("Response: ", data);
     } catch (error) {
-      console.error("Error: ", error);
+      console.error("Error sending OTP:", error);
+      setErrorMessage("Failed to send OTP");
     } finally {
       setLoading(false);
     }
   };
+  
 
-  // const navigateToOTPScreen = (phoneNumber) => {
-  //   navigation.navigate("OTPScreen", { phoneNumber });
-  // };
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Log in</Text>
-      {/* <Text style={styles.loginText}>
-        Enter your phone number to team up with your best friend and meet new
-        people!
-      </Text> */}
       <View style={styles.textLogin}>
         <Text style={styles.subtitle}>Enter phone number</Text>
         <TextInput
@@ -83,13 +102,13 @@ const PhoneLogin = ({ navigation }) => {
       ) : null}
       <TouchableOpacity
         style={[styles.button, loading && styles.buttonDisabled]}
-        onPress={sendPhoneNumberForOtp}
+        onPress={sendOTP}
         disabled={loading}
       >
         {loading ? (
           <ActivityIndicator size="small" color="#fff" />
         ) : (
-          <Text style={styles.buttonText}>Verify</Text>
+          <Text style={styles.buttonText}>Send</Text>
         )}
       </TouchableOpacity>
       <Text style={styles.messageText}>
@@ -134,7 +153,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 35,
     fontSize: 20,
-    // textAlign: "center",
   },
   button: {
     width: 340,
@@ -151,15 +169,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
   },
-  // loginText: {
-  //   fontWeight: "400",
-  //   fontSize: 15,
-  //   textAlign: "center",
-  //   width: "80%",
-  //   lineHeight: 18.15,
-  //   paddingVertical: 7,
-  //   marginBottom: 17,
-  // },
   messageText: {
     fontWeight: "400",
     fontSize: 12,

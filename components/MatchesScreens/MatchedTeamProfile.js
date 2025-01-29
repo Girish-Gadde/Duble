@@ -33,7 +33,36 @@ const MatchedTeamProfile = ({ route, navigation }) => {
   const [roomId1, setRoomId] = useState(null);
   const menuClicked = useSelector((state) => state.menuClicked);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
-  //const navigation = useNavigation();
+  
+  // Save Image to Async
+  const teamId = profile._id; // Hardcoded Team ID
+  const imageUrl = 'https://cloud-cube-us2.s3.amazonaws.com/gwsaugjvvszh/1736840255395_1b447ae5-7607-4df8-98d6-8d46303a396c.jpeg'; // Hardcoded Image URL
+  const [inputTeamId, setInputTeamId] = useState(''); // Input for fetching
+  const [fetchedImage, setFetchedImage] = useState(null); // Image to display
+
+  // Automatically save the hardcoded image to AsyncStorage on component render
+  useEffect(() => {
+    const saveImageToStorage = async () => {
+      try {
+        const existingData = JSON.parse(await AsyncStorage.getItem('images')) || {}; // Get existing images
+        if (!existingData[teamId]) {
+          // Add the new image
+          const updatedData = { ...existingData, [teamId]: imageUrl };
+          await AsyncStorage.setItem('images', JSON.stringify(updatedData));
+          console.log(`Image for ${teamId} saved to AsyncStorage.`);
+        } else {
+          console.log(`Image for ${teamId} already exists in AsyncStorage.`);
+        }
+      } catch (error) {
+        console.error('Error saving image to AsyncStorage:', error);
+      }
+    };
+
+    saveImageToStorage();
+  }, []);
+
+
+  // Save Image to Async
 
   useEffect(() => {
     const formattedImages = (profile.selectedImages || []).map((imagePath) => ({

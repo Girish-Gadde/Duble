@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleShowIcons } from "../Redux/Actions";
 import Carousel from "react-native-reanimated-carousel";
 import { serverIP } from "@/config";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get("window").width;
 
@@ -106,6 +107,37 @@ const HomeScreen = ({ route, navigation }) => {
   const [currentProfile, setCurrentProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
+  const [team, setTeam] = useState(null);
+  const [url, setUrl] = useState(null);
+
+
+
+  // Save Image to async storage
+
+  const teamId = team; // Hardcoded Team ID
+  const imageUrl = url; // Hardcoded Image URL
+  const [inputTeamId, setInputTeamId] = useState(''); // Input for fetching
+  const [fetchedImage, setFetchedImage] = useState(null); // Image to display
+
+  // Automatically save the hardcoded image to AsyncStorage on component render
+  
+    const saveImageToStorage = async () => {
+      try {
+        const existingData = JSON.parse(await AsyncStorage.getItem('images')) || {}; // Get existing images
+        if (!existingData[teamId]) {
+          // Add the new image
+          const updatedData = { ...existingData, [teamId]: imageUrl };
+          await AsyncStorage.setItem('images', JSON.stringify(updatedData));
+          console.log(`Image for ${teamId} saved to AsyncStorage.`);
+        } else {
+          console.log(`Image for ${teamId} already exists in AsyncStorage.`);
+        }
+      } catch (error) {
+        console.error('Error saving image to AsyncStorage:', error);
+      }
+    };
+
+  // Save Image to async storage
 
   // useEffect(() => {
   //   if (yourTeamProfile) {
@@ -129,6 +161,10 @@ const HomeScreen = ({ route, navigation }) => {
       const responseData = await response.json();
       if (response.ok) {
         console.log(responseData, "TM--------->>>>>");
+        console.log(responseData._id, "TM - ID--------->>>>>");
+        setTeam(responseData._id);
+        console.log(responseData.selectedImages[0], "TM - image--------->>>>>");
+        setUrl(responseData.selectedImages[0])
         setCurrentProfile(responseData);
         setImages(formatImages(responseData.selectedImages));
       } else {
@@ -185,6 +221,7 @@ const HomeScreen = ({ route, navigation }) => {
       likingTeamId: yourTeamProfile._id,
     };
     handleAction(`${serverIP}/like/saving-like-id`, payload);
+    saveImageToStorage();
   };
 
   const toggleDislike = () => {

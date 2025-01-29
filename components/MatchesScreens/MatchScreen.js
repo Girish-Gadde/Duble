@@ -29,9 +29,12 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
   const [clickStatuses, setClickStatuses] = useState({});
   const [loading, setLoading] = useState(true);
 
+
   // **TEAM ID**
   // You can get teamId from yourTeamProfile or route.params
   const teamId = "66d6ee9e92e63ffe7c44f9ef"; // Adjust this based on your data structure
+
+  let teamB;
 
   // **CONTEXT (If used)**
   // If you're using useUserContext, make sure it's properly set up
@@ -129,7 +132,7 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
         console.log(updatedStatuses, clickStatuses, "AFTER CLICK");
       }
       dispatch(menuClickAction());
-      navigation.navigate("TeamProfile", { profile, yourTeamProfile, userName });
+      navigation.navigate("TeamProfile", { profile, yourTeamProfile, userName,teamB });
     } catch (error) {
       console.error("Error updating click status:", error);
       Alert.alert("Error", "Failed to update click status. Please try again.");
@@ -151,13 +154,18 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
  //   navigation.navigate("Chat", { roomId, username: userName });
  if (team) {
   const teaMembers = team.members
-  onRoomSelect(roomId, userName, teaMembers);
+  let teamId = team.teamId
+  onRoomSelect(roomId, userName, teaMembers,teamId);
 }
   };
 
   // **RENDER FUNCTIONS**
   const renderChatItem = ({ item }) => {
     console.log("Rendering room item:", item); // Debugging log
+    console.log("Rendering room item:------> index1", item.teams[1].teamId); // Debugging log
+    teamB = item.teams[1].teamId;
+
+    console.log("TeamB ---> ID" , teamB)
 
     // Ensure teams is an array before flattening its members
     const allMembers = Array.isArray(item.teams)
