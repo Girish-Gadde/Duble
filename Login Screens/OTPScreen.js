@@ -65,7 +65,7 @@ const OTPScreen = ({ route, navigation }) => {
       });
 
       if (response.status === 200 && response.data.Details) {
-        alert("OTP Verified Successfully!");
+        //alert("OTP Verified Successfully!");
         if (response.data.Details === "Navigate to Account Details") {
           navigation.navigate("VerifyScreen", { otp: enteredOtp, mobileNumber });
         } else if (response.data.Details === "Navigate to Home page") {
@@ -79,7 +79,7 @@ const OTPScreen = ({ route, navigation }) => {
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
-      setErrorMessage("Failed to verify OTP. Please try again.");
+      setErrorMessage("Invalid OTP!");
     } finally {
       setLoading(false);
     }
