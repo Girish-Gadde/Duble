@@ -17,11 +17,13 @@ import { serverIP } from "@/config";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 
 const ChatScreen = ({ route, navigation }) => {
-  const { roomId, username, teaMembers, imageUrl } = route.params;
+  const { roomId, username, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const socket = io(serverIP);
   const scrollViewRef = useRef();
+
+  const [showUnmatch, setShowUnmatch] = useState(false);
 
   useEffect(() => {
     socket.emit("joinRoom", roomId);
@@ -56,6 +58,32 @@ const ChatScreen = ({ route, navigation }) => {
       socket.disconnect();
     };
   }, [roomId]);
+
+    const toggleDislike = async () => {
+      // setIsDislikeActive(!isDislikeActive);
+      // updateCurrentIndex(
+      //   currentProfileIndex < profiles.length - 1 ? currentProfileIndex + 1 : 0
+      // );
+  
+      try {
+        const response = await fetch(`${serverIP}/match/unmatching-the-team`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ dislikedTeamId, dislikingTeamId, roomId}),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to update dislike status and chat room");
+        }
+        await refreshYourTeam();
+        navigation.goBack();
+        //removeProfile();
+      } catch (error) {
+        console.error("Error updating dislike status:", error);
+      }
+    };
 
   const sendMessage = () => {
     if (!newMessage) return;
@@ -134,7 +162,7 @@ const ChatScreen = ({ route, navigation }) => {
             style={styles.itemImage}
           />
           <Text style={styles.headerText}>{teaMembers[0]} & {teaMembers[1]}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setShowUnmatch(!showUnmatch)}>
             <Entypo name="dots-three-vertical" size={28} color="#000000" />
           </TouchableOpacity>
           {/* <TouchableOpacity>
@@ -144,6 +172,11 @@ const ChatScreen = ({ route, navigation }) => {
             <Ionicons name="videocam-outline" size={28} color="#000000" />
           </TouchableOpacity> */}
         </View>
+        {showUnmatch && (
+        <TouchableOpacity style={styles.unmatchButton} onPress={toggleDislike}>
+          <Text style={styles.unmatchText}>Unmatch</Text>
+        </TouchableOpacity>
+      )}
       </View>
       <View style={styles.innerContainer}>
         <ScrollView
@@ -194,6 +227,19 @@ const styles = StyleSheet.create({
   itemImage: { width: 49, height: 49, borderRadius: 25, marginRight: 10 },
   header: { backgroundColor: "#EDEEF1", paddingBottom: "2%", paddingTop: "15%", flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: "4%", elevation: 8 },
   headerText: { fontSize: 20, fontWeight: "600", paddingRight: "5%" },
+  unmatchButton: {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 5,
+    alignSelf: 'flex-end',
+    marginRight: 10,
+    marginTop: 5,
+  },
+  unmatchText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+
 });
 
 export default ChatScreen;

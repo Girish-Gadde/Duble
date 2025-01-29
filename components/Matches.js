@@ -29,7 +29,7 @@ const Matches = ({ route, navigation, onRoomSelect }) => {
             onRoomSelect={onRoomSelect}
             />
           )}
-          initialParams={{ yourTeamProfile, userName, navigation, dispatch }}
+          initialParams={{ yourTeamProfile, userName, navigation, dispatch, refreshYourTeam }}
           options={{
             headerShown: false,
             // headerTitle: () => (

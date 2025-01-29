@@ -360,9 +360,14 @@ const HomeTab = ({ route, navigation }) => {
   };
 
 
-  const navigateToChatScreen = (roomId, username, teaMembers, imageUrl)=>{
-    console.log("Navigating to Chat with:", roomId, username, teaMembers, imageUrl);
-    navigation.navigate("Chat", { roomId, username, teaMembers, imageUrl });
+  const navigateToChatScreen = (roomId, username, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam)=>{
+    console.log("Navigating to Chat with:", roomId, username, teaMembers, imageUrl,dislikedTeamId, dislikingTeamId, refreshYourTeam);
+    navigation.navigate("Chat", { roomId, username, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam });
+  }
+
+  const logOut = ()=>{
+    AsyncStorage.removeItem("mobileNumber")
+    navigation.navigate('Login');
   }
 
   if (loading) {
@@ -617,6 +622,7 @@ const HomeTab = ({ route, navigation }) => {
             navigation,
             profile: individualProfile,
             dispatch,
+            logOut
           }}
           options={{
             tabBarIcon: ({ focused, color, size }) => (
@@ -650,7 +656,7 @@ const HomeTab = ({ route, navigation }) => {
           initialParams={{
             navigation,
             profile,
-            dispatch,
+            dispatch
           }}
           options={({ navigation }) => ({
             tabBarButton: () => null, // Hide the tab from the tab bar

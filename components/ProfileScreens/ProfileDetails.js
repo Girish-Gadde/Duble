@@ -86,7 +86,7 @@ const profiles = [
 ];
 
 const ProfileDetails = ({ route, navigation }) => {
-  const { dispatch } = route.params;
+  const { dispatch, logOut } = route.params;
   const profile = useSelector((state) => state.individualProfile);
   console.log(profile, "INDIVIDUAL PROFILE");
   const [userId, setUserId] = useState(profile._id);
@@ -442,6 +442,12 @@ const ProfileDetails = ({ route, navigation }) => {
   const navigateToInitialProfile = () => {
     navigation.navigate("ProfileScreen1");
   };
+
+  const loggingOut = ()=>{
+    logOut()
+  }
+
+  
   return (
     <ScrollView >
       <View style={styles.viewContainer}>
@@ -894,6 +900,15 @@ const ProfileDetails = ({ route, navigation }) => {
           <Text style={styles.backButtonText}>Done</Text>
         </View>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.doneButton1}
+        onPress={loggingOut}
+      >
+        <View style={[styles.buttonBackContainer]}>
+          <Text style={styles.backButtonText}>Log Out</Text>
+        </View>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -1085,7 +1100,7 @@ const styles = StyleSheet.create({
   //   height: 49,
   // },
   backButtonText: {
-    width: 51,
+    width: 71,
     height: 24,
     color: "#121212",
     fontSize: 20,

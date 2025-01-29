@@ -53,7 +53,7 @@ const LikedMatch = ({ route, navigation }) => {
         const teaMembers = [profile.name1, profile.name2]
         console.log(responseData, "Response Data-1---->:", roomId, teaMembers);
         // refreshYourTeam();
-        navigation.navigate("LikedChat", { roomId, username: userName, teaMembers, imageUrl: profile.selectedImages[0] });
+        navigation.navigate("LikedChat", { roomId, username: userName, teaMembers, imageUrl: profile.selectedImages[0], dislikedTeamId: profile._id, dislikingTeamId: yourTeamProfile._id, refreshYourTeam });
       //  onRoomSelect(roomId, userName, teaMembers);
         // Alert.alert("Success", "Chat room created successfully", [
         //   {

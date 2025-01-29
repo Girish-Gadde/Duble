@@ -31,6 +31,7 @@ import Notification from "./components/Team/TeamUpRequest/Notification";
 import Toast from "react-native-toast-message";
 import ChatScreen from "./components/ChatScreens/ChatScreen";
 
+import CountryCode from './Login Screens/CountrySelect'
 
 
 const Stack = createNativeStackNavigator();
@@ -95,6 +96,11 @@ export default function App() {
             <Stack.Screen
               name="PhoneLogin"
               component={PhoneLogin}
+              options={{ headerShown: false }}
+            />
+                  <Stack.Screen
+              name="CountryCode"
+              component={CountryCode}
               options={{ headerShown: false }}
             />
             <Stack.Screen

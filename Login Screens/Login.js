@@ -15,7 +15,7 @@ const Login = () => {
   const navigation = useNavigation();
 
   const navigateToPhoneLoginScreen = () => {
-    navigation.navigate("PhoneLogin", { navigation });
+    navigation.navigate("CountryCode", { navigation });
   };
 
   const navigateToPhoneLoginScreen1 = () => {
