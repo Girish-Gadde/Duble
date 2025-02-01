@@ -46,6 +46,7 @@ const socket = io(serverIP);
 
 const HomeTab = ({ route, navigation }) => {
   const { mobileNumber } = route.params;
+  console.log(mobileNumber, 'MOB-Num')
   /// const mobileNumber = "6305148607";
   const dispatch = useDispatch();
   const { selectedTeamIndex, setSelectedTeamIndex } = useContext(UserContext);
@@ -107,7 +108,7 @@ const HomeTab = ({ route, navigation }) => {
   async function getUserId() {
     try {
       const response = await fetch(
-        `${serverIP}/auth/get-user-id?mobileNumber=${mobileNumber}`,
+        `${serverIP}/auth/get-user-id?mobileNumber=${encodeURIComponent(mobileNumber)}`,
         {
           method: "GET",
           headers: {
