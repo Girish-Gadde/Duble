@@ -79,6 +79,7 @@ const DOBScreen = ({ route, navigation }) => {
           display="spinner"
           onChange={onChange}
           maximumDate={new Date()} // Restrict future dates
+          textColor="black"
         />
       )}
 
