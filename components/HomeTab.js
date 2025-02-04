@@ -366,8 +366,8 @@ const HomeTab = ({ route, navigation }) => {
     navigation.navigate("Chat", { roomId, username, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam });
   }
 
-  const logOut = ()=>{
-    AsyncStorage.removeItem("mobileNumber")
+  const logOut = async ()=>{
+    await AsyncStorage.removeItem("mobileNumber")
     navigation.navigate('Login');
   }
 
@@ -417,6 +417,7 @@ const HomeTab = ({ route, navigation }) => {
             refreshYourTeam,
             mobileNumber,
             userName,
+            individualProfile,
             dispatch,
             fetchTeams,
             error,

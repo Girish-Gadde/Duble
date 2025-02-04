@@ -29,7 +29,6 @@ export default function TeamUp({ route, navigation }) {
 
   
   const [isPopupVisible, setPopupVisible] = useState(false);
-  const openPopup = () => setPopupVisible(true);
   const closePopup = () => setPopupVisible(false);
 
     const profiles = [
@@ -86,6 +85,7 @@ export default function TeamUp({ route, navigation }) {
         mobileNumber,
         dispatch,
         userName,
+        individualProfile,
         fetchTeams,
         error,
       } = route.params;
@@ -93,6 +93,14 @@ export default function TeamUp({ route, navigation }) {
       const [isPopup1Visible, setPopup1Visible] = useState(false);
       const [isPopup2Visible, setPopup2Visible] = useState(false);
     
+      const openPopup = () => {
+        if(individualProfile.status === 'Y'){
+          setPopupVisible(true);
+        }else{
+          alert('Please wait for your profile verification from Duble team.')
+        }
+      }
+
       const openPopup1 = () => {
         setPopup1Visible(true);
       };
