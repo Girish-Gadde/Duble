@@ -50,6 +50,11 @@ export default function CreateTeam({
       return;
     }
 
+      // Ensure +91 prefix is added only if it's not already present
+  const formattedMobileNumber = teamateMobileNumber.startsWith("+91")
+  ? teamateMobileNumber
+  : `+91${teamateMobileNumber}`;
+
     try {
       setLoading(true);
       setErrorMessage("");
@@ -59,7 +64,7 @@ export default function CreateTeam({
           teamName,
           userName,
           userId,
-          teamateMobileNumber, // Use the hardcoded creator name
+          teamateMobileNumber: formattedMobileNumber, // Send the formatted number
         }
       );
 
@@ -134,7 +139,7 @@ export default function CreateTeam({
       <TextInput
         style={styles.input}
         placeholderTextColor="grey"
-        placeholder="Enter your team mate's mobile number"
+        placeholder="Enter team mate's mobile number"
         value={teamateMobileNumber}
         onChangeText={setTeamateMobileNumber}
       />

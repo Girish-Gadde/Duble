@@ -66,7 +66,9 @@
     "redux": "^5.0.1",
     "socket.io-client": "^4.7.5",
     "style": "^0.0.3",
-    "expo-linear-gradient": "~13.0.2"
+    "expo-linear-gradient": "~13.0.2",
+    "expo-notifications": "~0.28.19",
+    "expo-device": "~6.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

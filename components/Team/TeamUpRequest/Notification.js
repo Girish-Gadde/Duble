@@ -92,7 +92,7 @@ const Notification = ({ route, navigation }) => {
           ? error.response.data.message
           : "Failed to create team";
 
-      Alert.alert("Error", errorMessage);
+     // Alert.alert("Error", errorMessage);
     }
   };
 
@@ -123,7 +123,7 @@ const Notification = ({ route, navigation }) => {
         error.response && error.response.data && error.response.data.message
           ? error.response.data.message
           : "Failed to reject notification";
-      Alert.alert("Error", errorMessage);
+    //  Alert.alert("Error", errorMessage);
     }
   };
 
@@ -135,7 +135,7 @@ const Notification = ({ route, navigation }) => {
         onPress={() => toggleExpandNotification(item._id)}
       >
         <Text style={styles.notificationText}>
-          {item.teamMateName} wants to team up with you
+          {item.teamMateName} requested to team up with you
         </Text>
         <MaterialIcons
           name={

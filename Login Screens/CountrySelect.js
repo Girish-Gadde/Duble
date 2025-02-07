@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ActivityIndicator, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, ActivityIndicator, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -35,11 +35,16 @@ const CountryCodeSelector = () => {
   }, []);
 
   const handleNext = () => {
-    if (selectedCountry) {
-      navigation.navigate("PhoneLogin", { countryCode: selectedCountry });
-    } else {
-      alert("Please select a country.");
+    if (selectedCountry !== "+91") {
+      Alert.alert(
+        "Service Unavailable",
+        "This app is currently available only in India",
+        [{ text: "OK" }]
+      );
+      return; // Restrict navigation
     }
+  
+    navigation.navigate("PhoneLogin", { countryCode: selectedCountry });
   };
 
   return (

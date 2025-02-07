@@ -39,6 +39,7 @@ import Ionicons4 from "react-native-vector-icons/Ionicons";
 import { TeamProfileStack } from "./Team/TeamProfileStack";
 
 import ChatScreen from "../components/ChatScreens/ChatScreen";
+import { showLocalNotification } from "./Notifications/NotificationService";
 
 const Tab = createBottomTabNavigator();
 
@@ -87,13 +88,14 @@ const HomeTab = ({ route, navigation }) => {
       fetchTeams(userId);
       // getUserId();
       //   getYourIndividualProfile(userId);
-      Alert.alert(data.message);
+      //Alert.alert(data.message);
     });
 
     socket.on("teamUpRequest", async (data) => {
       const userId = await AsyncStorage.getItem("userId");
       getYourIndividualProfile(userId);
-      Alert.alert(data.message);
+      showLocalNotification("Team Up Request", data.message, { teamRequest: data });
+      //Alert.alert(data.message);
     });
 
     socket.on("teamLikedNotification", async (data) => {

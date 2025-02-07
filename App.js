@@ -31,7 +31,9 @@ import Notification from "./components/Team/TeamUpRequest/Notification";
 import Toast from "react-native-toast-message";
 import ChatScreen from "./components/ChatScreens/ChatScreen";
 
-import CountryCode from './Login Screens/CountrySelect'
+import CountryCode from './Login Screens/CountrySelect';
+import NotificationService from "./components/Notifications/NotificationService";
+
 
 
 const Stack = createNativeStackNavigator();
@@ -75,6 +77,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <UserProvider>
+      <NotificationService />
         <NavigationContainer independent={true}>
           <Stack.Navigator initialRouteName={initialRoute}>
             {/* You can add your screens here */}
