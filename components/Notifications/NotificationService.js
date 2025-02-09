@@ -88,10 +88,10 @@ async function sendTokenToBackend(token) {
       return;
     }
 
-    if (storedToken === token) {
-      console.log("Token is unchanged. Skipping API call.");
-      return; // Avoid sending duplicate token
-    }
+    // if (storedToken === token) {
+    //   console.log("Token is unchanged. Skipping API call.");
+    //   return; // Avoid sending duplicate token
+    // }
 
     await fetch(`${serverIP}/push-notification/save-expo-token`, {
       method: "POST",
