@@ -16,7 +16,7 @@ export const ProfileStack = ({ route, navigation }) => {
         <Stack.Screen
           name="ProfileScreen1"
           component={ProfileScreen1}
-          initialParams={{ navigation, profile }}
+          initialParams={{ navigation, profile, logOut }}
           options={{ headerShown: false }}
         />
         <Stack.Screen

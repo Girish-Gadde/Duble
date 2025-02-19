@@ -42,18 +42,18 @@ export default function CreateTeam({
       return;
     }
 
-    if (mobileNumber === teamateMobileNumber) {
-      Alert.alert(
-        "Error",
-        "Your mobile number is same as teammate's mobile number."
-      );
-      return;
-    }
-
       // Ensure +91 prefix is added only if it's not already present
   const formattedMobileNumber = teamateMobileNumber.startsWith("+91")
   ? teamateMobileNumber
   : `+91${teamateMobileNumber}`;
+
+  if (mobileNumber === formattedMobileNumber) {
+    Alert.alert(
+      "Alert",
+      "Your mobile number is same as teammate's mobile number."
+    );
+    return;
+  }
 
     try {
       setLoading(true);
@@ -141,7 +141,20 @@ export default function CreateTeam({
         placeholderTextColor="grey"
         placeholder="Enter team mate's mobile number"
         value={teamateMobileNumber}
-        onChangeText={setTeamateMobileNumber}
+        keyboardType="phone-pad"
+        maxLength={20}
+        onChangeText={(text) => {
+          // Remove spaces and allow only digits with an optional leading '+'
+          let formattedText = text.replace(/\s+/g, "").replace(/[^0-9+]/g, "");
+      
+          // Ensure '+' is only at the start
+          if (formattedText.includes("+") && !formattedText.startsWith("+")) {
+            formattedText = formattedText.replace(/\+/g, "");
+          }
+      
+          // Update state
+          setTeamateMobileNumber(formattedText);
+        }}
       />
 
       {/* <TouchableOpacity style={styles.button} onPress={createATeam}>

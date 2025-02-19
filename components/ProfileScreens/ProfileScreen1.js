@@ -6,12 +6,14 @@ import {
   Text,
   ScrollView,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { serverIP } from "@/config";
+import * as Updates from "expo-updates";
 
 const profiles = [
   {
@@ -85,7 +87,7 @@ const calculateAge = (dob) => {
 };
 
 const ProfileScreen1 = ({ route, navigation }) => {
-  const { profile } = route.params;
+  const { profile, logOut } = route.params;
 
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
@@ -112,6 +114,46 @@ const ProfileScreen1 = ({ route, navigation }) => {
 
   const goToProfileDetails = () => {
     navigation.navigate("ProfileDetails", { profile, navigation });
+  };
+
+  const handleDeleteProfile = async () => {
+    Alert.alert(
+      "Are you sure?",
+      "Are you sure you want to delete your profile? This action cannot be undone.",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Yes, Delete",
+          onPress: async () => {
+            try {
+              const response = await fetch(`${serverIP}/auth/delete-profile`, {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId: profile._id }),
+              });
+  
+              if (response.ok) {
+                Alert.alert("Deleted", "Your profile has been deleted.");
+                    // Reload app to clear cache and reset state
+              await Updates.reloadAsync();
+              
+                logOut();
+                // Navigate to login or onboarding screen
+              } else {
+                Alert.alert("Error", "Failed to delete profile.");
+              }
+            } catch (error) {
+              Alert.alert("Error", "Something went wrong. Please try again.");
+            }
+          },
+        },
+      ]
+    );
   };
 
   // Calculate age based on profile.dob
@@ -273,6 +315,21 @@ const ProfileScreen1 = ({ route, navigation }) => {
             /> */}
           <Text style={styles.backButtonText}>Edit</Text>
         </TouchableOpacity>
+
+        <View>
+        <TouchableOpacity
+          style={styles.goBackButton}
+          onPress={handleDeleteProfile}
+        >
+          {/* <Ionicons
+              name="infinite-outline"
+              size={24}
+              color="red"
+              style={styles.icon}
+            /> */}
+          <Text style={styles.backButtonText1}>Delete Profile</Text>
+        </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
@@ -460,6 +517,15 @@ const styles = StyleSheet.create({
   // },
   backButtonText: {
     width: 80,
+    height: 24,
+    color: "#121212",
+    fontSize: 20,
+    alignItems: "center",
+    marginBottom: 4.5,
+    textAlign: "center",
+  },
+  backButtonText1: {
+    width: 150,
     height: 24,
     color: "#121212",
     fontSize: 20,

@@ -492,7 +492,7 @@ const ProfileDetails = ({ route, navigation }) => {
           <Text style={styles.searchText}>🔍 Basics</Text>
         </View>
         <View style={styles.basicContainer}>
-          <View style={styles.columnContainer}>
+          {/* <View style={styles.columnContainer}>
             <View style={styles.rowContainer}>
               <MaterialIcons
                 name="location-on"
@@ -510,7 +510,7 @@ const ProfileDetails = ({ route, navigation }) => {
                 color="black"
               />
             </View>
-          </View>
+          </View> */}
           <View style={styles.columnContainer1}>
             <View style={styles.rowContainer}>
               <FontAwesome5

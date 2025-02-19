@@ -17,7 +17,7 @@ const JobScreen = ({ route, navigation }) => {
 
   const navigateToLocScreen = () => {
     if (occupation) {
-      navigation.navigate("LocationScreen", {
+      navigation.navigate("PictureScreen", {
         name,
         dob,
         gender,

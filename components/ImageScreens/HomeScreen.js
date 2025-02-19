@@ -196,10 +196,25 @@ const HomeScreen = ({ route, navigation }) => {
     handleAction(`${serverIP}/like/saving-dislike-id`, payload);
   };
 
+  const navigateToTeamSwitch = ()=>{
+    navigation.navigate('Teams')
+  }
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
+  }
+
+  if (!yourTeamProfile) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>Please create your teams</Text>
+        <TouchableOpacity style={styles.newTeamButton} onPress={navigateToTeamSwitch}>
+        <Text style={styles.emptyText1}>Create Team</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -214,6 +229,8 @@ const HomeScreen = ({ route, navigation }) => {
       </View>
     );
   }
+
+ 
 
   const renderCarouselItem = ({ item }) => {
     //  console.log(item, "PATH");

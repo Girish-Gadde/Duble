@@ -24,7 +24,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "Duble",
+      "package": "com.duble.duble",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyAFTtQ9taTiY-CM-NBnVV96yMnkZr3TmM4"

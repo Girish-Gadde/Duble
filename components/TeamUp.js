@@ -226,7 +226,7 @@ export default function TeamUp({ route, navigation }) {
 
 
   return (
-    <ImageBackground source={image}  style={styles.background}>
+    <ImageBackground style={styles.background}>
       
       <View style={styles.whiteScreen}>
                 <View
