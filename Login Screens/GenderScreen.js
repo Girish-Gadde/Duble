@@ -17,7 +17,7 @@ const GenderScreen = ({ route, navigation }) => {
 
   const navigateToNextScreen = () => {
     if (gender) {
-      navigation.navigate("JobScreen", {
+      navigation.navigate("AboutScreen", {
         name,
         dob,
         gender,

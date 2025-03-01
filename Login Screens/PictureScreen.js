@@ -13,14 +13,16 @@ import * as ImagePicker from "expo-image-picker";
 import { serverIP } from "@/config";
 
 const PictureScreen = ({ route, navigation }) => {
-  const { name, dob, gender, occupation, mobileNumber } =
+  const { name, dob, gender, aboutMe, occupation, height, mobileNumber } =
     route.params;
   console.log(
     "DETAILS: ",
     name,
     dob,
     gender,
+    aboutMe,
     occupation,
+    height, '-Height',
     mobileNumber
   );
   const [images, setImages] = useState([]);
@@ -58,7 +60,9 @@ const PictureScreen = ({ route, navigation }) => {
     formData.append("name", name);
     formData.append("dob", dob);
     formData.append("gender", gender);
+    formData.append("aboutMe", aboutMe);
     formData.append("occupation", occupation);
+    formData.append("height", height);
     formData.append("mobileNumber", mobileNumber);
     // formData.append("location", JSON.stringify(location));
     // formData.append("address", address);

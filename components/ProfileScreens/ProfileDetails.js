@@ -1054,9 +1054,9 @@ const styles = StyleSheet.create({
   },
   viewContainer: {
     backgroundColor: "#FFFFFF",
-    marginTop: "8%",
+    marginTop: "4%",
     marginHorizontal: "5%",
-    marginBottom: "4.5%",
+    marginBottom: "2%",
     borderRadius: 6,
     paddingBottom: "3%",
     width:'90%'
@@ -1081,7 +1081,9 @@ const styles = StyleSheet.create({
   doneButton1: {
     width: '90%',
     height: 49,
-    margin: 20,
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 5,
     backgroundColor: "#FFFFFF",
     borderRadius: 35,
     // paddingVertical: 10,

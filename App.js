@@ -17,6 +17,8 @@ import NameScreen from "./Login Screens/NameScreen";
 import GenderScreen from "./Login Screens/GenderScreen";
 import DOBScreen from "./Login Screens/DOBScreen";
 import JobScreen from "./Login Screens/JobScreen";
+import AboutScreen from "./Login Screens/AboutScreen";
+import HeightScreen from "./Login Screens/HeightScreen";
 import LocationScreen from "./Login Screens/LocationScreen";
 import PictureScreen from "./Login Screens/PictureScreen";
 import InviteUser from "./Login Screens/InviteUser";
@@ -144,6 +146,16 @@ export default function App() {
             <Stack.Screen
               name="LocationScreen"
               component={LocationScreen}
+              options={{ headerShown: false }}
+            />
+               <Stack.Screen
+              name="AboutScreen"
+              component={AboutScreen}
+              options={{ headerShown: false }}
+            />
+                <Stack.Screen
+              name="HeightScreen"
+              component={HeightScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

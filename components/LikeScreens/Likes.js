@@ -249,7 +249,9 @@ const Likes = ({ route, navigation }) => {
 
       const data = await response.json();
       console.log(data, "LIKED_TEAMS-0887");
-      setTeams(data);
+          // Remove null values from the array
+      const validTeams = Array.isArray(data) ? data.filter(team => team !== null) : [];
+      setTeams(validTeams);
 
       // Load click statuses from AsyncStorage
       const storedStatuses = await AsyncStorage.getItem(
@@ -260,9 +262,9 @@ const Likes = ({ route, navigation }) => {
       setClickStatuses(statuses);
     
     } catch (error) {
-      console.error("Error fetching teams:", error);
+      console.error("Error fetching teams-Likes-7:", error);
     } finally {
-      setLoading(false); // Stop loading when the data is fetched
+      //setLoading(false); // Stop loading when the data is fetched
     }
   };
 
@@ -273,6 +275,15 @@ const Likes = ({ route, navigation }) => {
   //     fetchTeams();
   //   }, [yourTeamProfile])
   // );
+
+  useEffect(() => {
+    // Ensure spinner is shown for at least 3 seconds
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 4000);
+
+    return () => clearTimeout(timer); // Cleanup timeout if unmounted
+  }, []);
 
   useEffect(() => {
     fetchTeams();
@@ -304,7 +315,7 @@ const Likes = ({ route, navigation }) => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#FF3156" />
+        <ActivityIndicator size={90} color="#0000ff" />
         <Text style={styles.loadingText}>Loading...</Text>
       </View>
     );
@@ -395,7 +406,7 @@ const styles = StyleSheet.create({
     maxWidth: "30%", // Ensures 3 items per row
   },
   profileImage: {
-    width: 110,
+    width: 104,
     height: 169,
     borderRadius: 10,
     marginVertical: 2,

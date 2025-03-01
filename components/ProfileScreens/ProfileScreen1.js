@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
@@ -92,6 +93,7 @@ const ProfileScreen1 = ({ route, navigation }) => {
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
   const [currentProfileIndex, setCurrentProfileIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
   //  const isEditVisible = useSelector((state) => state.showEditButtonAndBio);
   //const navigation = useNavigation();
 
@@ -172,27 +174,18 @@ const ProfileScreen1 = ({ route, navigation }) => {
       style={{ backgroundColor: "#EDEEF1" }}
     >
       <View style={{ flex: 1 }}>
+      {loading && (
+        <View style={{ justifyContent: 'center', alignSelf: 'center', top:'20%' }}>
+          <ActivityIndicator size={100} color="#0000ff" />
+        </View>
+      )}
+
         <Image
           source={{ uri: `${profile?.images[0]}` }}
           style={styles.image}
           resizeMode="cover"
+          onLoad={() => setLoading(false)}
         />
-        {/* {isEditVisible && (
-          <TouchableOpacity
-            style={styles.editButton}
-            onPress={goToProfileDetails}
-          >
-            <View style={styles.editButtonContainer}>
-              <Ionicons
-                name="infinite-outline"
-                size={24}
-                color="red"
-                style={styles.icon}
-              />
-              <Text style={styles.editButtonText}>Edit</Text>
-            </View>
-          </TouchableOpacity>
-        )} */}
 
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
@@ -440,9 +433,9 @@ const styles = StyleSheet.create({
   },
   viewContainer: {
     backgroundColor: "#FFFFFF",
-    marginTop: "8%",
+    marginTop: "6%",
     marginHorizontal: "5%",
-    marginBottom: "4.5%",
+   // marginBottom: "2%",
     borderRadius: 6,
     paddingBottom: "3%",
     width: '90%'
@@ -501,7 +494,9 @@ const styles = StyleSheet.create({
   goBackButton: {
     width: "90%",
     height: 49,
-    margin: 20,
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 5,
     backgroundColor: "#FFFFFF",
     borderRadius: 35,
     flexDirection: "row",

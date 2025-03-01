@@ -9,46 +9,57 @@ import {
   SafeAreaView,
 } from "react-native";
 
-const NameScreen = ({ route, navigation }) => {
+const AboutScreen = ({ route, navigation }) => {
   // const navigation = useNavigation();
-  const { mobileNumber } = route.params;
-  const [name, setName] = useState(null);
+  const { name, dob, gender, mobileNumber } = route.params;
+  const [aboutMe, setAboutMe] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [inputHeight, setInputHeight] = useState(40);
 
-
-  const handleNameChange = (text) => {
-    const validName = text.replace(/[^a-zA-Z\s]/g, ""); // Allows only letters and spaces
-    setName(validName);
+  const handleInputChange = (text) => {
+    // Allow only letters and spaces, removing any invalid characters
+    const formattedText = text.replace(/[^A-Za-z\s,!.]/g, "");
+    setAboutMe(formattedText);
   };
 
+  const navigateToJobScreen = () => {
+    if (!aboutMe) {
+      setErrorMessage("Please enter something about yourself");
+      return;
+    }
 
-  const navigateToDOBScreen = () => {
-    if(!name){
-      setErrorMessage("Please enter your name");
-      return 
+    const formattedAboutMe = aboutMe.trim();
+    if (formattedAboutMe.length === 0) {
+      setErrorMessage("Please enter something about yourself");
+      return;
     }
-    const formattedName = name.trim();
-    if (formattedName.length === 0) {
-      setErrorMessage("Please enter your name");
-      return
-    }
-    
-    navigation.navigate("DOBScreen", { name: formattedName, mobileNumber, navigation });
+
+    navigation.navigate("JobScreen", {
+      name,
+      dob,
+      gender,
+      aboutMe: formattedAboutMe,
+      mobileNumber,
+      navigation,
+    });
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Set Up</Text>
       <View style={styles.textLogin}>
-        <Text style={styles.subtitle}>Hi! What’s your name?</Text>
+        <Text style={styles.subtitle}>Tell us about yourself</Text>
         <TextInput
-          style={styles.input}
-          placeholder="Enter name"
-          placeholderTextColor="#D3D3D3"
+          style={[styles.input, { height: inputHeight }]} 
+          placeholder="About yourself"
           keyboardType="default"
-          autoCapitalize="none"
-          value={name}
-          onChangeText={handleNameChange}
+          autoCapitalize="sentences"
+          multiline
+          value={aboutMe}
+          onChangeText={handleInputChange}
+          onContentSizeChange={(event) =>
+            setInputHeight(event.nativeEvent.contentSize.height + 10)
+          }
         />
 
         <Text style={styles.subtitle1}>This will appear on your profile</Text>
@@ -56,7 +67,7 @@ const NameScreen = ({ route, navigation }) => {
       {errorMessage ? (
         <Text style={styles.errorText}>{errorMessage}</Text>
       ) : null}
-      <TouchableOpacity style={styles.button} onPress={navigateToDOBScreen}>
+      <TouchableOpacity style={styles.button} onPress={navigateToJobScreen}>
         <Text style={styles.buttonText}>Done</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -82,7 +93,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 20,
-    marginBottom: "12%",
+    marginBottom: "10%",
     alignSelf: "center",
     // marginLeft: 20,
     fontWeight: "400",
@@ -91,7 +102,7 @@ const styles = StyleSheet.create({
   },
   subtitle1: {
     fontSize: 12,
-    marginBottom: 10,
+    marginBottom: 7,
     alignSelf: "center",
     // marginLeft: 20,
     fontWeight: "400",
@@ -100,14 +111,17 @@ const styles = StyleSheet.create({
   },
   input: {
     width: 340,
-    height: 40,
+    minHeight: 70, // Minimum height
+    maxHeight: 200, // Prevents excessive expansion
     borderWidth: 2,
     borderColor: "#6420AA",
     marginBottom: 10,
     paddingHorizontal: 20,
+    paddingVertical: 10,
     backgroundColor: "#fff",
-    borderRadius: 35,
-    fontSize: 20,
+    borderRadius: 15, // Slightly adjusted for better appearance
+    fontSize: 18,
+    textAlignVertical: "top", // Ensures text starts at the top
   },
   button: {
     width: 340,
@@ -128,4 +142,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NameScreen;
+export default AboutScreen;

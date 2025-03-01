@@ -69,9 +69,30 @@ const { userName } = route.params;
     navigation.goBack();
   };
 
-  const renderCarouselItem = ({ item }) => {
-    return <Image source={item} style={styles.image} resizeMode="cover" />;
-  };
+  // const renderCarouselItem = ({ item }) => {
+  //   return <Image source={item} style={styles.image} resizeMode="cover" />;
+  // };
+
+    const renderCarouselItem = ({ item }) => {
+      const [loading, setLoading] = useState(true);
+    
+      return (
+        <View style={{ alignItems: "center", width, height: 654 }}>
+  
+          {loading &&
+          <View style= {{justifyContent: 'center', top: '35%'}}> 
+          <ActivityIndicator size={90} color="red" />
+          </View>
+          }
+          <Image
+            source={item}
+            style={[styles.image, { position: loading ? "absolute" : "relative" }]}
+            resizeMode="cover"
+            onLoad={() => setLoading(false)}
+          />
+        </View>
+      );
+    };
 
   // const images = [
   //   profile.imageSource,

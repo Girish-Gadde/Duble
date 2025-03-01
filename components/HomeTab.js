@@ -377,7 +377,7 @@ const HomeTab = ({ route, navigation }) => {
     // Show loading indicator while data is being fetched
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#FF3156" />
+        <ActivityIndicator size={90} color="#0000ff" />
         <Text>Loading...</Text>
       </View>
     );
@@ -433,7 +433,7 @@ const HomeTab = ({ route, navigation }) => {
                   color={color}
                 />
 
-                <View
+                {/* <View
                   style={{
                     position: "absolute",
                     top: 0,
@@ -443,7 +443,7 @@ const HomeTab = ({ route, navigation }) => {
                     width: 8,
                     height: 8,
                   }}
-                />
+                /> */}
               </View>
             ),
             tabBarLabelStyle: {
@@ -498,7 +498,7 @@ const HomeTab = ({ route, navigation }) => {
                   size={size}
                   color={color}
                 />
-                <View
+                {/* <View
                   style={{
                     position: "absolute",
                     top: 0,
@@ -508,7 +508,7 @@ const HomeTab = ({ route, navigation }) => {
                     width: 8,
                     height: 8,
                   }}
-                />
+                /> */}
               </View>
             ),
             tabBarLabelStyle: {
@@ -591,7 +591,7 @@ const HomeTab = ({ route, navigation }) => {
                   size={size}
                   color={color}
                 />
-                <View
+                {/* <View
                   style={{
                     position: "absolute",
                     top: 0,
@@ -601,7 +601,7 @@ const HomeTab = ({ route, navigation }) => {
                     width: 8,
                     height: 8,
                   }}
-                />
+                /> */}
               </View>
             ),
             tabBarLabelStyle: {

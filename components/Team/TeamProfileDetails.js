@@ -376,7 +376,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
   };
   return (
     <ScrollView>
-      <View style={styles.headContainer}>
+      {/* <View style={styles.headContainer}>
         <Text style={styles.headText}>Team Profile</Text>
         <TouchableOpacity
           style={styles.donButton}
@@ -384,293 +384,15 @@ const TeamProfileDetails = ({ route, navigation }) => {
         >
           <Text style={styles.doneText1}>Done</Text>
         </TouchableOpacity>
-      </View>
-      {/* <View style={styles.viewContainer}>
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchText}>🎨 Our Interests</Text>
-        </View>
-        <View style={styles.renderedTagsContainer}>
-          {tags.map((tag, index) => (
-            <View key={index} style={styles.tag}>
-              <Text>{tag}</Text>
-              <TouchableOpacity onPress={() => handleRemoveTag(index)}>
-                <Text style={styles.removeButton}>x</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
-        <View style={styles.textInput}>
-          <Tags
-            initialTags={tags}
-            containerStyle={styles.tagsInputContainer}
-            inputStyle={styles.tagsInput}
-            onTagPress={(index, tagLabel, event, deleted) =>
-              !deleted && handleRemoveTag(index)
-            }
-          />
-          <TextInput
-            ref={tagInputRef}
-            placeholder="Add interests"
-            onChangeText={(text) => setTagInput(text)}
-            value={tagInput}
-          />
-          <TouchableOpacity onPress={handleAddTag}>
-            <Text style={styles.addButton}>+</Text>
-          </TouchableOpacity>
-        </View>
       </View> */}
-      {/* <View style={styles.viewContainer}>
-        <View style={styles.searchContainer}>
-         <Ionicons name="search" size={16} color="#454545" /> *
-          <Text style={styles.searchText}>🔍 Our Story</Text>
-          {!isEditing && (
-            <TouchableOpacity onPress={handleEdit}>
-              <FontAwesome6
-                name="edit" // Right arrow icon
-                size={16}
-                color="#121212"
-                style={styles.editIcon}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
 
-        {isEditing ? (
-          <View>
-            <TextInput
-              style={styles.aboutInput}
-              value={text}
-              onChangeText={setText}
-              multiline
-              autoFocus
-            />
-            <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
-              <Text style={styles.doneText}>Done</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <Text style={styles.text}>{text}</Text>
-        )}
-      </View> */}
-      {/* <View style={styles.viewContainer}>
-        <View style={styles.searchContainer}>
-           <Ionicons name="search" size={16} color="#454545" /> 
-          <Text style={styles.searchText}>🔍 Basics</Text>
-        </View>
-        <View style={styles.basicContainer}>
-          <View style={styles.columnContainer}>
-            <View style={styles.rowContainer}>
-              <MaterialIcons
-                name="location-on"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>Location</Text>
-            </View>
-            <View style={styles.rowContainer2}>
-              <Text style={styles.cell}>Pitampura</Text>
-              <MaterialIcons
-                name="keyboard-arrow-right" // Right arrow icon
-                size={24}
-                color="black"
-              />
-            </View>
-          </View>
-          <View style={styles.columnContainer1}>
-            <View style={styles.rowContainer}>
-              <FontAwesome5
-                name="ruler-vertical"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell1}>Height</Text>
-            </View>
-            <View style={styles.rowContainer2}>
-              <Text style={styles.cell}>155 cm</Text>
-              <MaterialIcons
-                name="keyboard-arrow-right" // Right arrow icon
-                size={24}
-                color="black"
-              />
-            </View>
-          </View>
-          <View style={styles.columnContainer}>
-            <View style={styles.rowContainer}>
-              <SimpleLineIcons
-                name="graduation"
-                size={18}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>Work</Text>
-            </View>
-            <View style={styles.rowContainer2}>
-              <Text style={styles.cell}>PhD Student</Text>
-              <MaterialIcons
-                name="keyboard-arrow-right" // Right arrow icon
-                size={24}
-                color="black"
-              />
-            </View>
-          </View>
-          <View style={styles.columnContainer}>
-            <View style={styles.rowContainer}>
-              <AntDesign
-                name="hearto"
-                size={17}
-                color="#121212"
-                style={styles.locationIcon}
-              />
-              <Text style={styles.cell}>Sexuality</Text>
-            </View>
-            <View style={styles.rowContainer2}>
-              <Text style={styles.cell}>Bisexual</Text>
-              <MaterialIcons
-                name="keyboard-arrow-right" // Right arrow icon
-                size={24}
-                color="black"
-                style={styles.arrowIcon}
-              />
-            </View>
-          </View>
-        </View>
-      </View> */}
       <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
           <Text style={styles.searchText}>📸 Our Pictures</Text>
         </View>
         <View style={styles.pictureContainer}>{renderProfilePictures()}</View>
       </View>
-      {/* <View style={styles.viewContainer}>
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchText}>😂 Our Humor Styles</Text>
-          {!isDateNightEditing && (
-            <TouchableOpacity onPress={handleDateNightEdit}>
-              <FontAwesome6
-                name="edit" // Right arrow icon
-                size={16}
-                color="#121212"
-                style={styles.editIcon1}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-        {isDateNightEditing ? (
-          <View>
-            <TextInput
-              style={styles.aboutInput}
-              value={dateNightText}
-              onChangeText={setDateNightText}
-              multiline
-              autoFocus
-            />
-            <View style={styles.editView}>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={handleDateNightDone}
-              >
-                <Text style={styles.doneText}>Delete</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.doneButton}
-                onPress={handleDateNightDone}
-              >
-                <Text style={styles.doneText}>Done</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ) : (
-          <Text style={styles.text}>{dateNightText}</Text>
-        )}
-      </View>
-      <View style={styles.viewContainer}>
-        <View style={styles.searchContainer}>
-           <Ionicons name="search" size={16} color="#454545" /> 
-          <Text style={styles.searchText}>🌟 Our Idea of a Fun Date</Text>
-          {!talkEditing && (
-            <TouchableOpacity onPress={handleTalkEdit}>
-              <FontAwesome6
-                name="edit" // Right arrow icon
-                size={16}
-                color="#121212"
-                style={styles.editIcon2}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-        {talkEditing ? (
-          <View>
-            <TextInput
-              style={styles.aboutInput}
-              value={talkText}
-              onChangeText={setIsTalkText}
-              multiline
-              autoFocus
-            />
-            <View style={styles.editView}>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={handleTalking}
-              >
-                <Text style={styles.doneText}>Delete</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.doneButton}
-                onPress={handleTalking}
-              >
-                <Text style={styles.doneText}>Done</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ) : (
-          <Text style={styles.text}>{talkText}</Text>
-        )}
-      </View>
-      <View style={styles.viewContainer}>
-        <View style={styles.searchContainer}>
-           <Ionicons name="search" size={16} color="#454545" /> 
-          <Text style={styles.searchText}>🌟 I would like you if</Text>
-          {!likeTextEditing && (
-            <TouchableOpacity onPress={handlelikeEdit}>
-              <FontAwesome6
-                name="edit" // Right arrow icon
-                size={16}
-                color="#121212"
-                style={styles.editIcon3}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
-        {likeTextEditing ? (
-          <View>
-            <TextInput
-              style={styles.aboutInput}
-              value={likeText}
-              onChangeText={setIsLikeText}
-              multiline
-              autoFocus
-            />
-            <View style={styles.editView}>
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={handleLiking}
-              >
-                <Text style={styles.doneText}>Delete</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.doneButton}
-                onPress={handleLiking}
-              >
-                <Text style={styles.doneText}>Done</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ) : (
-          <Text style={styles.text}>{likeText}</Text>
-        )}
-      </View> */}
+
 
       {profile.dynamicContent?.length > 0 ? (
         profile.dynamicContent.map((content, index) => (
@@ -1107,7 +829,7 @@ const styles = StyleSheet.create({
   },
   viewContainer: {
     backgroundColor: "#FFFFFF",
-    marginTop: 30,
+    marginTop: '4%',
     marginHorizontal: 20,
     marginBottom: 5,
     borderRadius: 6,

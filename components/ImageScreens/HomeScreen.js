@@ -197,34 +197,35 @@ const HomeScreen = ({ route, navigation }) => {
   };
 
   const navigateToTeamSwitch = ()=>{
+    refreshYourTeam();
     navigation.navigate('Teams')
   }
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#fff" />
+        <ActivityIndicator size={90} color="#0000ff" />
       </View>
     );
   }
 
-  if (!yourTeamProfile) {
-    return (
-      <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>Please create your teams</Text>
-        <TouchableOpacity style={styles.newTeamButton} onPress={navigateToTeamSwitch}>
-        <Text style={styles.emptyText1}>Create Team</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+  // if (!yourTeamProfile) {
+  //   return (
+  //     <View style={styles.emptyContainer}>
+  //       <Text style={styles.emptyText}>Please create your teams</Text>
+  //       <TouchableOpacity style={styles.newTeamButton} onPress={navigateToTeamSwitch}>
+  //       <Text style={styles.emptyText1}>Create Team</Text>
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // }
 
-  if (!currentProfile) {
+  if (!yourTeamProfile || !currentProfile) {
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>No teams available</Text>
-        <TouchableOpacity style={styles.newTeamButton} onPress={refreshYourTeam}>
-        <Text style={styles.emptyText1}>Get new teams</Text>
+        <TouchableOpacity style={styles.newTeamButton} onPress={navigateToTeamSwitch}>
+        <Text style={styles.emptyText1}>Create new teams</Text>
         </TouchableOpacity>
       </View>
     );
@@ -232,9 +233,30 @@ const HomeScreen = ({ route, navigation }) => {
 
  
 
+  // const renderCarouselItem = ({ item }) => {
+  //   //  console.log(item, "PATH");
+  //   return <Image source={item} style={styles.image} resizeMode="cover" />;
+  // };
+
   const renderCarouselItem = ({ item }) => {
-    //  console.log(item, "PATH");
-    return <Image source={item} style={styles.image} resizeMode="cover" />;
+    const [loading, setLoading] = useState(true);
+  
+    return (
+      <View style={{ alignItems: "center", width, height: 654 }}>
+
+        {loading &&
+        <View style= {{justifyContent: 'center', top: '35%'}}> 
+        <ActivityIndicator size={90} color="#0000ff" />
+        </View>
+        }
+        <Image
+          source={item}
+          style={[styles.image, { position: loading ? "absolute" : "relative" }]}
+          resizeMode="cover"
+          onLoad={() => setLoading(false)}
+        />
+      </View>
+    );
   };
 
   return (

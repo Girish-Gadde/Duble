@@ -38,6 +38,15 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
   // const { indexRef } = useUserContext();
   // const displayIndex = useRef(indexRef.current);
 
+    useEffect(() => {
+      // Ensure spinner is shown for at least 3 seconds
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+  
+      return () => clearTimeout(timer); // Cleanup timeout if unmounted
+    }, []);
+
   // **EFFECT TO FETCH MATCHED TEAMS**
   useEffect(() => {
     if (!yourTeamProfile) {
@@ -104,7 +113,7 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
         console.log("Error fetching rooms:", error);
         // alert("Failed to fetch rooms");
       } finally {
-        setLoading(false);
+        //setLoading(false);
       }
     };
 
@@ -196,7 +205,7 @@ const MatchScreen = ({ route, navigation,onRoomSelect }) => {
   if (loading) {
     return (
       <ActivityIndicator
-        size="large"
+        size={90}
         color="#0000ff"
         style={styles.loadingIndicator}
       />

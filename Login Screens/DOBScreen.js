@@ -33,17 +33,35 @@ const DOBScreen = ({ route, navigation }) => {
 
   // Validates and navigates to the next screen
   const navigateToLocationScreen = () => {
-    if (dob) {
-      navigation.navigate("GenderScreen", {
-        name,
-        dob,
-        mobileNumber,
-        navigation,
-      });
-    } else {
+    if (!dob) {
       setErrorMessage("Please select your date of birth");
+      return;
     }
+  
+    // Calculate age
+    const birthDate = new Date(date);
+    const today = new Date();
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    const dayDiff = today.getDate() - birthDate.getDate();
+  
+    // Adjust age if birthday hasn't occurred yet this year
+    const adjustedAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
+  
+    if (adjustedAge < 18) {
+      setErrorMessage("You must be at least 18 years old to continue");
+      return;
+    }
+  
+    // Navigate to the next screen
+    navigation.navigate("GenderScreen", {
+      name,
+      dob,
+      mobileNumber,
+      navigation,
+    });
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>

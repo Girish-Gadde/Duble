@@ -11,24 +11,40 @@ import {
 
 const JobScreen = ({ route, navigation }) => {
   // const navigation = useNavigation();
-  const { name, dob, gender, mobileNumber } = route.params;
+  const { name, dob, gender, aboutMe, mobileNumber } = route.params;
   const [occupation, setOccupation] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const navigateToLocScreen = () => {
-    if (occupation) {
-      navigation.navigate("PictureScreen", {
+    // Function to handle input validation
+    const handleInputChange = (text) => {
+      const formattedText = text.replace(/[^A-Za-z\s]/g, ""); // Allows only letters & spaces
+      setOccupation(formattedText);
+    };
+
+    const navigateToLocScreen = () => {
+      if (!occupation) {
+        setErrorMessage("Please enter your occupation");
+        return;
+      }
+  
+      const formattedOccupation = occupation.trim();
+      if (formattedOccupation.length === 0) {
+        setErrorMessage("Please enter your occupation");
+        return;
+      }
+  
+      navigation.navigate("HeightScreen", {
         name,
         dob,
         gender,
-        occupation,
+        aboutMe,
+        occupation: formattedOccupation,
         mobileNumber,
         navigation,
       });
-    } else {
-      setErrorMessage("Please enter your occupation");
-    }
-  };
+    };
+  
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Set Up</Text>
@@ -40,7 +56,7 @@ const JobScreen = ({ route, navigation }) => {
           keyboardType="default"
           autoCapitalize="none"
           value={occupation}
-          onChangeText={(text) => setOccupation(text)}
+          onChangeText={handleInputChange}
         />
 
         <Text style={styles.subtitle1}>This will appear on your profile</Text>
