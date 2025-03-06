@@ -19,10 +19,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { useUserContext } from 'path-to-your-context'; // Uncomment and adjust the path if you have a UserContext
 
-const MatchScreen = ({ route, navigation,onRoomSelect }) => {
+const MatchScreen = ({ route, navigation }) => {
   // **HOOKS AND STATE DECLARATIONS**
   // Make sure all hooks are declared at the top level
-  const { userName, dispatch, refreshYourTeam } = route.params;
+  const { userName, dispatch, refreshYourTeam, onRoomSelect } = route.params;
   const yourTeamProfile = useSelector((state) => state.profile);
   const [teams, setTeams] = useState([]);
   const [rooms, setRooms] = useState([]);

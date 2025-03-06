@@ -569,15 +569,14 @@ const HomeTab = ({ route, navigation }) => {
 
         <Tab.Screen
           name="Matches"
-          component={(props) => (
-            <Matches {...props} onRoomSelect={navigateToChatScreen} />
-          )}
+          component={Matches}
           initialParams={{
             navigation,
             yourTeamProfile: profile,
             userName,
             refreshYourTeam,
             dispatch,
+            onRoomSelect: navigateToChatScreen,
           }}
           options={{
             tabBarIcon: ({ focused, color, size }) => (
