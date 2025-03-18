@@ -50,6 +50,7 @@ export default function TeamUp({ route, navigation }) {
           key={index.toString()}
           style={styles.teamItemWrapper}
           onPress={() => handleTeamClick(index)}
+          activeOpacity={1}
         >
           <Image
             source={{

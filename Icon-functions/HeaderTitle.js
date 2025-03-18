@@ -79,7 +79,7 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
       />
   
       <Text style={{ fontSize: 25, fontWeight: "400" }}>{title}</Text> */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           position: "absolute",
           right: "-120%",
@@ -87,7 +87,7 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
         }}
         onPress={handleMenuClick}
       >
-        {/* Your button icon or text */}
+        
         <Image
           source={require("../assets/Group.jpg")} // Replace with your image source
           style={{
@@ -97,7 +97,7 @@ const HeaderTitleWithIcon = ({ title, iconName, navigateToTeamProfile }) => {
             marginLeft: 2,
           }} // Adjust width, height, and border-radius as needed
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {/* Notification Icon */}
       <TouchableOpacity

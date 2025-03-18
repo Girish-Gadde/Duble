@@ -10,20 +10,25 @@ import {
   Text,
   ScrollView,
   Image,
+  Alert,
 } from "react-native";
 import io from "socket.io-client";
 import Icon1 from "react-native-vector-icons/Feather";
 import { serverIP } from "@/config";
 import { Ionicons, Entypo } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 
 const ChatScreen = ({ route, navigation }) => {
-  const { roomId, username, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam } = route.params;
+  const { roomId, username, userId, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const socket = io(serverIP);
   const scrollViewRef = useRef();
 
   const [showUnmatch, setShowUnmatch] = useState(false);
+  const [showReport, setShowReport] = useState(false);
+const [selectedMember, setSelectedMember] = useState(null);
+const [reportReason, setReportReason] = useState("");
 
   useEffect(() => {
     socket.emit("joinRoom", roomId);
@@ -147,12 +152,55 @@ const ChatScreen = ({ route, navigation }) => {
     );
   };
 
+
+  // Function to handle report submission
+  const submitReport = async () => {
+    if (!selectedMember || !reportReason  || !dislikedTeamId) {
+      alert("Please select a member and enter a reason.");
+      return;
+    }
+  
+    console.log(`Reporting ${selectedMember} (Team ID: ${dislikedTeamId}) for: ${reportReason}`);
+  
+    try {
+      const response = await fetch(`${serverIP}/like/report-a-user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          reportingTo: {
+            teamId: dislikedTeamId,    // ObjectId of the disliked team
+            username: selectedMember   // Username of the reported member
+          },
+          reportedByUser: userId, // Attach user's ObjectId
+          reason: reportReason,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to submit report");
+      }
+  
+      alert("Report submitted successfully.");
+  
+      // Reset state after submitting
+      setShowReport(false);
+      setSelectedMember(null);
+      setReportReason("");
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      alert("Failed to submit report. Please try again.");
+    }
+  };
+  
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View>
+      <View style = {styles.blockContainer}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back-outline" size={20} color="#121212" />
@@ -173,10 +221,64 @@ const ChatScreen = ({ route, navigation }) => {
           </TouchableOpacity> */}
         </View>
         {showUnmatch && (
-        <TouchableOpacity style={styles.unmatchButton} onPress={toggleDislike}>
+          <View style = {styles.blockContainer}> 
+        <TouchableOpacity style={styles.unmatchButton} onPress={
+          () => {
+            Alert.alert(
+              "Confirm Unmatch",
+              "Are you sure you want to unmatch? Once unmatched, this feature will block them from reaching you and you won’t be able to reach out to any of these team members also.",
+              [
+                { text: "Cancel", style: "cancel" },
+                { text: "Yes", onPress: toggleDislike },
+              ]
+            );
+          }
+        }>
           <Text style={styles.unmatchText}>Unmatch</Text>
         </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.unmatchButton} 
+          onPress={() => setShowReport(!showReport)}
+        >
+          <Text style={styles.unmatchText}>Report</Text>
+        </TouchableOpacity>
+          </View>
       )}
+            {showReport && (
+      <View style={styles.reportContainer}>
+        {/* Dropdown for selecting a member */}
+        <Picker
+          selectedValue={selectedMember}
+          onValueChange={(itemValue) => setSelectedMember(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="Select Member" value={null} />
+          {teaMembers.map((member, index) => (
+            <Picker.Item key={index} label={member} value={member} />
+          ))}
+        </Picker>
+
+        {/* Text input for report reason */}
+        {selectedMember && (
+          <>
+            <TextInput
+              style={styles.input1}
+              placeholder="Enter report reason..."
+              value={reportReason}
+              onChangeText={setReportReason}
+            />
+            <View style={styles.reportButton}>
+              <TouchableOpacity onPress={submitReport} style={styles.submitButton}>
+                <Text style={styles.submitText}>Submit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setShowReport(false)} style={styles.cancelButton}>
+                <Text style={styles.cancelText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+      </View>
+    )}
       </View>
       <View style={styles.innerContainer}>
         <ScrollView
@@ -234,12 +336,59 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     marginRight: 10,
     marginTop: 5,
+    width: 90,
+    alignItems: 'center'
   },
   unmatchText: {
     color: '#fff',
     fontWeight: 'bold',
   },
-
+  reportContainer: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: "#F5EBFF",
+    borderRadius: 5,
+  },
+  picker: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "#ccc"
+  },
+  input1: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 8,
+    marginTop: 10,
+    borderRadius: 5,
+    backgroundColor: '#ffffff'
+  },
+  reportButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  submitButton: {
+    backgroundColor: "#007bff",
+    padding: 10,
+    borderRadius: 5,
+  },
+  submitText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  cancelButton: {
+    backgroundColor: "#ff0000",
+    padding: 10,
+    borderRadius: 5,
+  },
+  cancelText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  blockContainer: {
+    backgroundColor: "#F5EBFF"
+  }
 });
 
 export default ChatScreen;

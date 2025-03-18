@@ -363,9 +363,9 @@ const HomeTab = ({ route, navigation }) => {
   };
 
 
-  const navigateToChatScreen = (roomId, username, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam)=>{
-    console.log("Navigating to Chat with:", roomId, username, teaMembers, imageUrl,dislikedTeamId, dislikingTeamId, refreshYourTeam);
-    navigation.navigate("Chat", { roomId, username, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam });
+  const navigateToChatScreen = (roomId, username, userId, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam)=>{
+    console.log("Navigating to Chat with:", roomId, username, userId, teaMembers, imageUrl,dislikedTeamId, dislikingTeamId, refreshYourTeam);
+    navigation.navigate("Chat", { roomId, username, userId, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam });
   }
 
   const logOut = async ()=>{
@@ -469,6 +469,7 @@ const HomeTab = ({ route, navigation }) => {
             navigation,
             yourTeamProfile: profile,
             userName,
+            userId,
             refreshYourTeam,
           }}
           listeners={({ navigation }) => ({
@@ -574,6 +575,7 @@ const HomeTab = ({ route, navigation }) => {
             navigation,
             yourTeamProfile: profile,
             userName,
+            userId,
             refreshYourTeam,
             dispatch,
             onRoomSelect: navigateToChatScreen,

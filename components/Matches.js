@@ -11,7 +11,7 @@ import ChatScreen from "./ChatScreens/ChatScreen";
 const Stack = createStackNavigator();
 
 const Matches = ({ route, navigation }) => {
-  const { yourTeamProfile, userName, refreshYourTeam, dispatch, onRoomSelect } = route.params;
+  const { yourTeamProfile, userName, userId, refreshYourTeam, dispatch, onRoomSelect } = route.params;
   const handleMenuClick = () => {
     console.log("DF");
     dispatch(menuClickAction());
@@ -24,7 +24,7 @@ const Matches = ({ route, navigation }) => {
         <Stack.Screen
           name="MatchScreen"
           component={MatchScreen}
-          initialParams={{ yourTeamProfile, userName, navigation, dispatch, refreshYourTeam, onRoomSelect }}
+          initialParams={{ yourTeamProfile, userName, userId, navigation, dispatch, refreshYourTeam, onRoomSelect }}
           options={{
             headerShown: false,
             // headerTitle: () => (
@@ -71,7 +71,7 @@ const Matches = ({ route, navigation }) => {
             onRoomSelect={onRoomSelect}
             />
           )}
-          initialParams={{ navigation, refreshYourTeam }}
+          initialParams={{ navigation, userId, refreshYourTeam }}
           options={{
             headerTitle: () => (
               <HeaderTitleWithIcon2

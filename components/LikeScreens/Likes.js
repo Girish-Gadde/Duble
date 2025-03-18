@@ -333,7 +333,7 @@ const Likes = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <TextInput style={styles.searchBar} placeholder="Search..." />
+      {/* <TextInput style={styles.searchBar} placeholder="Search..." /> */}
       <Text style={styles.headerText}>People who liked you</Text>
       <FlatList
         data={teams}

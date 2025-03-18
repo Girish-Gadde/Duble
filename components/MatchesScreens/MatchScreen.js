@@ -22,7 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const MatchScreen = ({ route, navigation }) => {
   // **HOOKS AND STATE DECLARATIONS**
   // Make sure all hooks are declared at the top level
-  const { userName, dispatch, refreshYourTeam, onRoomSelect } = route.params;
+  const { userName, userId, dispatch, refreshYourTeam, onRoomSelect } = route.params;
   const yourTeamProfile = useSelector((state) => state.profile);
   const [teams, setTeams] = useState([]);
   const [rooms, setRooms] = useState([]);
@@ -163,7 +163,7 @@ const MatchScreen = ({ route, navigation }) => {
   const imageUrl = team.imageUrl;
   const dislikedTeamId = team.teamId; // The team being disliked
   const dislikingTeamId = yourTeamProfile._id; // The user's team profile
-  onRoomSelect(roomId, userName, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam);
+  onRoomSelect(roomId, userName, userId, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam);
 }
   };
 
