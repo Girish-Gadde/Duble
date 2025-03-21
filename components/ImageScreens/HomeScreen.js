@@ -488,17 +488,17 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 24,
-    color: "#333",
+    color: "#800080",
     marginBottom: '2%'
   },
   emptyText1: {
     fontSize: 20,
-    color: "#333",
+    color: "#fff",
   },
   newTeamButton:{
     margin: '3%',
     padding:'3%',
-    backgroundColor: '#fffff7',
+    backgroundColor: '#800080',
     borderRadius:10
   },
   image: {
