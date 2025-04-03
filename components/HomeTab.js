@@ -532,6 +532,7 @@ const HomeTab = ({ route, navigation }) => {
           component={HomeScreen}
           initialParams={{
             navigation,
+            userId,
             yourTeamProfile: profile,
             refreshYourTeam,
             dispatch,

@@ -9,6 +9,8 @@ import {
   ActivityIndicator,
   Dimensions,
   Alert,
+  Modal,
+  TextInput,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import {
@@ -100,18 +102,26 @@ const width = Dimensions.get("window").width;
 // ];
 
 const HomeScreen = ({ route, navigation }) => {
-  const { refreshYourTeam, dispatch } = route.params;
+  const { userId, refreshYourTeam, dispatch } = route.params;
   const yourTeamProfile = useSelector((state) => state.profile);
   // console.log(yourTeamProfile, "HOME");
   const [currentProfile, setCurrentProfile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+
   // useEffect(() => {
   //   if (yourTeamProfile) {
   //   fetchInitialProfile();
   //   }
   // }, []);
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
 
   useEffect(() => {
     if (yourTeamProfile) fetchInitialProfile();
@@ -195,6 +205,43 @@ const HomeScreen = ({ route, navigation }) => {
     };
     handleAction(`${serverIP}/like/saving-dislike-id`, payload);
   };
+
+  const submitReport = async () => {
+    if (!reportReason.trim()) {
+      alert("Please enter a reason for reporting.");
+      return;
+    }
+
+    toggleDislike();
+
+    try {
+      const response = await fetch(`${serverIP}/like/report-a-user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          reportingTo: {
+            teamId: currentProfile._id, // ObjectId of the disliked team
+          },
+          reportedByUser: userId, // Attach user's ObjectId
+          reason: reportReason.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit report");
+      }
+
+      alert("Report submitted successfully.");
+      setReportReason(""); // Reset the reason field
+      setModalVisible(false); // Close modal
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      alert("Failed to submit report. Please try again.");
+    }
+  };
+
 
   const navigateToTeamSwitch = ()=>{
     refreshYourTeam();
@@ -472,6 +519,38 @@ const HomeScreen = ({ route, navigation }) => {
           </View>
         </TouchableOpacity>
       </View>
+      <View style= {styles.reportStyle}>
+      <TouchableOpacity style={styles.reportButton} onPress={toggleModal}>
+            <Text style={styles.buttonText}>Report and Reject</Text>
+        </TouchableOpacity>
+      </View>
+           {/* Report Modal */}
+           <Modal visible={modalVisible} transparent animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Enter Report Reason</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Type your reason here..."
+              multiline
+              value={reportReason}
+              onChangeText={setReportReason}
+            />
+            <View style={styles.buttnContainer}>
+              <TouchableOpacity style={styles.cancelButton} onPress={toggleModal}>
+                <Text style={styles.buttonTxt}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.submitButton, !reportReason.trim() && styles.disabledButton]}
+                onPress={submitReport}
+                disabled={!reportReason.trim()}
+              >
+                <Text style={styles.buttonTxt}>Submit</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -776,11 +855,86 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#454545",
   },
+  reportButton: {
+    width: "86%",
+    height: 49,
+    marginHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 5,
+    backgroundColor: "#6420AA",
+    borderRadius: 35,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    // border: 2,
+    // borderWidth: 2,
+   // borderColor: "#45474B",
+  },
+  reportStyle:{
+    alignItems: 'center'
+  },
   // carouselImage: {
   //   width: viewportWidth - 60,
   //   height: 200,
   //   borderRadius: 10,
   // },
+
+  buttonTxt: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  input: {
+    width: "100%",
+    height: 80,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    borderRadius: 5,
+    textAlignVertical: "top",
+    marginBottom: 10,
+  },
+  buttnContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  cancelButton: {
+    backgroundColor: "#6420AA",
+    padding: 10,
+    borderRadius: 5,
+    flex: 1,
+    marginRight: 5,
+    alignItems: "center",
+  },
+  submitButton: {
+    backgroundColor: "#FF3156",
+    padding: 10,
+    borderRadius: 5,
+    flex: 1,
+    marginLeft: 5,
+    alignItems: "center",
+  },
+  disabledButton: {
+    backgroundColor: "lightgray",
+  },
 });
 
 export default HomeScreen;
