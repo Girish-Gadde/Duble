@@ -9,6 +9,7 @@ import store from "./components/Store";
 import HomeTab from "./components/HomeTab";
 import ProfileScreen1 from "./components/ProfileScreens/ProfileScreen1";
 import DubleStart from "./Login Screens/DubleStart";
+import TermsScreen from "./Login Screens/TermsScreen";
 import Login from "./Login Screens/Login";
 import PhoneLogin from "./Login Screens/PhoneLogin";
 import OTPScreen from "./Login Screens/OTPScreen";
@@ -91,6 +92,11 @@ export default function App() {
             <Stack.Screen
               name="DubleStart"
               component={DubleStart}
+              options={{ headerShown: false }}
+            />
+              <Stack.Screen
+              name="TermsScreen"
+              component={TermsScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

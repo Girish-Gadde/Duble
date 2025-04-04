@@ -27,7 +27,11 @@ const CountryCodeSelector = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching countries:", error);
-        setLoading(false);
+                    // ✅ Fallback to only India
+    const fallback = [{ label: "India (+91)", value: "+91" }];
+    setCountries(fallback);
+    setSelectedCountry("+91");
+    setLoading(false)
       }
     };
 

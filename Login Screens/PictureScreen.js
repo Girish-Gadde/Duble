@@ -120,6 +120,13 @@ const PictureScreen = ({ route, navigation }) => {
         <Text style={styles.subtitle}>Let’s add a few pictures!</Text>
       </View>
 
+      <View style={styles.infoBox}>
+  <Text style={styles.infoText}>
+    We need your images to create your profile. Rest assured, your images will be securely stored in our database using encryption to ensure your privacy and safety.
+  </Text>
+</View>
+
+
       <View style={styles.imageGrid}>
         {images.map((image, index) => (
           <View key={index} style={styles.imageContainer}>
@@ -171,15 +178,14 @@ const styles = StyleSheet.create({
     fontSize: 45,
     lineHeight: 53.91,
     fontWeight: "700",
-    marginTop: 20,
-    marginBottom: 45,
+    marginTop: 10,
+    marginBottom: 20,
   },
   textLogin: {
-    marginBottom: 20,
+    marginBottom: 2,
   },
   subtitle: {
     fontSize: 20,
-    marginBottom: 45,
     alignSelf: "center",
     fontWeight: "400",
     lineHeight: 23.96,
@@ -256,6 +262,18 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 14,
     fontWeight: "bold",
+  },
+  infoBox: {
+    backgroundColor: '#f0f0f0',
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+  infoText: {
+    fontSize: 16,
+    color: '#121212',
+    lineHeight: 22,
+    textAlign: 'center',
   },
 });
 

@@ -5,7 +5,7 @@ import { View, Image, StyleSheet } from "react-native";
 const DubleStart = () => {
   const navigation = useNavigation();
   const navigateToLoginScreen = () => {
-    navigation.navigate("Login");
+    navigation.navigate("TermsScreen", {navigation});
   };
 
   useEffect(() => {
