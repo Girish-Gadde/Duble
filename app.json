@@ -2,7 +2,7 @@
   "expo": {
     "name": "Duble",
     "slug": "duble",
-    "version": "1.0.5",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/DubleLogo.png",
     "scheme": "myapp",
@@ -14,12 +14,15 @@
     },
     "ios": {
       "icon": "./assets/DubleLogo.png",
-      "buildNumber": "6",
+      "buildNumber": "9",
       "supportsTablet": true,
       "config": {
         "googleMapsApiKey": "AIzaSyAFTtQ9taTiY-CM-NBnVV96yMnkZr3TmM4"
       },
-      "bundleIdentifier": "Duble"
+      "bundleIdentifier": "Duble",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "versionCode": "4",

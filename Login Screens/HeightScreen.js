@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { Platform } from "react-native";
 
 const HeightScreen = ({ route, navigation }) => {
   const { name, dob, gender, aboutMe, occupation, mobileNumber } = route.params;
@@ -31,30 +32,32 @@ const HeightScreen = ({ route, navigation }) => {
       <View style={styles.textLogin}>
         <Text style={styles.subtitle}>Select your height</Text>
 
+        <View style={{flexDirection:'row', gap:10}}>
         {/* Feet Picker */}
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={feet}
-            onValueChange={(itemValue) => setFeet(itemValue)}
-            style={styles.picker}
-          >
-            {Array.from({ length: 7 }, (_, i) => (
-              <Picker.Item key={i} label={`${4 + i} ft`} value={`${4 + i}`} />
-            ))}
-          </Picker>
-        </View>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={feet}
+                onValueChange={(itemValue) => setFeet(itemValue)}
+                style={styles.picker}
+              >
+                {Array.from({ length: 7 }, (_, i) => (
+                  <Picker.Item itemStyle={{ height: 180, fontSize: 20, textAlign: 'center' }}  key={i} label={`${4 + i} ft`} value={`${4 + i}`} />
+                ))}
+              </Picker>
+            </View>
 
-        {/* Inches Picker */}
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={inches}
-            onValueChange={(itemValue) => setInches(itemValue)}
-            style={styles.picker}
-          >
-            {Array.from({ length: 12 }, (_, i) => (
-              <Picker.Item key={i} label={`${i} in`} value={`${i}`} />
-            ))}
-          </Picker>
+            {/* Inches Picker */}
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={inches}
+                onValueChange={(itemValue) => setInches(itemValue)}
+                style={styles.picker}
+              >
+                {Array.from({ length: 12 }, (_, i) => (
+                  <Picker.Item key={i} label={`${i} in`} value={`${i}`} />
+                ))}
+              </Picker>
+            </View>
         </View>
 
         <Text style={styles.subtitle1}>This will appear on your profile</Text>
@@ -97,7 +100,7 @@ const styles = StyleSheet.create({
     color: "#121212",
   },
   pickerContainer: {
-    width: 340,
+    width: 150,
     borderWidth: 2,
     borderColor: "#6420AA",
     borderRadius: 35,
@@ -107,7 +110,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: "100%",
-    height: 40,
+    height: Platform.OS === "ios" ? 180 : 40,
   },
   button: {
     width: 340,
