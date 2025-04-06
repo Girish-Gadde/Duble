@@ -10,12 +10,12 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-const Login = () => {
+const Login = ({navigation}) => {
   const [activeButton, setActiveButton] = useState(null);
-  const navigation = useNavigation();
+  //const navigation = useNavigation();
 
   const navigateToPhoneLoginScreen = () => {
-    navigation.navigate("CountryCode", { navigation });
+    navigation.navigate("TermsScreen", { navigation });
   };
 
   const navigateToPhoneLoginScreen1 = () => {

@@ -12,7 +12,7 @@ const TermsScreen = ({navigation}) => {
       return;
     }
 
-    navigation.replace('Login'); // Replace this with your login screen name
+    navigation.replace('CountryCode'); // Replace this with your login screen name
   };
 
   return (

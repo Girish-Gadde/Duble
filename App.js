@@ -94,14 +94,14 @@ export default function App() {
               component={DubleStart}
               options={{ headerShown: false }}
             />
-              <Stack.Screen
-              name="TermsScreen"
-              component={TermsScreen}
-              options={{ headerShown: false }}
-            />
             <Stack.Screen
               name="Login"
               component={Login}
+              options={{ headerShown: false }}
+            />
+             <Stack.Screen
+              name="TermsScreen"
+              component={TermsScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

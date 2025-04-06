@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     width: "100%",
-    height: Platform.OS === "ios" ? 180 : 40,
+    height: Platform.OS === "ios" ? 180 : 150,
   },
   button: {
     width: 340,
