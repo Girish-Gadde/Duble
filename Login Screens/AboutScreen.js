@@ -55,6 +55,7 @@ const AboutScreen = ({ route, navigation }) => {
           keyboardType="default"
           autoCapitalize="sentences"
           multiline
+          placeholderTextColor="gray"
           value={aboutMe}
           onChangeText={handleInputChange}
           onContentSizeChange={(event) =>
@@ -122,6 +123,7 @@ const styles = StyleSheet.create({
     borderRadius: 15, // Slightly adjusted for better appearance
     fontSize: 18,
     textAlignVertical: "top", // Ensures text starts at the top
+    
   },
   button: {
     width: 340,

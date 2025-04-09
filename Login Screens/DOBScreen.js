@@ -73,6 +73,7 @@ const DOBScreen = ({ route, navigation }) => {
         <TouchableOpacity onPress={showDatepicker}>
           <TextInput
             style={styles.input}
+            placeholderTextColor="gray"
             placeholder="Select date of birth"
             value={dob}
             editable={false}

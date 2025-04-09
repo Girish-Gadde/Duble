@@ -52,6 +52,7 @@ const JobScreen = ({ route, navigation }) => {
         <Text style={styles.subtitle}>Hey, What do you do?</Text>
         <TextInput
           style={styles.input}
+          placeholderTextColor="gray"
           placeholder="Enter occupation"
           keyboardType="default"
           autoCapitalize="none"

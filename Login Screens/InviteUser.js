@@ -85,12 +85,14 @@ const InviteUser = () => {
 
       <TextInput
         style={styles.input}
+        placeholderTextColor="gray"
         placeholder="Sender Name"
         value={senderName}
         onChangeText={setSenderName}
       />
       <TextInput
         style={styles.input}
+        placeholderTextColor="gray"
         placeholder="Sender Phone"
         value={senderPhone}
         onChangeText={setSenderPhone}
@@ -109,12 +111,14 @@ const InviteUser = () => {
 
               <TextInput
                 style={styles.input}
+                placeholderTextColor="gray"
                 placeholder="Receiver Name"
                 value={receiverName}
                 onChangeText={setReceiverName}
               />
               <TextInput
                 style={styles.input}
+                placeholderTextColor="gray"
                 placeholder="Receiver Phone"
                 value={receiverPhone}
                 onChangeText={setReceiverPhone}
