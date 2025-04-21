@@ -43,6 +43,7 @@
     "expo-system-ui": "~3.0.7",
     "expo-updates": "~0.25.28",
     "expo-web-browser": "~13.0.3",
+    "firebase": "^11.6.0",
     "install": "^0.13.0",
     "npx": "^10.2.2",
     "react": "18.2.0",

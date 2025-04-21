@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "942798556500",
+    "project_id": "duble-social-1f6f3",
+    "storage_bucket": "duble-social-1f6f3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:942798556500:android:a249c4d8ea904a10f14cc1",
+        "android_client_info": {
+          "package_name": "com.duble.social"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1V_bb8TtaunTzeQ0spPce1qSU2h1Sp8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -19,7 +19,7 @@ const Login = ({navigation}) => {
   };
 
   const navigateToPhoneLoginScreen1 = () => {
-    navigation.navigate("PhoneLogin1");
+    navigation.navigate("NotTest", {navigation});
   };
 
   return (
@@ -75,7 +75,7 @@ const Login = ({navigation}) => {
             Login with Phone Number
           </Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity
+        <TouchableOpacity
           style={[
             styles.button,
             activeButton === "gmail"
@@ -96,7 +96,7 @@ const Login = ({navigation}) => {
           >
             Login with Gmail
           </Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

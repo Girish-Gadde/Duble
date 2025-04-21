@@ -36,7 +36,10 @@ import ChatScreen from "./components/ChatScreens/ChatScreen";
 
 import CountryCode from './Login Screens/CountrySelect';
 import NotificationService from "./components/Notifications/NotificationService";
+import { navigationRef, getActiveRouteName } from "./utils/ios Notification/navigationRef";
 
+import NotTest from './utils/ios Notification/notTest'
+import AndroidNotification from './utils/Android Notification/AndroidNotification'
 
 
 const Stack = createNativeStackNavigator();
@@ -81,7 +84,14 @@ export default function App() {
     <Provider store={store}>
       <UserProvider>
       <NotificationService />
-        <NavigationContainer independent={true}>
+        <NavigationContainer independent={true}
+          ref={navigationRef}
+          onStateChange={(state) => {
+            const currentRouteName = getActiveRouteName(state);
+            global.currentScreen = currentRouteName;
+            console.log('Current screen', currentRouteName);
+          }}
+        >
           <Stack.Navigator initialRouteName={initialRoute}>
             {/* You can add your screens here */}
             {/* <Stack.Screen
@@ -102,6 +112,11 @@ export default function App() {
              <Stack.Screen
               name="TermsScreen"
               component={TermsScreen}
+              options={{ headerShown: false }}
+            />
+             <Stack.Screen
+              name="NotTest"
+              component={AndroidNotification}
               options={{ headerShown: false }}
             />
             <Stack.Screen
