@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useContext } from "react";
 import {
   View,
   TextInput,
@@ -18,11 +19,19 @@ import { serverIP } from "@/config";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 
+import {
+  showLocalNotification
+} from '../../utils/ios Notification/notification';
+
+import {useSocket} from '../../utils/socket/SocketContext'
+
 const ChatScreen = ({ route, navigation }) => {
   const { roomId, username, userId, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const socket = io(serverIP);
+  //const socket = io(serverIP);
+  const socket = useSocket(); 
+  //const socket = useContext(SocketContext);
   const scrollViewRef = useRef();
 
   const [showUnmatch, setShowUnmatch] = useState(false);
@@ -34,12 +43,22 @@ const [reportReason, setReportReason] = useState("");
     socket.emit("joinRoom", roomId);
 
     // Listen for messages from others
-    socket.on("message", (message) => {
-      // Only add the message if it's not from the current user
-      if (message.sender !== username) {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      }
-    });
+    // socket.on("message", (message) => {
+    //   // Only add the message if it's not from the current user
+    //   if (message.sender !== username) {
+    //     setMessages((prevMessages) => [...prevMessages, message]);
+    //   }
+    // });
+
+  socket.on("message", async (message) => {
+    if (message.sender !== username) {
+      setMessages((prevMessages) => [...prevMessages, message]);
+  
+      // Use the shared notification function
+      await showLocalNotification(`${message.sender} says:`, message.message, { roomId });
+    }
+  });
+  
 
     const fetchMessages = async () => {
       try {
@@ -63,6 +82,47 @@ const [reportReason, setReportReason] = useState("");
       socket.disconnect();
     };
   }, [roomId]);
+
+
+  // useEffect(() => {
+  //   if (!socket || !roomId) return;
+
+  //   socket.emit("joinRoom", roomId);
+  //   console.log("Joined room:", roomId);
+
+  //   const handleMessage = async (message) => {
+  //     if (message.sender !== username) {
+  //       setMessages((prev) => [...prev, message]);
+  //       await showLocalNotification(`${message.sender} says:`, message.message, {
+  //         roomId: message.roomId,
+  //       });
+  //     }
+  //   };
+
+  //   socket.on("message", handleMessage);
+
+  //   const fetchMessages = async () => {
+  //     try {
+  //       const response = await fetch(`${serverIP}/api/messages/${roomId}`);
+  //       const data = await response.json();
+  //       if (Array.isArray(data.messages)) {
+  //         setMessages(data.messages);
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch messages", error);
+  //     }
+  //   };
+
+  //   fetchMessages();
+
+  //   return () => {
+  //     socket.off("message", handleMessage);
+  //     socket.emit("leaveRoom", roomId); // optional clean-up
+  //   };
+  // }, [socket, roomId]);
+  
+
+
 
     const toggleDislike = async () => {
       // setIsDislikeActive(!isDislikeActive);

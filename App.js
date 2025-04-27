@@ -40,6 +40,8 @@ import { navigationRef, getActiveRouteName } from "./utils/ios Notification/navi
 
 import NotTest from './utils/ios Notification/notTest'
 import AndroidNotification from './utils/Android Notification/AndroidNotification'
+import {SocketProvider} from './utils/socket/SocketContext'
+
 
 
 const Stack = createNativeStackNavigator();
@@ -47,6 +49,8 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [initialRoute, setInitialRoute] = useState(null);
   const [mobileNumber, setMobileNumber] = useState(null);
+
+  const username = 'Girish'
   useEffect(() => {
     const checkMobileNumber = async () => {
        //await AsyncStorage.removeItem("selectedTeamIndex");
@@ -84,6 +88,7 @@ export default function App() {
     <Provider store={store}>
       <UserProvider>
       <NotificationService />
+      <SocketProvider>
         <NavigationContainer independent={true}
           ref={navigationRef}
           onStateChange={(state) => {
@@ -116,7 +121,7 @@ export default function App() {
             />
              <Stack.Screen
               name="NotTest"
-              component={AndroidNotification}
+              component={NotTest}
               options={{ headerShown: false }}
             />
             <Stack.Screen
@@ -220,6 +225,7 @@ export default function App() {
             />
           </Stack.Navigator>
         </NavigationContainer>
+        </SocketProvider>
       </UserProvider>
     </Provider>
   );

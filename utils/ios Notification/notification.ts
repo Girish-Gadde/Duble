@@ -115,7 +115,7 @@ import * as Device from 'expo-device';
 // Set up notification handler
 Notifications.setNotificationHandler({
   handleNotification: async () => {
-    const suppressScreens = ['NotTest','Login']; // Add screen names where alert should be suppressed
+    const suppressScreens = ['Chat']; // Add screen names where alert should be suppressed
 
     // Get the current screen from the global state (or navigation context)
     const currentScreen = global.currentScreen || 'Unknown'; // Fallback to 'Unknown' if not set
@@ -174,6 +174,23 @@ export async function registerForPushNotificationsAsync(): Promise<string | null
 
   return token;
 }
+
+// Add this below your other exports in the notification file
+export async function showLocalNotification(title: string, body: string, data: Record<string, any> = {}) {
+  try {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title,
+        body,
+        data,
+      },
+      trigger: null, // fire immediately
+    });
+  } catch (error) {
+    console.error('❌ Failed to show local notification:', error);
+  }
+}
+
 
 // Send a push notification
 export async function sendPushNotification(
