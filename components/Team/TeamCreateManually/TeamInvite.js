@@ -133,6 +133,7 @@ export default function CreateTeam({
         placeholder="Enter Team Name"
         placeholderTextColor="grey"
         value={teamName}
+        returnKeyType="done"
         onChangeText={setTeamName}
       />
       <Text style={styles.label}>Team mate's Mobile number</Text>
@@ -142,6 +143,7 @@ export default function CreateTeam({
         placeholder="Enter team mate's mobile number"
         value={teamateMobileNumber}
         keyboardType="phone-pad"
+        returnKeyType="done"
         maxLength={20}
         onChangeText={(text) => {
           // Remove spaces and allow only digits with an optional leading '+'

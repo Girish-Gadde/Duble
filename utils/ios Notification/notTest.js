@@ -138,7 +138,7 @@ const PushNotificationSender = () => {
     };
 
     try {
-      const response = await fetch("http://192.168.1.11:4002/notifications/send-notification", {
+      const response = await fetch("http://192.168.1.9:4002/notifications/send-notification", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

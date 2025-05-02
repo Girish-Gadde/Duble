@@ -157,7 +157,7 @@ export async function registerForPushNotificationsAsync(): Promise<string | null
     }
 
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log('🔔 Expo Push Token:', token);
+    console.log('🔔 Expo Push Token ---->:', token);
   } else {
     Alert.alert('Must use a physical device for push notifications');
     return null;

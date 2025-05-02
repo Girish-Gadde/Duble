@@ -36,7 +36,7 @@ export default function App() {
       setFcmPushToken(data);
 
       // Send the token to your backend
-      const response = await axios.post('http://192.168.1.7:4002/firebase-android/register-device-token', {
+      const response = await axios.post('http://192.168.1.9:4002/firebase-android/register-device-token', {
         token: data,  // Send FCM token to the backend
       });
       console.log(response.data);
@@ -53,7 +53,7 @@ export default function App() {
     }
 
     try {
-      const response = await axios.post('http://192.168.1.7:4002/firebase-android/send-push-notification', {
+      const response = await axios.post('http://192.168.1.9:4002/firebase-android/send-push-notification', {
         token: fcmPushToken,  // Use FCM token here
       });
       console.log(response.data);
