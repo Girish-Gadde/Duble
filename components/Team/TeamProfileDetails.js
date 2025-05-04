@@ -402,7 +402,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
     ));
 
     // Check if the number of images is less than 5 to render the empty box with the '+' icon
-    if (formattedImages.length < 16) {
+    if (formattedImages.length < 6) {
       const emptyBox = (
         <TouchableOpacity onPress={() => handleUploadImage()}>
           <View style={[styles.pictureBox, styles.emptyBox]}>
