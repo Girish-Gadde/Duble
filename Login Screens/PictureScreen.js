@@ -10,6 +10,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as FileSystem from 'expo-file-system';
 import { serverIP } from "@/config";
 
 const PictureScreen = ({ route, navigation }) => {
@@ -29,6 +31,59 @@ const PictureScreen = ({ route, navigation }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [compressing, setCompressing] = useState(false);
+
+
+  const compressImage = async (uri, index) => {
+    // setCompressing((prev) => {
+    //   const updated = [...prev];
+    //   updated[index] = true;
+    //   return updated;
+    // });
+  
+    const fileInfo = await FileSystem.getInfoAsync(uri);
+    const fileSize = fileInfo.size;
+    const MAX_SIZE = 150 * 1024;
+  
+    let compressedUri = uri;
+    try {
+      if (fileSize > MAX_SIZE) {
+        console.log('Image size is larger than 150KB, compressing...');
+        let compressionAttempt = 0;
+        let currentSize = fileSize;
+  
+        while (currentSize > MAX_SIZE && compressionAttempt < 3) {
+          const quality = 0.5 - compressionAttempt * 0.1;
+          const result = await ImageManipulator.manipulateAsync(
+            uri,
+            [{ resize: { width: 800 - compressionAttempt * 100 } }],
+            { compress: quality, format: ImageManipulator.SaveFormat.JPEG }
+          );
+  
+          compressedUri = result.uri;
+          const compressedInfo = await FileSystem.getInfoAsync(compressedUri);
+          currentSize = compressedInfo.size;
+
+          console.log(`Attempt ${compressionAttempt + 1}:`);
+          console.log('Original size:', (fileSize / 1024).toFixed(2), 'KB');
+          console.log('Compressed size:', (currentSize / 1024).toFixed(2), 'KB');
+  
+          compressionAttempt++;
+        }
+      }
+    } catch (err) {
+      console.error("Compression failed:", err);
+    }
+  
+    // setCompressing((prev) => {
+    //   const updated = [...prev];
+    //   updated[index] = false;
+    //   return updated;
+    // });
+  
+    return compressedUri;
+  };
+  
 
   const pickImages = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -42,7 +97,24 @@ const PictureScreen = ({ route, navigation }) => {
         Alert.alert("Limit Reached", "You can only upload up to 4 images.");
         return;
       }
-      setImages([...images, ...result.assets.map((asset) => asset.uri)]);
+
+          try {
+            const newImages = result.assets.map(asset => asset.uri);
+            setCompressing(true);
+        // Process and compress each image
+        const processedImages = await Promise.all(
+          newImages.map((uri, index) =>
+            compressImage(uri, images.length + index)
+          )
+        );
+
+        setImages([...images, ...processedImages]);
+      } catch (error) {
+        console.error('Error processing images:', error);
+        Alert.alert('Error', 'Failed to process images. Please try again.');
+      }finally {
+        setCompressing(false); // hide loader after compression
+      }
     }
   };
 
@@ -131,6 +203,11 @@ const PictureScreen = ({ route, navigation }) => {
         {images.map((image, index) => (
           <View key={index} style={styles.imageContainer}>
             <Image source={{ uri: image }} style={styles.image} />
+            {/* {compressing[index] && (
+        <View style={styles.loaderOverlay}>
+          <ActivityIndicator size="small" color="#fff" />
+        </View>
+      )} */}
             <TouchableOpacity
               style={styles.removeButton}
               onPress={() => removeImage(index)}
@@ -154,6 +231,13 @@ const PictureScreen = ({ route, navigation }) => {
           <Text style={styles.AddText}>Add more+</Text>
         </TouchableOpacity>
       )}
+
+{compressing && (
+  <View style={styles.fullscreenLoader}>
+    <ActivityIndicator size="large" color="#6420AA" />
+  </View>
+)}
+
 
       <TouchableOpacity style={[styles.button, loading && styles.buttonDisabled]} onPress={uploadData}
        disabled={loading}
@@ -275,6 +359,31 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     textAlign: 'center',
   },
+  fullscreenLoader: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10,
+  },
+  
+  // loaderOverlay: {
+  //   position: 'absolute',
+  //   top: 0,
+  //   left: 0,
+  //   right: 0,
+  //   bottom: 0,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: 'rgba(0,0,0,0.4)',
+  //   borderRadius: 8,
+  // },
+  
 });
 
 export default PictureScreen;
+

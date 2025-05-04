@@ -49,6 +49,7 @@ const NameScreen = ({ route, navigation }) => {
           autoCapitalize="none"
           value={name}
           onChangeText={handleNameChange}
+          maxLength={27}
         />
 
         <Text style={styles.subtitle1}>This will appear on your profile</Text>

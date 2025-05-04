@@ -8,7 +8,7 @@ import PromptScreen from "./PromptScreen";
 const Stack = createStackNavigator();
 
 export const ProfileStack = ({ route, navigation }) => {
-  const { profile, dispatch, logOut } = route.params;
+  const { profile, refreshYourInidividualProfile, dispatch, logOut } = route.params;
   // console.log(profile, "INDIVIDUAL PROFILE");
   return (
     <NavigationContainer independent={true}>
@@ -22,7 +22,7 @@ export const ProfileStack = ({ route, navigation }) => {
         <Stack.Screen
           name="ProfileDetails"
           component={ProfileDetails}
-          initialParams={{ navigation, profile, dispatch, logOut }}
+          initialParams={{ navigation, profile, refreshYourInidividualProfile, dispatch, logOut }}
           options={{ headerShown: false }}
         />
         <Stack.Screen

@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import axios from "axios"; // Ensure axios is installed for API calls
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { serverIP } from "@/config";
 import { useSelector } from "react-redux";
 
@@ -134,9 +134,12 @@ const Notification = ({ route, navigation }) => {
         style={styles.notificationRow}
         onPress={() => toggleExpandNotification(item._id)}
       >
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Ionicons name="shuffle" size={36} color="black" style={{ marginRight: 5 }} />
         <Text style={styles.notificationText}>
-          {item.teamMateName} requested to team up with you
+          New team request from {item.teamMateName}
         </Text>
+        </View>
         <MaterialIcons
           name={
             expandedNotification === item._id
@@ -160,7 +163,7 @@ const Notification = ({ route, navigation }) => {
             style={styles.rejectButton}
             onPress={() => handleReject(item._id)}
           >
-            <Text style={styles.buttonText}>Reject</Text>
+            <Text style={styles.rejectButtonText}>Decline</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -187,7 +190,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
+   // backgroundColor: "#fff",
   },
   // title: {
   //   fontSize: 24,
@@ -195,7 +198,7 @@ const styles = StyleSheet.create({
   //   marginBottom: 16,
   // },
   notificationItem: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#ffffff",
     padding: 16,
     marginVertical: 8,
     borderRadius: 8,
@@ -214,23 +217,32 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10,
+    marginTop: 5,
+    justifyContent: 'center'
   },
   acceptButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#FF3156",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 35,
+    marginHorizontal: 10
   },
   rejectButton: {
-    backgroundColor: "#f44336",
+    backgroundColor: "#fff",
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 35,
+    marginHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#FF3156',
   },
   buttonText: {
     color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  rejectButtonText: {
+    color: "#FF3156",
     fontWeight: "bold",
     fontSize: 16,
   },

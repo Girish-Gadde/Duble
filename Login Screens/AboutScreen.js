@@ -19,7 +19,12 @@ const AboutScreen = ({ route, navigation }) => {
   const handleInputChange = (text) => {
     // Allow only letters and spaces, removing any invalid characters
     const formattedText = text.replace(/[^A-Za-z\s,!.]/g, "");
-    setAboutMe(formattedText);
+    const words = formattedText.trim().split(/\s+/);
+    if (words.length <= 50) {
+      setAboutMe(formattedText);
+    } else {
+      alert("Word Limit Exceeded", "You can enter up to 100 words only.");
+    }
   };
 
   const navigateToJobScreen = () => {
@@ -61,6 +66,7 @@ const AboutScreen = ({ route, navigation }) => {
           onContentSizeChange={(event) =>
             setInputHeight(event.nativeEvent.contentSize.height + 10)
           }
+          maxLength={500}
         />
 
         <Text style={styles.subtitle1}>This will appear on your profile</Text>

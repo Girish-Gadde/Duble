@@ -25,6 +25,8 @@ import {
 import Tags from "react-native-tags";
 import { serverIP } from "@/config";
 import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as FileSystem from 'expo-file-system';
 
 const profiles = [
   {
@@ -89,7 +91,7 @@ const profiles = [
 ];
 
 const TeamProfileDetails = ({ route, navigation }) => {
-  const { dispatch } = route.params;
+  const {refreshYourSelectedTeam, dispatch } = route.params;
   const profile = useSelector((state) => state.profile);
   console.log(profile, "DF");
   const [tags, setTags] = useState([]);
@@ -122,6 +124,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
   const [selectedPrompt, setSelectedPrompt] = useState(null);
   const [inputText, setInputText] = useState("");
   const [promptText, setPromptText] = useState(null);
+    const [uploading, setUploading] = useState(false);
 
   const [currentProfileIndex, setCurrentProfileIndex] = useState(
     profiles.length - 1
@@ -145,6 +148,46 @@ const TeamProfileDetails = ({ route, navigation }) => {
   );
   const [formattedImages, setFormattedImages] = useState(formattedImagePics);
 
+  useEffect(() => {
+    const formattedImages = (profile?.selectedImages || []).map(
+      (imagePath) => ({
+        uri: `${imagePath}`,
+      })
+    );
+    console.log(formattedImages, "IMAGE-7777777");
+    setFormattedImages(formattedImages);
+  }, [profile]);
+
+    const compressImage = async (uri) => {
+      const fileInfo = await FileSystem.getInfoAsync(uri);
+      const fileSizeKB = fileInfo.size / 1024;
+      console.log(`Original image size: ${fileSizeKB.toFixed(2)} KB`);
+  
+      // Only compress if over 150KB
+      if (fileSizeKB <= 150) return uri;
+    
+      let quality = 1;
+      let compressedUri = uri;
+    
+      // Gradually reduce quality to reach target size range
+      for (let q = 0.9; q >= 0.2; q -= 0.1) {
+        const result = await ImageManipulator.manipulateAsync(
+          uri,
+          [],
+          { compress: q, format: ImageManipulator.SaveFormat.JPEG }
+        );
+        const newSize = (await FileSystem.getInfoAsync(result.uri)).size / 1024;
+        console.log(`Tried compression q=${q.toFixed(1)} → ${newSize.toFixed(2)} KB`);
+        if (newSize >= 50 && newSize <= 150) {
+          compressedUri = result.uri;
+          console.log(`Final compressed size: ${newSize.toFixed(2)} KB`);
+          break;
+        }
+      }
+    
+      return compressedUri;
+    };
+
   const handleUploadImage = async () => {
     // Request permission to access the camera roll
     const permissionResult =
@@ -163,20 +206,24 @@ const TeamProfileDetails = ({ route, navigation }) => {
     });
 
     if (!pickerResult.canceled) {
+      setUploading(true); // show loader
+
+      try {
       const localUri = pickerResult.assets[0].uri;
       console.log(localUri, "SPLIT");
-      const filename = localUri.split("/").pop();
+      const compressedUri = await compressImage(localUri);
+      const filename = compressedUri.split("/").pop();
       const match = /\.(\w+)$/.exec(filename);
       const fileType = match ? `image/${match[1]}` : `image`;
 
       const formData = new FormData();
       formData.append("image", {
-        uri: localUri,
+        uri: compressedUri,
         name: filename,
         type: fileType,
       });
 
-      try {
+      
         const response = await fetch(
           `${serverIP}/edit/add-images-to-your-team-profile?teamId=${teamId}`,
           {
@@ -191,16 +238,19 @@ const TeamProfileDetails = ({ route, navigation }) => {
         if (response.ok) {
           const updatedImages = await response.json();
           // Update the state with new images
-          setFormattedImages(
-            updatedImages.map((imagePath) => ({
-              uri: `${imagePath}`,
-            }))
-          );
+          // setFormattedImages(
+          //   updatedImages.map((imagePath) => ({
+          //     uri: `${imagePath}`,
+          //   }))
+          // );
+          refreshYourSelectedTeam();
         } else {
           console.error("Failed to upload image", response.statusText);
         }
       } catch (error) {
         console.error("Error uploading image:", error);
+      }finally {
+        setUploading(false); // hide loader
       }
     }
   };
@@ -238,7 +288,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
       }
 
       setIsEditing(null); // Reset editing state
-      alert("Content updated successfully!");
+     // alert("Content updated successfully!");
     } catch (error) {
       console.error("Error updating content:", error);
       alert("Error updating content");
@@ -390,7 +440,14 @@ const TeamProfileDetails = ({ route, navigation }) => {
         <View style={styles.searchContainer}>
           <Text style={styles.searchText}>📸 Our Pictures</Text>
         </View>
-        <View style={styles.pictureContainer}>{renderProfilePictures()}</View>
+        <View style={styles.pictureContainer}>
+        {renderProfilePictures()}
+              {uploading && (
+          <View style={styles.uploadLoader}>
+            <ActivityIndicator size="large" color="#6420AA" />
+          </View>
+        )}
+        </View>
       </View>
 
 
@@ -575,7 +632,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
           </View>
 
           <View style={styles.rowContainer}>
-            {/* <View style={styles.iconContainer3}>
+            <View style={styles.iconContainer3}>
               <FontAwesome5
                 name="ruler-vertical"
                 size={18}
@@ -583,7 +640,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
                 style={styles.locationIcon}
               />
               <Text style={styles.cell}>{profile.user1Height}</Text>
-            </View> */}
+            </View>
             <View style={styles.iconContainer}>
               <AntDesign
                 name="hearto"
@@ -632,15 +689,15 @@ const TeamProfileDetails = ({ route, navigation }) => {
           </View>
 
           <View style={styles.rowContainer}>
-            {/* <View style={styles.iconContainer3}>
+            <View style={styles.iconContainer3}>
                 <FontAwesome5
                   name="ruler-vertical"
                   size={18}
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>155 cm</Text>
-              </View> */}
+                <Text style={styles.cell}>{profile?.user2Height}</Text>
+              </View>
             <View style={styles.iconContainer}>
               <AntDesign
                 name="hearto"
@@ -1144,6 +1201,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#121212",
     marginRight: 10,
+    width:'73%'
     // lineHeight: 36.31,
   },
   ageText1: {
@@ -1286,6 +1344,17 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     color: "#454545",
+  },
+  uploadLoader: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
   },
 });
 

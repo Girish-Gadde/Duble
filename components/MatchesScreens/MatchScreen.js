@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: 120,
-    height: 190,
+    height: 200,
     alignItems: "center",
     marginRight: 10,
   },

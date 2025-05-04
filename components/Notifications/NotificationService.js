@@ -80,7 +80,7 @@ async function registerForPushNotificationsAsync() {
 // ✅ Send token to backend
 async function sendTokenToBackend(token) {
   try {
-    const storedToken = await AsyncStorage.getItem("expoPushToken"); // Get saved token
+  //  const storedToken = await AsyncStorage.getItem("expoPushToken"); // Get saved token
     const userId = await AsyncStorage.getItem("userId"); // Get user ID
 
     if (!userId) {
@@ -99,7 +99,7 @@ async function sendTokenToBackend(token) {
       body: JSON.stringify({ userId, expoPushToken: token }),
     });
 
-    await AsyncStorage.setItem("expoPushToken", token); // Save token locally
+   // await AsyncStorage.setItem("expoPushToken", token); // Save token locally
     console.log("Expo push token saved successfully.");
   } catch (error) {
     console.error("Failed to send token:", error);

@@ -26,6 +26,9 @@ import Tags from "react-native-tags";
 import { useNavigation } from "@react-navigation/native";
 import { serverIP } from "@/config";
 import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from 'expo-image-manipulator';
+import * as FileSystem from 'expo-file-system';
+import * as Updates from "expo-updates";
 
 const profiles = [
   {
@@ -86,7 +89,7 @@ const profiles = [
 ];
 
 const ProfileDetails = ({ route, navigation }) => {
-  const { dispatch, logOut } = route.params;
+  const { refreshYourInidividualProfile, dispatch, logOut } = route.params;
   const profile = useSelector((state) => state.individualProfile);
   console.log(profile, "INDIVIDUAL PROFILE");
   const [userId, setUserId] = useState(profile._id);
@@ -119,6 +122,8 @@ const ProfileDetails = ({ route, navigation }) => {
   const [inputText, setInputText] = useState("");
   const [promptText, setPromptText] = useState(null);
   const [promptVisible, setPromptVisible] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
 
   const prompts = [
     "🗣️ I can talk for hours about",
@@ -200,7 +205,7 @@ const ProfileDetails = ({ route, navigation }) => {
       }
 
       setIsEditing(null); // Reset editing state
-      alert("Content updated successfully!");
+     // alert("Content updated successfully!");
     } catch (error) {
       console.error("Error updating content:", error);
       alert("Error updating content");
@@ -311,6 +316,47 @@ const ProfileDetails = ({ route, navigation }) => {
   }));
   const [formattedImages, setFormattedImages] = useState(formattedImagePics);
 
+  useEffect(() => {
+    const formattedImages = (profile?.images || []).map(
+      (imagePath) => ({
+        uri: `${imagePath}`,
+      })
+    );
+    console.log(formattedImages, "IMAGE-7777777");
+    setFormattedImages(formattedImages);
+  }, [profile]);
+
+
+  const compressImage = async (uri) => {
+    const fileInfo = await FileSystem.getInfoAsync(uri);
+    const fileSizeKB = fileInfo.size / 1024;
+    console.log(`Original image size: ${fileSizeKB.toFixed(2)} KB`);
+
+    // Only compress if over 150KB
+    if (fileSizeKB <= 150) return uri;
+  
+    let quality = 1;
+    let compressedUri = uri;
+  
+    // Gradually reduce quality to reach target size range
+    for (let q = 0.9; q >= 0.2; q -= 0.1) {
+      const result = await ImageManipulator.manipulateAsync(
+        uri,
+        [],
+        { compress: q, format: ImageManipulator.SaveFormat.JPEG }
+      );
+      const newSize = (await FileSystem.getInfoAsync(result.uri)).size / 1024;
+      console.log(`Tried compression q=${q.toFixed(1)} → ${newSize.toFixed(2)} KB`);
+      if (newSize >= 50 && newSize <= 150) {
+        compressedUri = result.uri;
+        console.log(`Final compressed size: ${newSize.toFixed(2)} KB`);
+        break;
+      }
+    }
+  
+    return compressedUri;
+  };
+
   const handleUploadImage = async () => {
     // Request permission to access the camera roll
     const permissionResult =
@@ -329,20 +375,24 @@ const ProfileDetails = ({ route, navigation }) => {
     });
 
     if (!pickerResult.canceled) {
+      setUploading(true); // show loader
+
+      try {
       const localUri = pickerResult.assets[0].uri;
       console.log(localUri, "SPLIT");
-      const filename = localUri.split("/").pop();
+      const compressedUri = await compressImage(localUri);
+      const filename = compressedUri.split("/").pop();
       const match = /\.(\w+)$/.exec(filename);
       const fileType = match ? `image/${match[1]}` : `image`;
 
       const formData = new FormData();
       formData.append("image", {
-        uri: localUri,
+        uri: compressedUri,
         name: filename,
         type: fileType,
       });
 
-      try {
+      
         const response = await fetch(
           `${serverIP}/edit/add-images-to-your-profile?userId=${userId}`,
           {
@@ -357,16 +407,19 @@ const ProfileDetails = ({ route, navigation }) => {
         if (response.ok) {
           const updatedImages = await response.json();
           // Update the state with new images
-          setFormattedImages(
-            updatedImages.map((imagePath) => ({
-              uri: `${imagePath}`,
-            }))
-          );
+          // setFormattedImages(
+          //   updatedImages.map((imagePath) => ({
+          //     uri: `${imagePath}`,
+          //   }))
+          // );
+          refreshYourInidividualProfile();
         } else {
           console.error("Failed to upload image", response.statusText);
         }
       } catch (error) {
         console.error("Error uploading image:", error);
+      }finally {
+        setUploading(false); // hide loader
       }
     }
   };
@@ -379,7 +432,7 @@ const ProfileDetails = ({ route, navigation }) => {
       </TouchableOpacity>
     ));
 
-    // Check if the number of images is less than 5 to render the empty box with the '+' icon
+    // Check if the number of images is less than 16 to render the empty box with the '+' icon
     if (formattedImages.length < 16) {
       const emptyBox = (
         <TouchableOpacity onPress={() => handleUploadImage()}>
@@ -443,7 +496,8 @@ const ProfileDetails = ({ route, navigation }) => {
     navigation.navigate("ProfileScreen1");
   };
 
-  const loggingOut = ()=>{
+  const loggingOut = async ()=>{
+    await Updates.reloadAsync();
     logOut()
   }
 
@@ -575,7 +629,14 @@ const ProfileDetails = ({ route, navigation }) => {
         <View style={styles.searchContainer}>
           <Text style={styles.searchText}>📸 My Pictures</Text>
         </View>
-        <View style={styles.pictureContainer}>{renderProfilePictures()}</View>
+        <View style={styles.pictureContainer}>
+        {renderProfilePictures()}
+        {uploading && (
+  <View style={styles.uploadLoader}>
+    <ActivityIndicator size="large" color="#6420AA" />
+  </View>
+)}
+ </View>
       </View>
       <View style={styles.viewContainer}>
         <View style={styles.searchContainer}>
@@ -1365,6 +1426,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#454545",
   },
+  uploadLoader: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
+  },
+  
 });
 
 export default ProfileDetails;

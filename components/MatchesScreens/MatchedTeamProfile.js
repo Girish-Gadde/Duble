@@ -214,11 +214,11 @@ const MatchedTeamProfile = ({ route, navigation, onRoomSelect }) => {
         </View> */}
         <View style={styles.textContainer}>
           <View style={styles.nameContainer}>
-            <Text style={styles.nameText}>{profile.name1},</Text>
-            <Text style={styles.ageText}>{profile.age1}</Text>
+            <Text style={styles.nameText}>{profile?.name1?.split(' ')[0]}</Text>
+            <Text style={styles.ageText}>{profile?.age1}</Text>
             <View style={styles.divider} />
-            <Text style={styles.nameText}>{profile.name2},</Text>
-            <Text style={styles.ageText}>{profile.age2}</Text>
+            <Text style={styles.nameText}>{profile?.name2?.split(' ')[0]}</Text>
+            <Text style={styles.ageText}>{profile?.age2}</Text>
           </View>
           {/* <View style={styles.locationContainer}>
             <MaterialIcons
@@ -280,7 +280,7 @@ const MatchedTeamProfile = ({ route, navigation, onRoomSelect }) => {
           />
           <View style={styles.bioDataContainer}>
             <View style={styles.singleNameContainer}>
-              <Text style={styles.nameText1}>{profile.name1},</Text>
+              <Text style={styles.nameText1}>{profile.name1}</Text>
               <Text style={styles.ageText1}>{profile.age1}</Text>
             </View>
             <View style={styles.rowContainer}>
@@ -306,15 +306,15 @@ const MatchedTeamProfile = ({ route, navigation, onRoomSelect }) => {
             </View>
 
             <View style={styles.rowContainer}>
-              {/* <View style={styles.iconContainer3}>
+              <View style={styles.iconContainer3}>
                 <FontAwesome5
                   name="ruler-vertical"
                   size={18}
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>{profile.user1Height}</Text>
-              </View> */}
+                <Text style={styles.cell}>{profile?.user1Height}</Text>
+              </View>
               <View style={styles.iconContainer}>
                 <AntDesign
                   name="hearto"
@@ -337,7 +337,7 @@ const MatchedTeamProfile = ({ route, navigation, onRoomSelect }) => {
           />
           <View style={styles.bioDataContainer}>
             <View style={styles.singleNameContainer}>
-              <Text style={styles.nameText1}>{profile.name2},</Text>
+              <Text style={styles.nameText1}>{profile.name2}</Text>
               <Text style={styles.ageText1}>{profile.age2}</Text>
             </View>
             <View style={styles.rowContainer}>
@@ -363,15 +363,15 @@ const MatchedTeamProfile = ({ route, navigation, onRoomSelect }) => {
             </View>
 
             <View style={styles.rowContainer}>
-              {/* <View style={styles.iconContainer3}>
+              <View style={styles.iconContainer3}>
                 <FontAwesome5
                   name="ruler-vertical"
                   size={18}
                   color="#121212"
                   style={styles.locationIcon}
                 />
-                <Text style={styles.cell}>155 cm</Text>
-              </View> */}
+                <Text style={styles.cell}>{profile?.user2Height}</Text>
+              </View>
               <View style={styles.iconContainer}>
                 <AntDesign
                   name="hearto"
@@ -426,17 +426,19 @@ const styles = StyleSheet.create({
   },
   nameContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    alignSelf: 'center',
+    alignItems: 'center',
     marginBottom: 2,
   },
   nameText: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#EDEEF1",
-    marginRight: 10,
+    marginRight: 7,
+     maxWidth:'38%'
   },
   ageText: {
-    fontSize: 25,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#EDEEF1",
   },
@@ -445,6 +447,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#121212",
     marginRight: 10,
+    maxWidth:'73%'
     // lineHeight: 36.31,
   },
   ageText1: {
@@ -454,7 +457,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     width: 3,
-    height: 30,
+    height: 40,
     backgroundColor: "white",
     marginHorizontal: 10,
   },
@@ -474,6 +477,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#EDEEF1",
     marginBottom: 20,
+    alignSelf: 'center'
   },
   actionContainer1: {
     flexDirection: "row",

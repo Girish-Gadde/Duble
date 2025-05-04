@@ -1,5 +1,5 @@
+
 import React, { useEffect, useState, useRef } from "react";
-import { useContext } from "react";
 import {
   View,
   TextInput,
@@ -18,53 +18,64 @@ import Icon1 from "react-native-vector-icons/Feather";
 import { serverIP } from "@/config";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
+import { ActivityIndicator } from 'react-native';
 
-import {
-  showLocalNotification
-} from '../../utils/ios Notification/notification';
-
-import {useSocket} from '../../utils/socket/SocketContext'
 
 const ChatScreen = ({ route, navigation }) => {
   const { roomId, username, userId, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam } = route.params;
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  //const socket = io(serverIP);
-  const socket = useSocket(); 
-  //const socket = useContext(SocketContext);
+  const socket = io(serverIP);
   const scrollViewRef = useRef();
 
   const [showUnmatch, setShowUnmatch] = useState(false);
   const [showReport, setShowReport] = useState(false);
 const [selectedMember, setSelectedMember] = useState(null);
 const [reportReason, setReportReason] = useState("");
+const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    socket.emit("joinRoom", roomId);
 
-    // Listen for messages from others
-    // socket.on("message", (message) => {
-    //   // Only add the message if it's not from the current user
-    //   if (message.sender !== username) {
-    //     setMessages((prevMessages) => [...prevMessages, message]);
-    //   }
-    // });
+useEffect(() => {
+  socket.emit("joinRoom", roomId);
 
-  socket.on("message", async (message) => {
+  // Listen for messages from others
+  socket.on("message", (message) => {
+    // Normalize the message to ensure it has 'timestamp'
+    const normalizedMessage = {
+      ...message,
+      timestamp: message.time || new Date().toISOString(), // If time is not sent, add current timestamp
+    };
+
+    // Only add the message if it's not from the current user
     if (message.sender !== username) {
-      setMessages((prevMessages) => [...prevMessages, message]);
-  
-      // Use the shared notification function
-      await showLocalNotification(`${message.sender} says:`, message.message, { roomId });
+      setMessages((prevMessages) => [...prevMessages, normalizedMessage]);
     }
   });
-  
+
+    // const fetchMessages = async () => {
+    //   try {
+    //     const response = await fetch(`${serverIP}/api/messages/${roomId}`);
+    //     const data = await response.json();
+
+    //     if (data.messages && Array.isArray(data.messages)) {
+    //       setMessages(data.messages);
+    //     } else {
+    //       console.error("Messages data is not in the expected format.");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching messages:", error);
+    //   }
+    // };
+
+    // fetchMessages();
+
+
 
     const fetchMessages = async () => {
       try {
         const response = await fetch(`${serverIP}/api/messages/${roomId}`);
         const data = await response.json();
-
+    
         if (data.messages && Array.isArray(data.messages)) {
           setMessages(data.messages);
         } else {
@@ -72,57 +83,20 @@ const [reportReason, setReportReason] = useState("");
         }
       } catch (error) {
         console.error("Error fetching messages:", error);
+      } finally {
+        setLoading(false); // This runs whether success or error
       }
     };
 
     fetchMessages();
+    
+
 
     return () => {
       socket.off("message");
       socket.disconnect();
     };
   }, [roomId]);
-
-
-  // useEffect(() => {
-  //   if (!socket || !roomId) return;
-
-  //   socket.emit("joinRoom", roomId);
-  //   console.log("Joined room:", roomId);
-
-  //   const handleMessage = async (message) => {
-  //     if (message.sender !== username) {
-  //       setMessages((prev) => [...prev, message]);
-  //       await showLocalNotification(`${message.sender} says:`, message.message, {
-  //         roomId: message.roomId,
-  //       });
-  //     }
-  //   };
-
-  //   socket.on("message", handleMessage);
-
-  //   const fetchMessages = async () => {
-  //     try {
-  //       const response = await fetch(`${serverIP}/api/messages/${roomId}`);
-  //       const data = await response.json();
-  //       if (Array.isArray(data.messages)) {
-  //         setMessages(data.messages);
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to fetch messages", error);
-  //     }
-  //   };
-
-  //   fetchMessages();
-
-  //   return () => {
-  //     socket.off("message", handleMessage);
-  //     socket.emit("leaveRoom", roomId); // optional clean-up
-  //   };
-  // }, [socket, roomId]);
-  
-
-
 
     const toggleDislike = async () => {
       // setIsDislikeActive(!isDislikeActive);
@@ -341,30 +315,40 @@ const [reportReason, setReportReason] = useState("");
     )}
       </View>
       <View style={styles.innerContainer}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          ref={scrollViewRef}
-          onContentSizeChange={() =>
-            scrollViewRef.current.scrollToEnd({ animated: true })
-          }
-          style={styles.messageList}
-          keyboardShouldPersistTaps="handled"
-        >
-          {messages.map((message, index) => renderMessage(message, index))}
-        </ScrollView>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            value={newMessage}
-            onChangeText={setNewMessage}
-            placeholder="Start typing..."
-            placeholderTextColor="gray"
-          />
-          <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
-            <Icon1 name="send" size={24} color="#fff" />
-          </TouchableOpacity>
-        </View>
-      </View>
+  {loading ? (
+    <View style={styles.loadingContainer}>
+      <ActivityIndicator size="large" color="#6200EE" />
+      <Text>Loading chats...</Text>
+    </View>
+  ) : (
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      ref={scrollViewRef}
+      onContentSizeChange={() =>
+        scrollViewRef.current.scrollToEnd({ animated: true })
+      }
+      style={styles.messageList}
+      keyboardShouldPersistTaps="handled"
+    >
+      {messages.map((message, index) => renderMessage(message, index))}
+    </ScrollView>
+  )}
+  
+  {/* Input box and send button stay visible */}
+  <View style={styles.inputContainer}>
+    <TextInput
+      style={styles.input}
+      value={newMessage}
+      onChangeText={setNewMessage}
+      placeholder="Start typing..."
+      placeholderTextColor="gray"
+    />
+    <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
+      <Icon1 name="send" size={24} color="#fff" />
+    </TouchableOpacity>
+  </View>
+</View>
+
     </KeyboardAvoidingView>
   );
 };
@@ -448,7 +432,13 @@ const styles = StyleSheet.create({
   },
   blockContainer: {
     backgroundColor: "#F5EBFF"
-  }
+  },
+  loadingContainer: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+}
+
 });
 
 export default ChatScreen;

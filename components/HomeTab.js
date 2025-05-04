@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   Alert,
   Image,
+  Keyboard,
   Text,
   TouchableOpacity,
   View,
@@ -55,6 +56,7 @@ const HomeTab = ({ route, navigation }) => {
   const [userName, setUserName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   // const [selectedTeamIndex, setSelectedTeamIndex] = useState(null);
   console.log(selectedTeamIndex, "Indexxxxxxxxxxxxxxxx");
   //index = selectedTeamIndex
@@ -154,20 +156,20 @@ const HomeTab = ({ route, navigation }) => {
       );
 
       if (!response.ok) {
-        //throw new Error("Failed to fetch your team-1");
-        Alert.alert(
-          "No Teams found",
-          "Please create your teams.",
-          [
-            {
-              text: "OK",
-              onPress: () => {
-                //navigation.navigate("Teams");
-              },
-            },
-          ],
-          { cancelable: false }
-        );
+        console.log("Failed to fetch your team-1");
+        // Alert.alert(
+        //   "No Teams found",
+        //   "Please create your teams.",
+        //   [
+        //     {
+        //       text: "OK",
+        //       onPress: () => {
+        //         //navigation.navigate("Teams");
+        //       },
+        //     },
+        //   ],
+        //   { cancelable: false }
+        // );
       }
 
       const responseData = await response.json();
@@ -263,9 +265,14 @@ const HomeTab = ({ route, navigation }) => {
   };
 
 
-  const refreshYourInidividualTeam = async () => {
-    const userId = await AsyncStorage.getItem("userId");
-    await getYourIndividualProfile(userId);
+  const refreshYourInidividualProfile = () => {
+     //const userId = await AsyncStorage.getItem("userId");
+     if(userId){
+      console.log(userId, 'This user refreshing');
+      getYourIndividualProfile(userId);
+    }else{
+      console.log('No userId found');
+    }
   };
 
   const fetchTeams = async (userId) => {
@@ -373,6 +380,28 @@ const HomeTab = ({ route, navigation }) => {
     navigation.navigate('Login');
   }
 
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      () => {
+        console.log('Keyboard Show')
+        setKeyboardVisible(true);
+      }
+    );
+
+    const keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
   if (loading) {
     // Show loading indicator while data is being fetched
     return (
@@ -401,8 +430,8 @@ const HomeTab = ({ route, navigation }) => {
               backgroundColor: "#EDEEF1",
               display: "flex",
               paddingHorizontal: 12,
-              paddingVertical: 20,
-              height: "13%",
+              paddingVertical: 20, // Reduce padding when keyboard is visible
+              height: isKeyboardVisible ? "18%" : "13%", //
               justifyContent: "center",
               //marginBottom: 10,
             },
@@ -627,6 +656,7 @@ const HomeTab = ({ route, navigation }) => {
           initialParams={{
             navigation,
             profile: individualProfile,
+            refreshYourInidividualProfile,
             dispatch,
             logOut
           }}
@@ -662,6 +692,7 @@ const HomeTab = ({ route, navigation }) => {
           initialParams={{
             navigation,
             profile,
+            refreshYourSelectedTeam,
             dispatch
           }}
           options={({ navigation }) => ({

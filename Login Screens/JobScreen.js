@@ -58,6 +58,7 @@ const JobScreen = ({ route, navigation }) => {
           autoCapitalize="none"
           value={occupation}
           onChangeText={handleInputChange}
+          maxLength={30}
         />
 
         <Text style={styles.subtitle1}>This will appear on your profile</Text>
