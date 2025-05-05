@@ -88,7 +88,9 @@ const calculateAge = (dob) => {
 };
 
 const ProfileScreen1 = ({ route, navigation }) => {
-  const { profile, logOut } = route.params;
+  const { logOut } = route.params;
+
+  const profile = useSelector((state) => state.individualProfile);
 
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);
