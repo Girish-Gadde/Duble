@@ -656,7 +656,6 @@ const HomeTab = ({ route, navigation }) => {
           initialParams={{
             navigation,
             profile: individualProfile,
-            refreshYourInidividualProfile,
             dispatch,
             logOut
           }}
@@ -692,7 +691,6 @@ const HomeTab = ({ route, navigation }) => {
           initialParams={{
             navigation,
             profile,
-            refreshYourSelectedTeam,
             dispatch
           }}
           options={({ navigation }) => ({

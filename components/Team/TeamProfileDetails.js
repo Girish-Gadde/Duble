@@ -91,7 +91,7 @@ const profiles = [
 ];
 
 const TeamProfileDetails = ({ route, navigation }) => {
-  const {refreshYourSelectedTeam, dispatch } = route.params;
+  const { dispatch } = route.params;
   const profile = useSelector((state) => state.profile);
   console.log(profile, "DF");
   const [tags, setTags] = useState([]);
@@ -223,9 +223,10 @@ const TeamProfileDetails = ({ route, navigation }) => {
         type: fileType,
       });
 
+      console.log(profile._id, 'TM-IMAGE IDDDD---->>>>>')
       
         const response = await fetch(
-          `${serverIP}/edit/add-images-to-your-team-profile?teamId=${teamId}`,
+          `${serverIP}/edit/add-images-to-your-team-profile?teamId=${profile._id}`,
           {
             method: "POST",
             headers: {
@@ -236,14 +237,16 @@ const TeamProfileDetails = ({ route, navigation }) => {
         );
 
         if (response.ok) {
-          const updatedImages = await response.json();
+          const updatedResponse = await response.json();
+          console.log(updatedResponse, 'IMAGE RES------>>>>>>')
+          dispatch(setProfile(updatedResponse));
           // Update the state with new images
           // setFormattedImages(
           //   updatedImages.map((imagePath) => ({
           //     uri: `${imagePath}`,
           //   }))
           // );
-          refreshYourSelectedTeam();
+         // refreshYourSelectedTeam();
         } else {
           console.error("Failed to upload image", response.statusText);
         }
@@ -356,7 +359,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
     // Send the new prompt to the back-end
     try {
       const response = await fetch(
-        `${serverIP}/edit/add-new-prompts?teamId=${teamId}`,
+        `${serverIP}/edit/add-new-prompts?teamId=${profile._id}`,
         {
           method: "POST",
           headers: {
@@ -606,7 +609,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
         />
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>{profile.name1},</Text>
+            <Text style={styles.nameText1}>{profile.name1}</Text>
             <Text style={styles.ageText1}>{profile.age1}</Text>
           </View>
           <View style={styles.rowContainer}>
@@ -663,7 +666,7 @@ const TeamProfileDetails = ({ route, navigation }) => {
         />
         <View style={styles.bioDataContainer}>
           <View style={styles.singleNameContainer}>
-            <Text style={styles.nameText1}>{profile.name2},</Text>
+            <Text style={styles.nameText1}>{profile.name2}</Text>
             <Text style={styles.ageText1}>{profile.age2}</Text>
           </View>
           <View style={styles.rowContainer}>
@@ -1201,7 +1204,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#121212",
     marginRight: 10,
-    width:'73%'
+    maxWidth:'73%'
     // lineHeight: 36.31,
   },
   ageText1: {

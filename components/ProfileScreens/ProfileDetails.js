@@ -89,7 +89,7 @@ const profiles = [
 ];
 
 const ProfileDetails = ({ route, navigation }) => {
-  const { refreshYourInidividualProfile, dispatch, logOut } = route.params;
+  const { dispatch, logOut } = route.params;
   const profile = useSelector((state) => state.individualProfile);
   console.log(profile, "INDIVIDUAL PROFILE");
   const [userId, setUserId] = useState(profile._id);
@@ -405,14 +405,14 @@ const ProfileDetails = ({ route, navigation }) => {
         );
 
         if (response.ok) {
-          const updatedImages = await response.json();
+          const updatedResponse = await response.json();
+          dispatch(setIndividualProfile(updatedResponse));
           // Update the state with new images
           // setFormattedImages(
           //   updatedImages.map((imagePath) => ({
           //     uri: `${imagePath}`,
           //   }))
           // );
-          refreshYourInidividualProfile();
         } else {
           console.error("Failed to upload image", response.statusText);
         }
