@@ -496,8 +496,8 @@ const ProfileDetails = ({ route, navigation }) => {
     navigation.navigate("ProfileScreen1");
   };
 
-  const loggingOut = async ()=>{
-    await Updates.reloadAsync();
+  const loggingOut =()=>{
+    //await Updates.reloadAsync();
     logOut()
   }
 
