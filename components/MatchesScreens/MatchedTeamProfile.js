@@ -24,8 +24,8 @@ import { useSelector } from "react-redux";
 
 const width = Dimensions.get("window").width;
 
-const MatchedTeamProfile = ({ route, navigation, onRoomSelect }) => {
-  const { profile, yourTeamProfile,userName, userId, refreshYourTeam } = route.params;
+const MatchedTeamProfile = ({ route, navigation}) => {
+  const { profile, yourTeamProfile,userName, userId, refreshYourTeam, onRoomSelect } = route.params;
     console.log("NAME", profile, "UR", yourTeamProfile, userName);
   const [isHeartActive, setIsHeartActive] = useState(false);
   const [showIcons, setShowIcons] = useState(true);

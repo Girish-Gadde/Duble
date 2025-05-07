@@ -500,6 +500,7 @@ const HomeTab = ({ route, navigation }) => {
             userName,
             userId,
             refreshYourTeam,
+            onRoomSelect: navigateToChatScreen,
           }}
           listeners={({ navigation }) => ({
             focus: () => {

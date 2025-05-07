@@ -394,7 +394,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   picker: {
-    height: 50,
+    ...Platform.select({
+      android: {
+        height: 50,
+      },
+      ios: {
+        height: '50%', // or any percentage you want
+      },
+    }),
     borderWidth: 1,
     borderColor: "#ccc",
     backgroundColor: "#ccc"

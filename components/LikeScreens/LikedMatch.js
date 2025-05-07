@@ -11,7 +11,7 @@ import {
 import Icon from "react-native-vector-icons/AntDesign";
 
 const LikedMatch = ({ route, navigation }) => {
-  const { profile, userName, userId, yourTeamProfile, refreshYourTeam } = route.params;
+  const { profile, userName, userId, yourTeamProfile, refreshYourTeam, onRoomSelect} = route.params;
   console.log(userName, 'NM')
   const [roomId1, setRoomId] = useState(null);
 
@@ -53,8 +53,8 @@ const LikedMatch = ({ route, navigation }) => {
         const teaMembers = [profile.name1, profile.name2]
         console.log(responseData, "Response Data-1---->:", roomId, teaMembers);
         // refreshYourTeam();
-        navigation.navigate("LikedChat", { roomId, username: userName, userId, teaMembers, imageUrl: profile.selectedImages[0], dislikedTeamId: profile._id, dislikingTeamId: yourTeamProfile._id, refreshYourTeam });
-      //  onRoomSelect(roomId, userName, teaMembers);
+      //navigation.navigate("LikedChat", { roomId, username: userName, userId, teaMembers, imageUrl: profile.selectedImages[0], dislikedTeamId: profile._id, dislikingTeamId: yourTeamProfile._id, refreshYourTeam });
+       onRoomSelect(roomId, userName, userId, teaMembers, profile.selectedImages[0], profile._id, yourTeamProfile._id, refreshYourTeam );
         // Alert.alert("Success", "Chat room created successfully", [
         //   {
         //     text: "OK",

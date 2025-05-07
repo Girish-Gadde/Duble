@@ -64,14 +64,14 @@ const Matches = ({ route, navigation }) => {
         />
         <Stack.Screen
           name="TeamProfile"
-          //component={MatchedTeamProfile}
-          component={(props) => (
-            <MatchedTeamProfile 
-            {...props} 
-            onRoomSelect={onRoomSelect}
-            />
-          )}
-          initialParams={{ navigation, userId, refreshYourTeam }}
+          component={MatchedTeamProfile}
+          // component={(props) => (
+          //   <MatchedTeamProfile 
+          //   {...props} 
+          //   onRoomSelect={onRoomSelect}
+          //   />
+          // )}
+          initialParams={{ navigation, userId, refreshYourTeam, onRoomSelect }}
           options={{
             headerTitle: () => (
               <HeaderTitleWithIcon2
