@@ -394,10 +394,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   picker: {
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    backgroundColor: "#ccc"
+    // height: '50%', // for android it will be 50px
+    // borderWidth: 1,
+    // borderColor: "#ccc",
+    // backgroundColor: "white"
+    ...Platform.select({
+      android: {
+        height: 50
+      },
+      ios:{
+        height:"50%"
+      }
+    })
   },
   input1: {
     borderWidth: 1,
