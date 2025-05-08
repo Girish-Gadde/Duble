@@ -375,8 +375,8 @@ const HomeTab = ({ route, navigation }) => {
     navigation.navigate("Chat", { roomId, username, userId, teaMembers, imageUrl, dislikedTeamId, dislikingTeamId, refreshYourTeam });
   }
 
-  const logOut = async ()=>{
-    await AsyncStorage.removeItem("mobileNumber")
+  const logOut = ()=>{
+    
     navigation.navigate('Login');
   }
 

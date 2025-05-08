@@ -29,6 +29,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from 'expo-image-manipulator';
 import * as FileSystem from 'expo-file-system';
 import * as Updates from "expo-updates";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const profiles = [
   {
@@ -497,7 +498,9 @@ const ProfileDetails = ({ route, navigation }) => {
   };
 
   const loggingOut = async ()=>{
+    await AsyncStorage.removeItem("mobileNumber")
     await Updates.reloadAsync();
+    
     logOut()
   }
 

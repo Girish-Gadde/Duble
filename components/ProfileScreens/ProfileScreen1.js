@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { serverIP } from "@/config";
 import * as Updates from "expo-updates";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const profiles = [
   {
@@ -120,6 +121,11 @@ const ProfileScreen1 = ({ route, navigation }) => {
     navigation.navigate("ProfileDetails", { profile, navigation });
   };
 
+  const refreshApp = async () =>{
+    await AsyncStorage.removeItem("mobileNumber");
+    await Updates.reloadAsync();
+  }
+
   const handleDeleteProfile = async () => {
     Alert.alert(
       "Are you sure?",
@@ -143,8 +149,8 @@ const ProfileScreen1 = ({ route, navigation }) => {
   
               if (response.ok) {
                 Alert.alert("Deleted", "Your profile has been deleted.");
-                    // Reload app to clear cache and reset state
-              await Updates.reloadAsync();
+                  refreshApp();
+                 
               
                 logOut();
                 // Navigate to login or onboarding screen
