@@ -72,8 +72,9 @@ const MatchScreen = ({ route, navigation }) => {
         }
 
         const data = await response.json();
-        console.log(data, "MATCHED_TEAMS");
-        setTeams(data);
+        //console.log(data, "MATCHED_TEAMS");
+        const validTeams = Array.isArray(data) ? data.filter(team => team !== null) : [];
+        setTeams(validTeams);
 
         const storedStatuses = await AsyncStorage.getItem(
           `clickStatuses_${yourTeamProfile._id}_Match`
@@ -82,7 +83,7 @@ const MatchScreen = ({ route, navigation }) => {
         setClickStatuses(statuses);
         console.log(statuses, clickStatuses, "CLICK-MATCH");
       } catch (error) {
-        console.error("Error fetching teams:", error);
+        console.error("Error fetching teams-Match:", error);
       }
     };
 
