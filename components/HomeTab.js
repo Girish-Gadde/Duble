@@ -96,7 +96,7 @@ const HomeTab = ({ route, navigation }) => {
     socket.on("teamUpRequest", async (data) => {
       const userId = await AsyncStorage.getItem("userId");
       getYourIndividualProfile(userId);
-      showLocalNotification("Team Up Request", data.message, { teamRequest: data });
+     // showLocalNotification("Team Up Request", data.message, { teamRequest: data });
       //Alert.alert(data.message);
     });
 
