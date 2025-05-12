@@ -34,7 +34,6 @@ export const TeamProfileStack = ({ route, navigation }) => {
     );
   }
   return (
-    <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="TeamProfile">
         <Stack.Screen
           name="TeamProfile"
@@ -60,6 +59,5 @@ export const TeamProfileStack = ({ route, navigation }) => {
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 };

@@ -11,7 +11,6 @@ export const ProfileStack = ({ route, navigation }) => {
   const { profile, dispatch, logOut } = route.params;
   // console.log(profile, "INDIVIDUAL PROFILE");
   return (
-    <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="ProfileScreen1">
         <Stack.Screen
           name="ProfileScreen1"
@@ -31,6 +30,5 @@ export const ProfileStack = ({ route, navigation }) => {
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 };

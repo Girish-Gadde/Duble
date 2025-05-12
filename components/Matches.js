@@ -19,7 +19,6 @@ const Matches = ({ route, navigation }) => {
   };
 
   return (
-    <NavigationContainer independent="true">
       <Stack.Navigator initialRouteName="MatchScreen">
         <Stack.Screen
           name="MatchScreen"
@@ -86,7 +85,6 @@ const Matches = ({ route, navigation }) => {
           }}
         />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 };
 

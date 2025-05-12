@@ -413,7 +413,7 @@ const HomeTab = ({ route, navigation }) => {
   }
 
   return (
-    <NavigationContainer independent={true}>
+   
       <Tab.Navigator
         initialRouteName="Home"
         screenOptions={{
@@ -731,7 +731,7 @@ const HomeTab = ({ route, navigation }) => {
           })}
         />
       </Tab.Navigator>
-    </NavigationContainer>
+ 
   );
 };
 

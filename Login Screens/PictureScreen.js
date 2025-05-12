@@ -243,7 +243,7 @@ const PictureScreen = ({ route, navigation }) => {
        disabled={loading}
        >
           {loading ? (
-        <ActivityIndicator size="Small" color="#fff"/>
+        <ActivityIndicator size="small" color="#fff"/>
       ) : (
         <Text style={styles.buttonText}>Done</Text>
        )}

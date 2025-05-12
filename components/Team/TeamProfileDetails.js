@@ -22,7 +22,6 @@ import {
   SimpleLineIcons,
   AntDesign,
 } from "@expo/vector-icons";
-import Tags from "react-native-tags";
 import { serverIP } from "@/config";
 import * as ImagePicker from "expo-image-picker";
 import * as ImageManipulator from 'expo-image-manipulator';

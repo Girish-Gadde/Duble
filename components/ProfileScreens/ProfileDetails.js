@@ -22,7 +22,6 @@ import {
   SimpleLineIcons,
   AntDesign,
 } from "@expo/vector-icons";
-import Tags from "react-native-tags";
 import { useNavigation } from "@react-navigation/native";
 import { serverIP } from "@/config";
 import * as ImagePicker from "expo-image-picker";

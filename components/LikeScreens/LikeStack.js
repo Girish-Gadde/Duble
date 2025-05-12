@@ -22,7 +22,6 @@ export const LikeStack = ({ route, navigation }) => {
     //navigation.navigate("LikeScreen1");
   };
   return (
-    <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="LikeScreen1">
         <Stack.Screen
           name="LikeScreen1"
@@ -77,6 +76,5 @@ export const LikeStack = ({ route, navigation }) => {
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 };
