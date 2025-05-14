@@ -525,32 +525,33 @@ const HomeScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
            {/* Report Modal */}
-           <Modal visible={modalVisible} transparent animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Enter Report Reason</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Type your reason here..."
-              multiline
-              value={reportReason}
-              onChangeText={setReportReason}
-            />
-            <View style={styles.buttnContainer}>
-              <TouchableOpacity style={styles.cancelButton} onPress={toggleModal}>
-                <Text style={styles.buttonTxt}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.submitButton, !reportReason.trim() && styles.disabledButton]}
-                onPress={submitReport}
-                disabled={!reportReason.trim()}
-              >
-                <Text style={styles.buttonTxt}>Submit</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+           {modalVisible && (
+  <View style={styles.overlay}>
+    <View style={styles.modalContent}>
+      <Text style={styles.modalTitle}>Enter Report Reason</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Type your reason here..."
+        multiline
+        value={reportReason}
+        onChangeText={setReportReason}
+      />
+      <View style={styles.buttnContainer}>
+        <TouchableOpacity style={styles.cancelButton} onPress={toggleModal}>
+          <Text style={styles.buttonTxt}>Cancel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.submitButton, !reportReason.trim() && styles.disabledButton]}
+          onPress={submitReport}
+          disabled={!reportReason.trim()}
+        >
+          <Text style={styles.buttonTxt}>Submit</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+)}
+
     </ScrollView>
   );
 };
@@ -892,6 +893,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: '18%',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    zIndex: 999, // Ensure it overlays everything
   },
   modalContent: {
     width: "80%",
