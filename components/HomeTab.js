@@ -502,25 +502,25 @@ const HomeTab = ({ route, navigation }) => {
             refreshYourTeam,
             onRoomSelect: navigateToChatScreen,
           }}
-          listeners={({ navigation }) => ({
-            focus: () => {
-              console.log("TARGET");
-              const state = navigation.getState();
-              const activeRoute = state.routes[state.index].state
-                ? state.routes[state.index].state.routes[
-                    state.routes[state.index].state.index
-                  ].name
-                : null;
+          // listeners={({ navigation }) => ({
+          //   focus: () => {
+          //     console.log("TARGET");
+          //     const state = navigation.getState();
+          //     const activeRoute = state.routes[state.index].state
+          //       ? state.routes[state.index].state.routes[
+          //           state.routes[state.index].state.index
+          //         ].name
+          //       : null;
 
-              if (
-                ["LikedProfile", "LikedMatch", "LikedChat"].includes(
-                  activeRoute
-                )
-              ) {
-                navigation.goBack(); // Navigate back to LikeScreen1
-              }
-            },
-          })}
+          //     if (
+          //       ["LikedProfile", "LikedMatch", "LikedChat"].includes(
+          //         activeRoute
+          //       )
+          //     ) {
+          //       navigation.goBack(); // Navigate back to LikeScreen1
+          //     }
+          //   },
+          // })}
           options={{
             tabBarIcon: ({ focused, color, size }) => (
               <View style={{ position: "relative" }}>
