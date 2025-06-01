@@ -111,6 +111,7 @@ const MatchScreen = ({ route, navigation }) => {
           setRooms(response.data);
         }
       } catch (error) {
+        setRooms([]);
         console.log("Error fetching rooms:", error);
         // alert("Failed to fetch rooms");
       } finally {

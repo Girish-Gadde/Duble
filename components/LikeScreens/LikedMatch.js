@@ -66,7 +66,7 @@ const LikedMatch = ({ route, navigation }) => {
         Alert.alert("Alert", "Chat room already exists for this team", [
           {
             text: "OK",
-            onPress: handleNavigate(responseData.roomId),
+            onPress: navigateBack,
           },
         ]);
 
